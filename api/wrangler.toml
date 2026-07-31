@@ -1,0 +1,13 @@
+name = "avatar-legends-api"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+
+# Non-secret config, safe to commit.
+[vars]
+SUPABASE_URL = "https://eatmqkekulibhzdkqwez.supabase.co"
+ALLOWED_ORIGIN = "http://localhost:3000"
+
+# Secrets are NOT set here. Set them with:
+#   wrangler secret put SUPABASE_ANON_KEY
+# Do this once for local dev (writes to .dev.vars if you prefer, see below)
+# and again for production deploy.
