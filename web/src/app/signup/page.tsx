@@ -2,8 +2,12 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
-import styles from '@/styles/auth.module.css';
+import LotusMark from '@/components/LotusMark';
+
+const inputCls =
+  'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -44,103 +48,111 @@ export default function SignUpPage() {
     router.refresh();
   }
 
-  if (checkEmail) {
-    return (
-      <main className={styles.page}>
-        <div className={styles.card}>
-          <h1 className={styles.title}>Check your email</h1>
-          <p className={styles.subtitle}>
-            We sent a confirmation link to <strong>{email}</strong>. Follow it to finish
-            setting up your account.
-          </p>
-        </div>
-      </main>
-    );
-  }
-
   return (
-    <main className={styles.page}>
-      <div className={styles.card}>
-        <h1 className={styles.title}>Create your account</h1>
-        <p className={styles.subtitle}>Join the archive in a few seconds.</p>
+    <main
+      className="min-h-screen flex items-center justify-center px-5 py-10 relative overflow-hidden font-body"
+      style={{ background: 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(58,110,165,0.2), transparent 65%), linear-gradient(180deg, #0d1b1e 0%, #142a2e 55%, #0d1b1e 100%)' }}
+    >
+      <div
+        className="absolute rounded-full"
+        style={{ top: 60, left: '12%', width: 70, height: 70, background: 'radial-gradient(circle at 35% 35%, #f5eedd, #d9c98a 70%)', boxShadow: '0 0 50px rgba(245,238,221,0.3)' }}
+      />
 
-        <form className={styles.form} onSubmit={handleSubmit} noValidate>
-          {error && (
-            <p className={styles.bannerError} role="alert">
-              {error}
+      <div className="relative w-full max-w-[400px]">
+        <Link href="/" className="flex items-center justify-center gap-2.5 mb-8">
+          <LotusMark size={28} />
+          <span className="font-display font-bold text-[16.5px] text-parchment">White Lotus Archive</span>
+        </Link>
+
+        {checkEmail ? (
+          <div className="rounded-[22px] p-10 border border-gold/20 shadow-2xl text-center" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
+            <h1 className="font-display font-semibold text-[23px] mb-2.5 text-parchment">Check your email</h1>
+            <p className="text-[14.5px] text-muted leading-relaxed">
+              We sent a confirmation link to <strong>{email}</strong>. Follow it to finish setting up your account.
             </p>
-          )}
-
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="username">
-              Username
-            </label>
-            <input
-              id="username"
-              className={styles.input}
-              type="text"
-              autoComplete="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              aria-invalid={!!error}
-              minLength={3}
-              required
-            />
-            <span className={styles.hint}>This is how others will see you.</span>
           </div>
+        ) : (
+          <div className="rounded-[22px] p-10 border border-gold/20 shadow-2xl" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
+            <h1 className="font-display font-semibold text-2xl mb-1.5 text-parchment">Create your account</h1>
+            <p className="text-[14.5px] text-muted mb-7">Join the archive and start your saga.</p>
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="email">
-              Email
-            </label>
-            <input
-              id="email"
-              className={styles.input}
-              type="email"
-              autoComplete="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              aria-invalid={!!error}
-              required
-            />
-          </div>
+            <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-4.5">
+              {error && (
+                <p role="alert" className="text-[13.5px] px-3.5 py-2.5 rounded-[10px] bg-[#b3492e]/15 border border-[#b3492e]/40 text-[#e8927a]">
+                  {error}
+                </p>
+              )}
 
-          <div className={styles.field}>
-            <label className={styles.label} htmlFor="password">
-              Password
-            </label>
-            <div className={styles.passwordRow}>
-              <input
-                id="password"
-                className={styles.input}
-                type={showPassword ? 'text' : 'password'}
-                autoComplete="new-password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                aria-invalid={!!error}
-                minLength={8}
-                required
-              />
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="username" className="text-[13px] font-semibold text-parchment-dim">Username</label>
+                <input
+                  id="username"
+                  type="text"
+                  autoComplete="username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  aria-invalid={!!error}
+                  minLength={3}
+                  required
+                  className={inputCls}
+                />
+                <span className="text-xs text-faint">This is how others will see you.</span>
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="email" className="text-[13px] font-semibold text-parchment-dim">Email</label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  aria-invalid={!!error}
+                  required
+                  className={inputCls}
+                />
+              </div>
+
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor="password" className="text-[13px] font-semibold text-parchment-dim">Password</label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? 'text' : 'password'}
+                    autoComplete="new-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    aria-invalid={!!error}
+                    minLength={8}
+                    required
+                    className={`${inputCls} pr-[68px]`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((v) => !v)}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 bg-transparent border-none text-muted text-xs font-semibold cursor-pointer px-2 py-1.5"
+                  >
+                    {showPassword ? 'Hide' : 'Show'}
+                  </button>
+                </div>
+                <span className="text-xs text-faint">At least 8 characters.</span>
+              </div>
+
               <button
-                type="button"
-                className={styles.toggleVisibility}
-                onClick={() => setShowPassword((v) => !v)}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                type="submit"
+                disabled={submitting}
+                className="mt-1.5 px-4 py-3.5 text-[15.5px] font-bold text-gold-ink bg-gold border-none rounded-full cursor-pointer disabled:opacity-60 hover:brightness-95"
               >
-                {showPassword ? 'Hide' : 'Show'}
+                {submitting ? 'Creating account\u2026' : 'Sign up'}
               </button>
-            </div>
-            <span className={styles.hint}>At least 8 characters.</span>
+            </form>
+
+            <p className="text-center text-[13.5px] text-muted mt-6">
+              Already have an account? <Link href="/login" className="font-semibold">Log in</Link>
+            </p>
           </div>
-
-          <button className={styles.submit} type="submit" disabled={submitting}>
-            {submitting ? 'Creating account…' : 'Sign up'}
-          </button>
-        </form>
-
-        <p className={styles.footer}>
-          Already have an account? <a href="/login">Log in</a>
-        </p>
+        )}
       </div>
     </main>
   );
