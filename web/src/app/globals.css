@@ -32,10 +32,12 @@ body {
   color: #0d1b1e;
 }
 
-a {
-  color: var(--color-gold);
-}
-
-a:hover {
-  color: var(--color-parchment);
+@layer base {
+  a {
+    color: var(--color-gold);
+  }
+  
+  a:hover {
+    color: var(--color-parchment);
+  }
 }

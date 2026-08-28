@@ -1,13 +1,20 @@
 import Link from "next/link";
 import LotusMark from "@/components/LotusMark";
+import Image from "next/image";
+import rokuEraImg from '../assets/eras/roku.jpg';
+import aangEraImg from '../assets/eras/aang.jpg'
+import kyoshiEraImg from '../assets/eras/kyoshi.jpg'
+import hywEraImg from '../assets/eras/hundred-year-war.jpg';
+import korraEraImg from '../assets/eras/korra.jpg';
+import customEraImg from '../assets/eras/custom.jpg';
 
 const ERAS = [
-  { name: "Avatar Roku", tag: "Fire Nation dawn", img: "/eras/roku.jpg", accent: "text-[#e8927a]" },
-  { name: "Avatar Aang", tag: "Hundred Year War\u2019s end", img: "/eras/aang.jpg", accent: "text-[#9ec4e8]" },
-  { name: "Avatar Kyoshi", tag: "Age of the Daofei", img: "/eras/kyoshi.jpg", accent: "text-[#a3c98a]" },
-  { name: "Hundred Year War", tag: "A world at war", img: "/eras/hundred-year-war.jpg", accent: "text-[#d97a5c]" },
-  { name: "Avatar Korra", tag: "Age of industry", img: "/eras/korra.jpg", accent: "text-[#9ec4e8]" },
-  { name: "Your own era", tag: "Build a custom setting", img: "/eras/custom.jpg", accent: "text-gold" },
+  { name: "Avatar Roku", tag: "Fire Nation dawn", img: rokuEraImg, accent: "text-[#e8927a]" },
+  { name: "Avatar Aang", tag: "Hundred Year War\u2019s end", img: aangEraImg, accent: "text-[#9ec4e8]" },
+  { name: "Avatar Kyoshi", tag: "Age of the Daofei", img: kyoshiEraImg, accent: "text-[#a3c98a]" },
+  { name: "Hundred Year War", tag: "A world at war", img: hywEraImg, accent: "text-[#d97a5c]" },
+  { name: "Avatar Korra", tag: "Age of industry", img: korraEraImg, accent: "text-[#9ec4e8]" },
+  { name: "Your own era", tag: "Build a custom setting", img: customEraImg, accent: "text-gold" },
 ];
 
 export default function Home() {
@@ -52,12 +59,14 @@ export default function Home() {
           Your story across the four nations, kept in one place
         </h1>
         <p className="relative text-lg leading-relaxed text-parchment-dim max-w-xl mx-auto mb-11">
-          Build characters, track your growth, and carry your Avatar Legends saga from your first spark to your final bending &mdash; all in one warm little archive.
+          Build characters, track your growth, and carry your Avatar Legends saga from your first spark to your final bending &mdash; all in one place.
         </p>
         <div className="relative flex gap-4 justify-center flex-wrap mb-18">
           <Link href="/signup" className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">Sign up &amp; create your character</Link>
           <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore the eras</a>
         </div>
+
+        {/* Elemental Orb Thingy */}
         <div className="relative flex justify-center max-w-xl mx-auto">
           <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#3a6ea5", boxShadow: "0 0 14px rgba(58,110,165,0.6)" }} />
           <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#4a7c3a", boxShadow: "0 0 14px rgba(74,124,58,0.6)" }} />
@@ -83,7 +92,7 @@ export default function Home() {
                 </div>
               ))}
             </div>
-            <Link href="/character/creator" className="bg-gold text-gold-ink px-7 py-3.5 rounded-full text-[15px] font-bold hover:brightness-95">Start creating</Link>
+            <Link href="/character/creator" className="bg-gold text-gold-ink px-7 py-3.5 rounded-full text-[15px] font-bold hover:brightness-95">Start Creating</Link>
           </div>
           <div className="rounded-3xl p-8 border border-gold/20 shadow-2xl" style={{ background: "linear-gradient(155deg, #1a3238, #10262a)" }}>
             <div className="flex justify-between items-center mb-5.5">
@@ -95,10 +104,10 @@ export default function Home() {
             </div>
             <div className="grid grid-cols-2 gap-3.5">
               {[
-                { name: "The Waterbender", note: "Flow, healing, adaptation", tint: "rgba(58,110,165,0.5)", bg: "rgba(58,110,165,0.12)" },
-                { name: "The Bodyguard", note: "Protection, loyalty, resolve", tint: "rgba(232,200,116,0.55)", bg: "rgba(232,200,116,0.14)" },
-                { name: "The Adamant", note: "Earth, stability, defiance", tint: "rgba(74,124,58,0.5)", bg: "rgba(74,124,58,0.12)" },
-                { name: "The Rebel", note: "Fire, defiance, change", tint: "rgba(179,73,46,0.5)", bg: "rgba(179,73,46,0.12)" },
+                { name: "The Foundling", note: "Dualistic. Torn. Exploring.", tint: "rgba(58,110,165,0.5)", bg: "rgba(58,110,165,0.12)" },
+                { name: "The Prodigy", note: "Arrogant. Extraordinary. Stubborn.", tint: "rgba(232,200,116,0.55)", bg: "rgba(232,200,116,0.14)" },
+                { name: "The Adamant", note: "Pragmatic. Fervent. Dangerous.", tint: "rgba(74,124,58,0.5)", bg: "rgba(74,124,58,0.12)" },
+                { name: "The Rogue", note: "Troublemaking. Lonely. Selfish.", tint: "rgba(179,73,46,0.5)", bg: "rgba(179,73,46,0.12)" },
               ].map((c) => (
                 <div key={c.name} className="rounded-2xl p-4" style={{ border: `1px solid ${c.tint}`, background: c.bg }}>
                   <p className="font-display text-sm text-parchment mb-1">{c.name}</p>
@@ -122,7 +131,7 @@ export default function Home() {
             {ERAS.map((era) => (
               <div key={era.name} className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-gold/20">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={era.img} alt={era.name} className="absolute inset-0 w-full h-full object-cover" />
+                <Image src={era.img} alt={era.name} fill className="absolute inset-0 w-full h-full object-cover" />
                 <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(13,27,30,0) 35%, rgba(13,27,30,0.92) 100%)" }} />
                 <Link href="/signup" className="absolute left-5 right-5 bottom-5">
                   <p className={`mb-1 text-[11.5px] tracking-[0.18em] uppercase ${era.accent}`}>{era.tag}</p>
