@@ -1,8 +1,8 @@
 import type { Playbook } from '../data';
 // TODO: swap these for the Adamant's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/hundred-year-war.jpg';
-import backgroundImg from '../../../../assets/eras/aang.jpg';
-import bannerImg from '../../../../assets/eras/roku.jpg';
+import iconImg from '../../../../assets/playbooks/adamant.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/adamant.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/adamant.jpg';
 
 export const adamant: Playbook = {
   id: 'adamant',
