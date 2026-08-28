@@ -111,6 +111,7 @@ function CharacterCreatorInner() {
           <StepPlaybook
             playbookId={draft.playbookId}
             onSelect={(playbookId) => update({ playbookId, statBonus: null, balanceShift: 0, selectedMoves: [] })}
+            onAdvance={goNext}
           />
         )}
         {draft.step === 3 && (

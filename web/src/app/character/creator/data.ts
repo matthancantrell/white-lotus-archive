@@ -52,6 +52,11 @@ export const ERA_HEADER_LABEL: Record<string, string> = {
 
 export const PORTRAIT_COLORS = ['#3a6ea5', '#4a7c3a', '#b3492e', '#d9c98a', '#8a5ca8', '#5c8a8a', '#c98a4c', '#6f8a5c', '#a54e6e', '#4c7ac9', '#8a7c3a', '#3a9e8f', '#9e5c3a', '#5c6f9e', '#7c9e3a', '#9e3a6f', '#4c9e6f', '#9e6f4c', '#6f4c9e', '#3a5c9e', '#9e3a3a', '#3a9e3a', '#9e9e3a'];
 export const PORTRAITS = PORTRAIT_COLORS.map((c, i) => ({ id: `p${i + 1}`, bg: `linear-gradient(155deg,${c},#1a3238)` }));
+
+// TEST placeholder icon-tile colors standing in for real per-playbook icon art.
+export const PLAYBOOK_ICON_COLORS = ['#3a6ea5', '#4a7c3a', '#b3492e', '#d9c98a', '#8a5ca8', '#5c8a8a', '#c98a4c', '#6f8a5c', '#a54e6e', '#4c7ac9', '#8a7c3a', '#3a9e8f'];
+// Placeholder banner filenames cycled per playbook until real per-playbook banner art exists.
+export const PLAYBOOK_BANNER_FILES = ['roku', 'aang', 'kyoshi', 'hundred-year-war', 'korra', 'custom'];
 export const TOTAL_STEPS = STEP_LABELS.length;
 
 export const INITIAL_DRAFT: CharacterDraft = {
