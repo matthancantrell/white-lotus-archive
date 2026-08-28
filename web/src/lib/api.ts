@@ -15,8 +15,9 @@
  */
 export async function apiFetch(path: string, init?: RequestInit): Promise<Response> {
   try {
-    const { getEnv } = await import('vinext/cloudflare');
-    const env = getEnv() as { API?: { fetch: typeof fetch } };
+    const { env } = (await import('cloudflare:workers')) as {
+      env: { API?: { fetch: typeof fetch } };
+    };
     if (env?.API) {
       return env.API.fetch(`https://api.internal${path}`, init);
     }
