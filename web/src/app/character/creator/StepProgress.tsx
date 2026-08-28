@@ -1,4 +1,4 @@
-import { CharacterDraft, TOTAL_STEPS, STEP_LABELS } from './data';
+import { CharacterDraft, TOTAL_STEPS, STEP_LABELS, ERA_HEADER_LABEL } from './data';
 
 export default function StepProgress({
   draft,
@@ -10,6 +10,7 @@ export default function StepProgress({
   onGoTo: (n: number) => void;
 }) {
   const progressPct = Math.round((draft.step / TOTAL_STEPS) * 100);
+  const eraLabel = draft.eraName ? ERA_HEADER_LABEL[draft.eraName] || draft.eraName : 'No era yet';
 
   return (
     <div className="max-w-4xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(18px,4vw,28px)]">
@@ -17,7 +18,11 @@ export default function StepProgress({
         <p className="font-display text-[12.5px] tracking-[0.2em] uppercase text-gold whitespace-nowrap">
           Step {draft.step} of {TOTAL_STEPS} &middot; {STEP_LABELS[draft.step - 1]}
         </p>
-        <p className="text-[12.5px] text-faint whitespace-nowrap overflow-hidden text-ellipsis">{playbookName}</p>
+        <div className="flex items-center gap-2 text-[12.5px] text-faint whitespace-nowrap overflow-hidden text-ellipsis">
+          <span>{eraLabel}</span>
+          <span className="w-1 h-1 rounded-full bg-faint shrink-0" />
+          <span>{playbookName}</span>
+        </div>
       </div>
       <div className="h-1.5 rounded-full bg-white/8 overflow-hidden">
         <div className="h-full bg-gold rounded-full transition-[width] duration-300" style={{ width: `${progressPct}%` }} />

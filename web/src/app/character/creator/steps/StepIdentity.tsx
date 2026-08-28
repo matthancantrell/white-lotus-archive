@@ -1,30 +1,19 @@
 import { BACKGROUNDS, DEMEANORS } from '../data';
 
 export default function StepIdentity({
-  name, hometown, look, background, demeanor,
-  onName, onHometown, onLook, onBackground, onDemeanor,
+  look, background, demeanor,
+  onLook, onBackground, onDemeanor,
 }: {
-  name: string; hometown: string; look: string; background: string | null; demeanor: string | null;
-  onName: (v: string) => void; onHometown: (v: string) => void; onLook: (v: string) => void;
+  look: string; background: string | null; demeanor: string | null;
+  onLook: (v: string) => void;
   onBackground: (v: string) => void; onDemeanor: (v: string) => void;
 }) {
   const inputCls = 'w-full box-border bg-white/6 border border-white/18 rounded-[10px] px-3.5 py-3 text-parchment text-[14.5px] placeholder:text-[#6f827d] focus:outline-none focus:border-gold';
 
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Look, name &amp; background</h1>
+      <h1 className="font-display font-semibold text-[30px] mb-2">Look &amp; background</h1>
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Be as creative as you like &mdash; use your GM for inspiration.</p>
-
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 mb-5">
-        <div>
-          <label className="block text-[13px] text-muted mb-2">Character name</label>
-          <input type="text" value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Teo of the Northern Air Temple" className={inputCls} />
-        </div>
-        <div>
-          <label className="block text-[13px] text-muted mb-2">Hometown</label>
-          <input type="text" value={hometown} onChange={(e) => onHometown(e.target.value)} placeholder="e.g. Gaoling" className={inputCls} />
-        </div>
-      </div>
 
       <div className="mb-5">
         <label className="block text-[13px] text-muted mb-2">Look</label>

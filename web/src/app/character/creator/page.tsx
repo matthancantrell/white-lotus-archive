@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import LotusMark from '@/components/LotusMark';
 import StepProgress from './StepProgress';
-import StepEra from './steps/StepEra';
+import Step1Setup from './Step1Setup';
 import StepPlaybook from './steps/StepPlaybook';
 import StepTraining from './steps/StepTraining';
 import StepStats from './steps/StepStats';
@@ -16,40 +17,56 @@ import StepConnections from './steps/StepConnections';
 import StepGrowth from './steps/StepGrowth';
 import { CharacterDraft, INITIAL_DRAFT, PLAYBOOKS, TOTAL_STEPS, Stats } from './data';
 
-const STORAGE_KEY = 'wla_character_draft';
 const SAVED_KEY = 'wla_saved_characters';
 
-export default function CharacterCreatorPage() {
-  const [draft, setDraft] = useState<CharacterDraft>(INITIAL_DRAFT);
+function makeCharacterId() {
+  try { return crypto.randomUUID(); } catch { return 'char_' + Date.now() + '_' + Math.random().toString(36).slice(2); }
+}
+
+function loadSavedList(): (CharacterDraft & { characterId: string; status: string; updatedAt: number })[] {
+  try {
+    const raw = window.localStorage.getItem(SAVED_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+}
+
+function CharacterCreatorInner() {
+  const searchParams = useSearchParams();
+  const editId = searchParams.get('id');
+
+  const [draft, setDraft] = useState<CharacterDraft>(() => {
+    // Editing an existing saved character (linked from the character manager) loads it by id.
+    // Any other visit to the creator always starts a blank character.
+    if (typeof window !== 'undefined' && editId) {
+      const existing = loadSavedList().find((c) => c.characterId === editId);
+      if (existing) return existing;
+    }
+    return { ...INITIAL_DRAFT, characterId: makeCharacterId() } as CharacterDraft;
+  });
   const [justSaved, setJustSaved] = useState(false);
 
-  useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY);
-      if (raw) setDraft(JSON.parse(raw));
-    } catch {}
-  }, []);
-
   function update(patch: Partial<CharacterDraft>) {
-    setDraft((prev) => {
-      const next = { ...prev, ...patch };
-      try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); } catch {}
-      return next;
-    });
+    setDraft((prev) => ({ ...prev, ...patch }));
     setJustSaved(false);
   }
 
+  function upsertSaved(status: 'draft' | 'complete') {
+    try {
+      const list = loadSavedList();
+      const record = { ...draft, status, updatedAt: Date.now() };
+      const idx = list.findIndex((c) => c.characterId === draft.characterId);
+      if (idx >= 0) list[idx] = record; else list.push(record);
+      window.localStorage.setItem(SAVED_KEY, JSON.stringify(list));
+    } catch {}
+  }
+
   function saveDraft() {
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draft)); } catch {}
+    upsertSaved('draft');
+    setJustSaved(true);
   }
 
   function saveCharacter() {
-    try {
-      const raw = window.localStorage.getItem(SAVED_KEY);
-      const list = raw ? JSON.parse(raw) : [];
-      list.push({ ...draft, savedAt: Date.now() });
-      window.localStorage.setItem(SAVED_KEY, JSON.stringify(list));
-    } catch {}
+    upsertSaved('complete');
     setJustSaved(true);
   }
 
@@ -66,7 +83,7 @@ export default function CharacterCreatorPage() {
           <span className="font-display font-bold text-[17px] text-parchment">White Lotus Archive</span>
         </Link>
         <div className="flex items-center gap-5.5">
-          <span className="text-[13.5px] text-muted hidden sm:inline">Draft auto-saves in this browser</span>
+          <span className="text-[13.5px] text-muted hidden sm:inline">Save your progress to revisit this character later</span>
           <button onClick={saveDraft} className="bg-white/8 text-parchment px-4.5 py-2.5 rounded-full text-[13.5px] font-semibold border border-white/22">
             Save draft
           </button>
@@ -76,7 +93,20 @@ export default function CharacterCreatorPage() {
       <StepProgress draft={draft} playbookName={playbook ? playbook.name : 'No playbook yet'} onGoTo={(n) => update({ step: n })} />
 
       <main className="max-w-4xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(24px,5vw,36px)] pb-15">
-        {draft.step === 1 && <StepEra eraName={draft.eraName} onSelect={(eraName) => update({ eraName })} />}
+        {draft.step === 1 && (
+          <Step1Setup
+            eraName={draft.eraName}
+            name={draft.name}
+            portraitId={draft.portraitId}
+            scopeText={draft.scopeText}
+            groupFocusesText={draft.groupFocusesText}
+            onSelectEra={(eraName) => update({ eraName })}
+            onName={(name) => update({ name })}
+            onPortrait={(portraitId) => update({ portraitId })}
+            onScope={(scopeText) => update({ scopeText })}
+            onGroupFocuses={(groupFocusesText) => update({ groupFocusesText })}
+          />
+        )}
         {draft.step === 2 && (
           <StepPlaybook
             playbookId={draft.playbookId}
@@ -127,13 +157,9 @@ export default function CharacterCreatorPage() {
         )}
         {draft.step === 8 && (
           <StepIdentity
-            name={draft.name}
-            hometown={draft.hometown}
             look={draft.look}
             background={draft.background}
             demeanor={draft.demeanor}
-            onName={(name) => update({ name })}
-            onHometown={(hometown) => update({ hometown })}
             onLook={(look) => update({ look })}
             onBackground={(background) => update({ background })}
             onDemeanor={(demeanor) => update({ demeanor })}
@@ -183,5 +209,13 @@ export default function CharacterCreatorPage() {
         </div>
       </main>
     </div>
+  );
+}
+
+export default function CharacterCreatorPage() {
+  return (
+    <Suspense fallback={null}>
+      <CharacterCreatorInner />
+    </Suspense>
   );
 }
