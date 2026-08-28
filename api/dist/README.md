@@ -1,0 +1,1 @@
+This folder contains the built output assets for the worker "avatar-legends-api" generated at 2026-08-28T03:33:03.868Z.
