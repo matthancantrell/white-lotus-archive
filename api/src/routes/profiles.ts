@@ -7,14 +7,34 @@ export const profiles = new Hono<{ Bindings: Env; Variables: Variables }>();
 
 // GET /api/profiles/me — the logged-in user's own profile (any visibility)
 profiles.get('/me', requireAuth, async (c) => {
-  const supabase = userClient(c.env, c.get('userToken'));
+  const userId = c.get('userId');
+  const userToken = c.get('userToken');
+
+  console.log('=== PROFILE DEBUG ===');
+  console.log('userId:', userId);
+  console.log('hasToken:', !!userToken);
+
+  const supabase = userClient(c.env, userToken);
+
   const { data, error } = await supabase
     .from('profiles')
     .select('*')
-    .eq('id', c.get('userId'))
+    .eq('id', userId)
     .single();
 
-  if (error) return c.json({ error: error.message }, 404);
+  console.log('profile data:', data);
+  console.log('profile error:', error);
+
+  if (error) {
+    return c.json({
+      error: error.message,
+      code: error.code,
+      details: error.details,
+      hint: error.hint,
+      userId,
+    }, 404);
+  }
+
   return c.json(data as Profile);
 });
 

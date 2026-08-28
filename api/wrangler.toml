@@ -7,6 +7,22 @@ compatibility_date = "2024-09-23"
 SUPABASE_URL = "https://eatmqkekulibhzdkqwez.supabase.co"
 ALLOWED_ORIGIN = "https://white-lotus-archive.matthancantrell.workers.dev/"
 
+[observability]
+enabled = false
+head_sampling_rate = 1
+redact_query_string = false
+
+[observability.logs]
+enabled = true
+head_sampling_rate = 1
+persist = true
+invocation_logs = true
+
+[observability.traces]
+enabled = false
+persist = true
+head_sampling_rate = 1
+
 # Secrets are NOT set here. Set them with:
 #   wrangler secret put SUPABASE_ANON_KEY
 # Do this once for local dev (writes to .dev.vars if you prefer, see below)
