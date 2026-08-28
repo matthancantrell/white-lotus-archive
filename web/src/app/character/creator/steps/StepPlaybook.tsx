@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { PLAYBOOKS, PLAYBOOK_IMAGES } from '../data';
+import { PLAYBOOKS } from '../data';
 import PlaybookCard from '../PlaybookCard';
 
 const STAT_LABELS: [string, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
@@ -49,8 +49,8 @@ export default function StepPlaybook({
                 name={p.name}
                 principlesLabel={p.principles.join(' / ')}
                 iconColor={p.iconColor}
-                icon={PLAYBOOK_IMAGES[p.iconImage]}
-                background={PLAYBOOK_IMAGES[p.backgroundImage]}
+                icon={p.iconImage}
+                background={p.backgroundImage}
                 selected={playbookId === p.id}
                 onClick={() => toggle(p.id)}
               />
@@ -89,7 +89,7 @@ export default function StepPlaybook({
 
               <div className="px-7 pt-5 pb-7">
                 <Image
-                  src={PLAYBOOK_IMAGES[pb.bannerFile]}
+                  src={pb.bannerFile}
                   alt={pb.name}
                   className="w-full mb-5"
                   style={{ height: 150, objectFit: 'cover' }}
