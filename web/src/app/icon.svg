@@ -1,0 +1,14 @@
+<svg width="32" height="32" viewBox="0 0 34 34" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="17" cy="17" r="16" fill="none" stroke="#e8c874" stroke-width="1.5" />
+  <g>
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(0 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(45 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(90 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(135 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(180 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(225 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(270 17 17)" />
+    <path d="M17 17 C 14 12.5, 14 8, 17 4 C 20 8, 20 12.5, 17 17 Z" fill="#e8c874" fill-opacity="0.92" stroke="#c99e3f" stroke-width="0.4" transform="rotate(315 17 17)" />
+  </g>
+  <circle cx="17" cy="17" r="2.4" fill="#0d1b1e" stroke="#e8c874" stroke-width="1" />
+</svg>
