@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react';
 import Image from 'next/image';
 import { PLAYBOOKS, PLAYBOOK_ICON_COLORS, PLAYBOOK_BANNER_FILES } from '../data';
-import { PlaybookCard } from '../PlaybookCard';
+import PlaybookCard from '../PlaybookCard';
 import rokuEraImg from '../../../../assets/eras/roku.jpg';
 import aangEraImg from '../../../../assets/eras/aang.jpg';
 import kyoshiEraImg from '../../../../assets/eras/kyoshi.jpg';

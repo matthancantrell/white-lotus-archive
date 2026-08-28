@@ -137,7 +137,7 @@ export default function Home() {
             <p className="text-base text-parchment-dim max-w-lg mx-auto">Play in a time you know by heart, or build a setting entirely your own.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_340px] gap-8 items-start">
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-3.5">
+            <div className="grid grid-cols-3 gap-3.5">
               {ERAS.map((era) => {
                 const selected = activeEraName === era.name;
                 return (

@@ -57,14 +57,30 @@ export default function Step1Setup({
       <h2 className="font-display font-semibold text-lg mb-1.5 text-parchment">Choose your era</h2>
       <p className="text-parchment-dim text-[14.5px] mb-4.5">This sets the backdrop for your story.</p>
 
+      {!activeEra && (
+        <div className="grid grid-cols-6 gap-3.5 mb-9">
+          {ERAS.map((era) => (
+            <button
+              key={era.name}
+              onClick={() => onSelectEra(era.name)}
+              className="relative block aspect-[3/4] rounded-2xl overflow-hidden border-2 bg-ink-soft"
+              style={{ borderColor: 'rgba(232,200,116,0.15)' }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={ERA_IMAGES[era.name].src} alt={era.name} className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0" style={{ background: 'linear-gradient(180deg, rgba(13,27,30,0) 40%, rgba(13,27,30,0.9) 100%)' }} />
+              <div className="absolute left-3.5 right-3.5 bottom-3">
+                <p className={`mb-0.5 text-[10.5px] tracking-[0.12em] uppercase ${era.accent}`}>{era.tag}</p>
+                <p className="font-display font-semibold text-[15.5px] text-parchment">{era.name}</p>
+              </div>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {activeEra && (
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start mb-9">
-        <div
-          className="grid gap-3.5"
-          style={{
-            gridTemplateColumns: activeEra ? 'repeat(3, 1fr)' : 'repeat(3, 1fr)',
-            gridTemplateRows: activeEra ? 'repeat(2, 200px)' : undefined,
-          }}
-        >
+        <div className="grid gap-3.5" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 200px)' }}>
           {ERAS.map((era) => {
             const selected = eraName === era.name;
             return (
@@ -72,12 +88,7 @@ export default function Step1Setup({
                 key={era.name}
                 onClick={() => onSelectEra(selected ? null : era.name)}
                 className="relative block rounded-2xl overflow-hidden border-2 bg-ink-soft"
-                style={{
-                  borderColor: selected ? ERA_ACCENT_HEX[era.name] : 'rgba(232,200,116,0.15)',
-                  aspectRatio: activeEra ? undefined : '3/4',
-                  width: '100%',
-                  height: activeEra ? '100%' : undefined,
-                }}
+                style={{ borderColor: selected ? ERA_ACCENT_HEX[era.name] : 'rgba(232,200,116,0.15)', width: '100%', height: '100%' }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ERA_IMAGES[era.name].src} alt={era.name} className="absolute inset-0 w-full h-full object-cover" />
@@ -91,7 +102,7 @@ export default function Step1Setup({
           })}
         </div>
 
-        {activeEra && (
+        {
           <div className="bg-ink-soft border border-gold/20 rounded-2xl p-6.5 flex flex-col overflow-y-auto" style={{ height: 414 }}>
             <p className={`mb-1.5 text-[11px] tracking-[0.18em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>
             <h3 className="font-display font-semibold text-[22px] text-parchment mb-4">{activeEra.name}</h3>
@@ -108,6 +119,7 @@ export default function Step1Setup({
           </div>
         )}
       </div>
+      )}
 
       <div className="rounded-2xl bg-ink-soft border border-gold/18 mb-9 overflow-hidden">
         <button onClick={() => setCampaignOpen((v) => !v)} className="flex items-center justify-between w-full px-5 py-4">
