@@ -136,7 +136,7 @@ export default function Home() {
             <h2 className="font-display font-semibold text-[clamp(27px,4.2vw,38px)] mb-4 text-parchment">Six chapters of the Avatar world</h2>
             <p className="text-base text-parchment-dim max-w-lg mx-auto">Play in a time you know by heart, or build a setting entirely your own.</p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_340px] gap-8 items-start">
+          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_340px] gap-8 items-center">
             <div className="grid grid-cols-3 gap-3.5">
               {ERAS.map((era) => {
                 const selected = activeEraName === era.name;
@@ -158,7 +158,7 @@ export default function Home() {
               })}
             </div>
 
-            <div className="md:sticky md:top-24 flex flex-col rounded-[20px] p-7.5 border border-gold/20 shadow-2xl min-h-[280px]" style={{ background: "linear-gradient(155deg, #1a3238, #10262a)" }}>
+            <div className="flex flex-col rounded-[20px] p-7.5 border border-gold/20 shadow-2xl min-h-[280px]" style={{ background: "linear-gradient(155deg, #1a3238, #10262a)" }}>
               {activeEra ? (
                 <>
                   <p className={`mb-2 text-xs tracking-[0.2em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>

@@ -79,16 +79,16 @@ export default function Step1Setup({
       )}
 
       {activeEra && (
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-6 items-stretch mb-9">
-        <div className="grid grid-cols-3 gap-3.5 content-start" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gridTemplateRows: 'repeat(2, 200px)' }}>
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start mb-9">
+        <div className="grid grid-cols-3 gap-3.5 content-start max-w-[560px]">
           {ERAS.map((era) => {
             const selected = eraName === era.name;
             return (
               <button
                 key={era.name}
                 onClick={() => onSelectEra(selected ? null : era.name)}
-                className="relative block aspect[3/4] w-full rounded-2xl overflow-hidden border-2 bg-ink-soft"
-                style={{ borderColor: selected ? ERA_ACCENT_HEX[era.name] : 'rgba(232,200,116,0.15)', width: '100%', height: '100%' }}
+                className="relative block aspect-[3/4] w-full rounded-2xl overflow-hidden border-2 bg-ink-soft"
+                style={{ borderColor: selected ? ERA_ACCENT_HEX[era.name] : 'rgba(232,200,116,0.15)' }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={ERA_IMAGES[era.name].src} alt={era.name} className="absolute inset-0 w-full h-full object-cover" />
@@ -103,7 +103,7 @@ export default function Step1Setup({
         </div>
 
         {
-          <div className="bg-ink-soft border border-gold/20 rounded-2xl p-6.5 flex flex-col overflow-y-auto">
+          <div className="bg-ink-soft border border-gold/20 rounded-2xl p-6.5 flex flex-col overflow-y-auto" style={{ height: 486 }}>
             <p className={`mb-1.5 text-[11px] tracking-[0.18em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>
             <h3 className="font-display font-semibold text-[22px] text-parchment mb-4">{activeEra.name}</h3>
             <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Overview</p>
