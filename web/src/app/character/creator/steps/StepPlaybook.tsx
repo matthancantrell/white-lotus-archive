@@ -47,7 +47,7 @@ export default function StepPlaybook({
               <PlaybookCard
                 key={p.id}
                 name={p.name}
-                principlesLabel={p.principles.join(' / ')}
+                principlesLabel={p.principles.join(' · ')}
                 iconColor={p.iconColor}
                 icon={p.iconImage}
                 background={p.backgroundImage}
@@ -68,7 +68,7 @@ export default function StepPlaybook({
                 <div className="flex justify-between items-start gap-3 mb-2.5">
                   <div>
                     <h3 className="font-display font-semibold text-2xl text-parchment mb-1">{pb.name}</h3>
-                    <p className="text-xs text-gold tracking-wide">{pb.principles.join(' / ')}</p>
+                    <p className="text-xs text-gold tracking-wide">{pb.principles.join(' · ')}</p>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
                     <button onClick={onAdvance} className="bg-gold text-gold-ink px-4.5 py-2.5 rounded-full text-[13.5px] font-bold whitespace-nowrap hover:brightness-95">
@@ -92,7 +92,7 @@ export default function StepPlaybook({
                   src={pb.bannerFile}
                   alt={pb.name}
                   className="w-full mb-5"
-                  style={{ height: 150, objectFit: 'cover' }}
+                  style={{ height: 150, objectFit: 'cover', outline: '2px solid #e8c874', outlineOffset: '-8px' }}
                 />
 
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
