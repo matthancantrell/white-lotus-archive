@@ -95,7 +95,7 @@ export default function StepPlaybook({
                   // fixed pixel height) keeps the full shape of the photo at any width,
                   // mobile included, rather than cropping harder as the panel narrows.
                   className="w-full aspect-[1920/600] object-cover mb-5"
-                  style={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }}
+                  style={{ outline: '1px solid #e8c874', outlineOffset: '-5px' }}
                 />
 
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
