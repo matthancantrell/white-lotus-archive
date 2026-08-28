@@ -72,7 +72,7 @@ export default function Step1Setup({
       <p className="text-parchment-dim text-[14.5px] mb-4.5">This sets the backdrop for your story.</p>
 
       {!activeEra && (
-        <div className="grid grid-cols-6 gap-3.5 mb-9">
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-3.5 mb-9">
           {ERAS.map((era) => (
             <button
               key={era.name}
