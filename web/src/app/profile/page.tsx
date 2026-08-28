@@ -35,7 +35,7 @@ export default async function ProfilePage() {
           <span className="font-display font-bold text-lg tracking-wide text-parchment">White Lotus Archive</span>
         </Link>
         <nav className="flex items-center gap-[clamp(16px,3vw,36px)] flex-wrap">
-          <a href="/#eras" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Eras</a>
+          <Link href="/#eras" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Eras</Link>
           <div className="hidden sm:block group relative">
             <button className="flex items-center gap-1.5 text-parchment-dim text-[15px] font-medium">
               Character

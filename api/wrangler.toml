@@ -5,7 +5,7 @@ compatibility_date = "2024-09-23"
 # Non-secret config, safe to commit.
 [vars]
 SUPABASE_URL = "https://eatmqkekulibhzdkqwez.supabase.co"
-ALLOWED_ORIGIN = "https://white-lotus-archive.matthancantrell.workers.dev/"
+ALLOWED_ORIGIN = "https://white-lotus-archive.matthancantrell.workers.dev"
 
 [observability]
 enabled = false
