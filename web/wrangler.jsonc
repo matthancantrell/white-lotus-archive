@@ -17,6 +17,12 @@
 	"images": {
 		"binding": "IMAGES"
 	},
+	"services": [
+		{
+			"binding": "API",
+			"service": "avatar-legends-api"
+		}
+	],
 	"observability": {
 		"enabled": false,
 		"head_sampling_rate": 1,

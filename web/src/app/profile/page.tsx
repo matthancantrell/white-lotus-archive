@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
+import { apiFetch } from '@/lib/api';
 import { ProfileForm } from './ProfileForm';
 import type { Profile } from './types';
 import styles from '@/styles/profile.module.css';
@@ -12,7 +13,7 @@ export default async function ProfilePage() {
 
   if (!session) redirect('/login');
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/profiles/me`, {
+  const res = await apiFetch('/api/profiles/me', {
     headers: { Authorization: `Bearer ${session.access_token}` },
     cache: 'no-store',
   });
