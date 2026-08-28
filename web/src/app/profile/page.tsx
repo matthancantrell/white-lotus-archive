@@ -18,9 +18,10 @@ export default async function ProfilePage() {
   });
 
   if (!res.ok) {
+    const body = await res.text();
+    console.error('Profile fetch failed:', res.status, res.statusText, body);
     throw new Error('Could not load your profile.');
   }
-
   const profile: Profile = await res.json();
 
   return (

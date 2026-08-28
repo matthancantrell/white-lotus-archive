@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
@@ -9,7 +9,7 @@ import LotusMark from '@/components/LotusMark';
 const inputCls =
   'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20';
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
@@ -118,5 +118,13 @@ export default function LoginPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={null}>
+      <LoginForm />
+    </Suspense>
   );
 }
