@@ -91,8 +91,11 @@ export default function StepPlaybook({
                 <Image
                   src={pb.bannerFile}
                   alt={pb.name}
-                  className="w-full mb-5"
-                  style={{ height: 150, objectFit: 'cover', outline: '2px solid #e8c874', outlineOffset: '-8px' }}
+                  // Real banner art is 1920x600 — matching that ratio here (instead of a
+                  // fixed pixel height) keeps the full shape of the photo at any width,
+                  // mobile included, rather than cropping harder as the panel narrows.
+                  className="w-full aspect-[1920/600] object-cover mb-5"
+                  style={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }}
                 />
 
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
