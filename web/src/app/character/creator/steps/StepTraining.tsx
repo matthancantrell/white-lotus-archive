@@ -17,7 +17,7 @@ export default function StepTraining({
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">
         Training defines how you fight &mdash; bending, weapons, or hand-to-hand. Fighting style is how you make that your own.
       </p>
-      <div className="grid grid-cols-4 gap-3 mb-7">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] gap-3 mb-7">
         {TRAININGS.map((t) => {
           const selected = trainingName === t;
           return (

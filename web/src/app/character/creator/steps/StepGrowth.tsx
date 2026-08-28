@@ -32,7 +32,7 @@ export default function StepGrowth({
 
       <div className="bg-panel border border-gold/25 rounded-2xl p-7">
         <p className="font-display font-semibold text-lg text-parchment mb-4">Ready to save {name || 'your character'}</p>
-        <div className="grid grid-cols-3 gap-x-6 gap-y-2.5 text-[13.5px] text-[#b9c2bd] mb-5.5">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-6 gap-y-2.5 text-[13.5px] text-[#b9c2bd] mb-5.5">
           <p><span className="text-faint">Playbook:</span> {playbook ? playbook.name : 'not chosen'}</p>
           <p><span className="text-faint">Training:</span> {trainingName || 'not chosen'}</p>
           <p><span className="text-faint">Era:</span> {eraName || 'not chosen'}</p>

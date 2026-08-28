@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState } from 'react';
+import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
@@ -9,7 +9,7 @@ import LotusMark from '@/components/LotusMark';
 const inputCls =
   'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20';
 
-function LoginForm() {
+export default function LoginPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const supabase = createClient();
@@ -40,7 +40,7 @@ function LoginForm() {
 
   return (
     <main
-      className="min-h-screen flex items-center justify-center px-5 py-10 relative overflow-hidden font-body"
+      className="min-h-screen flex items-center justify-center px-5 py-[clamp(24px,6vw,40px)] relative overflow-hidden font-body"
       style={{ background: 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(58,110,165,0.2), transparent 65%), linear-gradient(180deg, #0d1b1e 0%, #142a2e 55%, #0d1b1e 100%)' }}
     >
       <div
@@ -54,7 +54,7 @@ function LoginForm() {
           <span className="font-display font-bold text-[16.5px] text-parchment">White Lotus Archive</span>
         </Link>
 
-        <div className="rounded-[22px] p-10 border border-gold/20 shadow-2xl" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
+        <div className="rounded-[22px] p-[clamp(24px,6vw,40px)] border border-gold/20 shadow-2xl" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
           <h1 className="font-display font-semibold text-2xl mb-1.5 text-parchment">Welcome back</h1>
           <p className="text-[14.5px] text-muted mb-7">Log in to continue your journey.</p>
 
@@ -118,13 +118,5 @@ function LoginForm() {
         </div>
       </div>
     </main>
-  );
-}
-
-export default function LoginPage() {
-  return (
-    <Suspense fallback={null}>
-      <LoginForm />
-    </Suspense>
   );
 }

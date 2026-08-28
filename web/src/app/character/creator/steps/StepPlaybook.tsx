@@ -7,7 +7,7 @@ export default function StepPlaybook({ playbookId, onSelect }: { playbookId: str
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">
         Your playbook is your archetype &mdash; it sets your stats, your balance principles, and the moves available to you. Only one player per playbook in a party.
       </p>
-      <div className="grid grid-cols-2 gap-3.5">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-3.5">
         {PLAYBOOKS.map((pb) => {
           const selected = playbookId === pb.id;
           return (

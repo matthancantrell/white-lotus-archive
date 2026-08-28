@@ -12,7 +12,7 @@ export default function StepProgress({
   const progressPct = Math.round((draft.step / TOTAL_STEPS) * 100);
 
   return (
-    <div className="max-w-4xl mx-auto px-10 pt-7">
+    <div className="max-w-4xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(18px,4vw,28px)]">
       <div className="flex justify-between items-center gap-4 mb-3.5 flex-wrap">
         <p className="font-display text-[12.5px] tracking-[0.2em] uppercase text-gold whitespace-nowrap">
           Step {draft.step} of {TOTAL_STEPS} &middot; {STEP_LABELS[draft.step - 1]}

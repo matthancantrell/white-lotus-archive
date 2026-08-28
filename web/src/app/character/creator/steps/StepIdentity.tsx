@@ -15,7 +15,7 @@ export default function StepIdentity({
       <h1 className="font-display font-semibold text-[30px] mb-2">Look, name &amp; background</h1>
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Be as creative as you like &mdash; use your GM for inspiration.</p>
 
-      <div className="grid grid-cols-2 gap-4 mb-5">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 mb-5">
         <div>
           <label className="block text-[13px] text-muted mb-2">Character name</label>
           <input type="text" value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Teo of the Northern Air Temple" className={inputCls} />
@@ -37,7 +37,7 @@ export default function StepIdentity({
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-6">
         <div>
           <p className="text-[13px] text-muted mb-2">Background</p>
           <div className="flex flex-wrap gap-2">

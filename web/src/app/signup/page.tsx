@@ -50,7 +50,7 @@ export default function SignUpPage() {
 
   return (
     <main
-      className="min-h-screen flex items-center justify-center px-5 py-10 relative overflow-hidden font-body"
+      className="min-h-screen flex items-center justify-center px-5 py-[clamp(24px,6vw,40px)] relative overflow-hidden font-body"
       style={{ background: 'radial-gradient(ellipse 80% 55% at 50% 0%, rgba(58,110,165,0.2), transparent 65%), linear-gradient(180deg, #0d1b1e 0%, #142a2e 55%, #0d1b1e 100%)' }}
     >
       <div
@@ -65,14 +65,14 @@ export default function SignUpPage() {
         </Link>
 
         {checkEmail ? (
-          <div className="rounded-[22px] p-10 border border-gold/20 shadow-2xl text-center" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
+          <div className="rounded-[22px] p-[clamp(24px,6vw,40px)] border border-gold/20 shadow-2xl text-center" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
             <h1 className="font-display font-semibold text-[23px] mb-2.5 text-parchment">Check your email</h1>
             <p className="text-[14.5px] text-muted leading-relaxed">
               We sent a confirmation link to <strong>{email}</strong>. Follow it to finish setting up your account.
             </p>
           </div>
         ) : (
-          <div className="rounded-[22px] p-10 border border-gold/20 shadow-2xl" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
+          <div className="rounded-[22px] p-[clamp(24px,6vw,40px)] border border-gold/20 shadow-2xl" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
             <h1 className="font-display font-semibold text-2xl mb-1.5 text-parchment">Create your account</h1>
             <p className="text-[14.5px] text-muted mb-7">Join the archive and start your saga.</p>
 

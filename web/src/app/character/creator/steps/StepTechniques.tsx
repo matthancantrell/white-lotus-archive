@@ -16,7 +16,7 @@ export default function StepTechniques({
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">
         Based on your training in {trainingName || 'no training yet'}, choose one technique you&rsquo;ve already mastered.
       </p>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
         {options.map((tq) => {
           const selected = selectedTechnique === tq.name;
           return (

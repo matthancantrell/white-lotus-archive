@@ -60,7 +60,7 @@ export default function CharacterCreatorPage() {
 
   return (
     <div className="bg-ink text-parchment min-h-screen font-body">
-      <header className="sticky top-0 z-20 flex items-center justify-between px-10 py-4.5 bg-ink/90 backdrop-blur-md border-b border-gold/15">
+      <header className="sticky top-0 z-20 flex items-center justify-between flex-wrap gap-y-2.5 px-[clamp(16px,5vw,40px)] py-[clamp(12px,3vw,18px)] bg-ink/90 backdrop-blur-md border-b border-gold/15">
         <Link href="/" className="flex items-center gap-3">
           <LotusMark size={30} />
           <span className="font-display font-bold text-[17px] text-parchment">White Lotus Archive</span>
@@ -75,7 +75,7 @@ export default function CharacterCreatorPage() {
 
       <StepProgress draft={draft} playbookName={playbook ? playbook.name : 'No playbook yet'} onGoTo={(n) => update({ step: n })} />
 
-      <main className="max-w-4xl mx-auto px-10 pt-9 pb-15">
+      <main className="max-w-4xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(24px,5vw,36px)] pb-15">
         {draft.step === 1 && <StepEra eraName={draft.eraName} onSelect={(eraName) => update({ eraName })} />}
         {draft.step === 2 && (
           <StepPlaybook
@@ -162,7 +162,7 @@ export default function CharacterCreatorPage() {
           />
         )}
 
-        <div className="flex justify-between mt-10 pt-6 border-t border-gold/12">
+        <div className="flex justify-between flex-wrap gap-3 mt-10 pt-6 border-t border-gold/12">
           <button
             onClick={goBack}
             disabled={draft.step === 1}

@@ -19,7 +19,7 @@ export default function StepConnections({
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Tie yourself to the rest of the party &mdash; add each companion and how you know them.</p>
       <div className="flex flex-col gap-3 mb-4.5">
         {connections.map((cn, i) => (
-          <div key={i} className="grid grid-cols-[1fr_2fr_auto] gap-2.5 items-center">
+          <div key={i} className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-2.5 items-center">
             <input type="text" value={cn.name} onChange={(e) => onUpdate(i, { name: e.target.value })} placeholder="Companion's name" className={inputCls} />
             <input type="text" value={cn.note} onChange={(e) => onUpdate(i, { note: e.target.value })} placeholder="How do you know them?" className={inputCls} />
             <button onClick={() => onRemove(i)} className="text-[#d97a5c] text-[13px] px-2 py-2">Remove</button>

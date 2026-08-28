@@ -40,7 +40,7 @@ export default function StepBalance({
             </div>
           ))}
         </div>
-        <div className="flex gap-3 justify-center">
+        <div className="flex gap-3 justify-center flex-wrap">
           <button
             onClick={() => onShift(-1)}
             disabled={!playbook}

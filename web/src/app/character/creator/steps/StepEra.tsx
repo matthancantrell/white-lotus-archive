@@ -5,7 +5,7 @@ export default function StepEra({ eraName, onSelect }: { eraName: string | null;
     <section>
       <h1 className="font-display font-semibold text-[30px] mb-2">Choose your era and setting</h1>
       <p className="text-parchment-dim text-[15px] mb-7">This sets the backdrop for your story &mdash; talk to your GM if you&rsquo;re joining an existing campaign.</p>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
         {ERAS.map((era) => {
           const selected = eraName === era.name;
           return (

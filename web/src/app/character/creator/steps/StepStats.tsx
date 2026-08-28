@@ -20,7 +20,7 @@ export default function StepStats({
     <section>
       <h1 className="font-display font-semibold text-[30px] mb-2">Stats</h1>
       <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Your playbook sets your starting array. You may add +1 to one stat (max +2).</p>
-      <div className="grid grid-cols-4 gap-3.5">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(130px,1fr))] gap-3.5">
         {STAT_ROWS.map(([key, label]) => {
           const base = playbook ? playbook.stats[key] : 0;
           const bonus = statBonus === key ? 1 : 0;
