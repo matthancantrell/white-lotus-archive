@@ -2,19 +2,8 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { PLAYBOOKS, PLAYBOOK_ICON_COLORS, PLAYBOOK_BANNER_FILES } from '../data';
+import { PLAYBOOKS, PLAYBOOK_IMAGES } from '../data';
 import PlaybookCard from '../PlaybookCard';
-import rokuEraImg from '../../../../assets/eras/roku.jpg';
-import aangEraImg from '../../../../assets/eras/aang.jpg';
-import kyoshiEraImg from '../../../../assets/eras/kyoshi.jpg';
-import hywEraImg from '../../../../assets/eras/hundred-year-war.jpg';
-import korraEraImg from '../../../../assets/eras/korra.jpg';
-import customEraImg from '../../../../assets/eras/custom.jpg';
-
-const BANNER_IMAGES: Record<string, typeof rokuEraImg> = {
-  roku: rokuEraImg, aang: aangEraImg, kyoshi: kyoshiEraImg,
-  'hundred-year-war': hywEraImg, korra: korraEraImg, custom: customEraImg,
-};
 
 const STAT_LABELS: [string, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 
@@ -31,9 +20,7 @@ export default function StepPlaybook({
   const [atBottom, setAtBottom] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
 
-  const pbIndex = PLAYBOOKS.findIndex((p) => p.id === playbookId);
-  const pb = pbIndex >= 0 ? PLAYBOOKS[pbIndex] : null;
-  const bannerFile = pb ? PLAYBOOK_BANNER_FILES[pbIndex % PLAYBOOK_BANNER_FILES.length] : null;
+  const pb = PLAYBOOKS.find((p) => p.id === playbookId) ?? null;
 
   function handleListScroll(e: React.UIEvent<HTMLDivElement>) {
     const el = e.currentTarget;
@@ -56,12 +43,14 @@ export default function StepPlaybook({
         {/* List: hidden on mobile once a playbook is selected */}
         <div className={`relative ${pb ? 'hidden md:block' : 'block'}`}>
           <div ref={listRef} onScroll={handleListScroll} className="hide-scrollbar flex flex-col gap-2 pr-1.5" style={{ height: 480, overflowY: 'auto' }}>
-            {PLAYBOOKS.map((p, i) => (
+            {PLAYBOOKS.map((p) => (
               <PlaybookCard
                 key={p.id}
                 name={p.name}
                 principlesLabel={p.principles.join(' / ')}
-                iconBg={`linear-gradient(155deg, ${PLAYBOOK_ICON_COLORS[i % PLAYBOOK_ICON_COLORS.length]}, #1a3238)`}
+                iconColor={p.iconColor}
+                icon={PLAYBOOK_IMAGES[p.iconImage]}
+                background={PLAYBOOK_IMAGES[p.backgroundImage]}
                 selected={playbookId === p.id}
                 onClick={() => toggle(p.id)}
               />
@@ -99,14 +88,12 @@ export default function StepPlaybook({
               </div>
 
               <div className="px-7 pt-5 pb-7">
-                {bannerFile && (
-                  <Image
-                    src={BANNER_IMAGES[bannerFile]}
-                    alt={pb.name}
-                    className="w-full mb-5"
-                    style={{ height: 150, objectFit: 'cover' }}
-                  />
-                )}
+                <Image
+                  src={PLAYBOOK_IMAGES[pb.bannerFile]}
+                  alt={pb.name}
+                  className="w-full mb-5"
+                  style={{ height: 150, objectFit: 'cover' }}
+                />
 
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
                 <div className="flex flex-wrap gap-2 mb-5">

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ERAS, PORTRAITS } from './data';
 import rokuEraImg from '../../../assets/eras/roku.jpg';
 import aangEraImg from '../../../assets/eras/aang.jpg';
@@ -47,7 +47,21 @@ export default function Step1Setup({
 }) {
   const [campaignOpen, setCampaignOpen] = useState(false);
   const [portraitsExpanded, setPortraitsExpanded] = useState(false);
+  const [detailAtBottom, setDetailAtBottom] = useState(true);
+  const detailRef = useRef<HTMLDivElement>(null);
   const activeEra = eraName ? ERAS.find((e) => e.name === eraName) ?? null : null;
+
+  function handleDetailScroll(e: React.UIEvent<HTMLDivElement>) {
+    const el = e.currentTarget;
+    setDetailAtBottom(el.scrollTop + el.clientHeight >= el.scrollHeight - 2);
+  }
+
+  useEffect(() => {
+    const el = detailRef.current;
+    if (!el) return;
+    el.scrollTop = 0;
+    setDetailAtBottom(el.scrollHeight <= el.clientHeight + 2);
+  }, [eraName]);
 
   return (
     <section>
@@ -79,8 +93,8 @@ export default function Step1Setup({
       )}
 
       {activeEra && (
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-6 items-start mb-9">
-        <div className="grid grid-cols-3 gap-3.5 content-start max-w-[560px]">
+      <div className="grid grid-cols-1 md:grid-cols-[560px_minmax(0,1fr)] gap-6 items-start mb-9">
+        <div className="grid grid-cols-3 gap-3.5 content-start">
           {ERAS.map((era) => {
             const selected = eraName === era.name;
             return (
@@ -103,19 +117,24 @@ export default function Step1Setup({
         </div>
 
         {
-          <div className="bg-ink-soft border border-gold/20 rounded-2xl p-6.5 flex flex-col overflow-y-auto" style={{ height: 486 }}>
-            <p className={`mb-1.5 text-[11px] tracking-[0.18em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>
-            <h3 className="font-display font-semibold text-[22px] text-parchment mb-4">{activeEra.name}</h3>
-            <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Overview</p>
-            <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.overview}</p>
-            <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">The Avatar</p>
-            <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.avatarStatus}</p>
-            <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Key events &amp; consequences</p>
-            <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.events}</p>
-            <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Tone</p>
-            <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.tone}</p>
-            <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Key tension</p>
-            <p className="text-sm leading-relaxed text-parchment-dim">{activeEra.tension}</p>
+          <div className="relative bg-ink-soft border border-gold/20 rounded-2xl overflow-hidden" style={{ height: 486 }}>
+            <div ref={detailRef} onScroll={handleDetailScroll} className="h-full flex flex-col p-6.5 overflow-y-auto hide-scrollbar">
+              <p className={`mb-1.5 text-[11px] tracking-[0.18em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>
+              <h3 className="font-display font-semibold text-[22px] text-parchment mb-4">{activeEra.name}</h3>
+              <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Overview</p>
+              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.overview}</p>
+              <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">The Avatar</p>
+              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.avatarStatus}</p>
+              <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Key events &amp; consequences</p>
+              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.events}</p>
+              <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Tone</p>
+              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.tone}</p>
+              <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Key tension</p>
+              <p className="text-sm leading-relaxed text-parchment-dim">{activeEra.tension}</p>
+            </div>
+            {!detailAtBottom && (
+              <div className="absolute left-0 right-0 bottom-0 h-14 pointer-events-none" style={{ background: 'linear-gradient(rgba(20,42,46,0), #142a2e)' }} />
+            )}
           </div>
         }
       </div>
