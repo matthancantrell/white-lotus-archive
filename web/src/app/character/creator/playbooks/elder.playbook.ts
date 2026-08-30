@@ -1,8 +1,8 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Elder's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/kyoshi.jpg';
-import backgroundImg from '../../../../assets/eras/roku.jpg';
-import bannerImg from '../../../../assets/eras/custom.jpg';
+import iconImg from '../../../../assets/playbooks/elder.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/elder.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/elder.jpg';
+
 
 export const elder: Playbook = {
   id: 'elder',

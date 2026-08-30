@@ -1,8 +1,7 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Rogue's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/custom.jpg';
-import backgroundImg from '../../../../assets/eras/hundred-year-war.jpg';
-import bannerImg from '../../../../assets/eras/kyoshi.jpg';
+import iconImg from '../../../../assets/playbooks/rogue.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/rogue.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/rogue.jpg';
 
 export const rogue: Playbook = {
   id: 'rogue',

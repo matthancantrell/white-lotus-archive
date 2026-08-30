@@ -1,8 +1,7 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Idealist's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/kyoshi.jpg';
-import backgroundImg from '../../../../assets/eras/roku.jpg';
-import bannerImg from '../../../../assets/eras/custom.jpg';
+import iconImg from '../../../../assets/playbooks/idealist.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/idealist.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/idealist.jpg';
 
 export const idealist: Playbook = {
   id: 'idealist',

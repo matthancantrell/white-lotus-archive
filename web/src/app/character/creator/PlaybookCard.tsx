@@ -24,7 +24,7 @@ export default function PlaybookCard({
       style={{ borderColor: selected ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
     >
       {/* Card background photo, dimmed so the name/principles stay legible over any picture. */}
-      <Image src={background} alt="" fill sizes="280px" className="object-cover" />
+      <Image src={background} alt="" fill sizes="280px" className="object-cover object-right" />
       <div
         className="absolute inset-0"
         style={{ background: selected ? 'linear-gradient(90deg, rgba(232,200,116,0.28), rgba(20,42,46,0.86))' : 'linear-gradient(90deg, rgba(20,42,46,0.55), rgba(20,42,46,0.86))' }}

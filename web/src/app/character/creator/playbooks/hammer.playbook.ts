@@ -1,8 +1,7 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Hammer's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/roku.jpg';
-import backgroundImg from '../../../../assets/eras/korra.jpg';
-import bannerImg from '../../../../assets/eras/hundred-year-war.jpg';
+import iconImg from '../../../../assets/playbooks/hammer.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/hammer.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/hammer.jpg';
 
 export const hammer: Playbook = {
   id: 'hammer',

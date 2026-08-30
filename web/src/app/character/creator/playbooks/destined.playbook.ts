@@ -1,8 +1,8 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Destined's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/aang.jpg';
-import backgroundImg from '../../../../assets/eras/custom.jpg';
-import bannerImg from '../../../../assets/eras/korra.jpg';
+import iconImg from '../../../../assets/playbooks/destined.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/destined.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/destined.jpg';
+
 
 export const destined: Playbook = {
   id: 'destined',

@@ -1,8 +1,7 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Prodigy's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/korra.jpg';
-import backgroundImg from '../../../../assets/eras/kyoshi.jpg';
-import bannerImg from '../../../../assets/eras/aang.jpg';
+import iconImg from '../../../../assets/playbooks/prodigy.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/prodigy.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/prodigy.jpg';
 
 export const prodigy: Playbook = {
   id: 'prodigy',

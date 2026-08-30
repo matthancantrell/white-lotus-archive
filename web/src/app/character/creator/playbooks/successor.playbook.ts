@@ -1,8 +1,7 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Successor's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/roku.jpg';
-import backgroundImg from '../../../../assets/eras/korra.jpg';
-import bannerImg from '../../../../assets/eras/hundred-year-war.jpg';
+import iconImg from '../../../../assets/playbooks/successor.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/successor.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/successor.jpg';
 
 export const successor: Playbook = {
   id: 'successor',

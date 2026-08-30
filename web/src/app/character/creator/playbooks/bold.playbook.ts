@@ -1,8 +1,7 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Bold's own real icon/background/banner art.
-import iconImg from '../../../../assets/eras/korra.jpg';
-import backgroundImg from '../../../../assets/eras/kyoshi.jpg';
-import bannerImg from '../../../../assets/eras/aang.jpg';
+import iconImg from '../../../../assets/playbooks/bold.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/bold.jpg';
+import bannerImg from '../../../../assets/playbooks/banner/bold.jpg';
 
 export const bold: Playbook = {
   id: 'bold',
