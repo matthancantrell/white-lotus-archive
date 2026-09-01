@@ -92,7 +92,7 @@ function CharacterCreatorInner() {
 
       <StepProgress draft={draft} playbookName={playbook ? playbook.name : 'No playbook yet'} onGoTo={(n) => update({ step: n })} />
 
-      <main className="max-w-7xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(24px,5vw,36px)] pb-15">
+      <main className="max-w-4xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(24px,5vw,36px)] pb-15">
         {draft.step === 1 && (
           <Step1Setup
             eraName={draft.eraName}
@@ -111,7 +111,16 @@ function CharacterCreatorInner() {
           <StepPlaybook
             playbookId={draft.playbookId}
             onSelect={(playbookId) => update({ playbookId, statBonus: null, balanceShift: 0, selectedMoves: [] })}
-            onAdvance={goNext}
+            statBonus={draft.statBonus}
+            onBump={(key: keyof Stats) => update({ statBonus: draft.statBonus === key ? null : key })}
+            selectedMoves={draft.selectedMoves}
+            onToggleMove={(name) => {
+              const has = draft.selectedMoves.includes(name);
+              let next = draft.selectedMoves;
+              if (has) next = next.filter((n) => n !== name);
+              else if (next.length < 2) next = [...next, name];
+              update({ selectedMoves: next });
+            }}
           />
         )}
         {draft.step === 3 && (
