@@ -3,10 +3,8 @@
 import { useState } from 'react';
 import { APPROACH_LABEL, Playbook, Technique, TechniqueLevel, TECHNIQUES, UNIVERSAL_TECHNIQUES } from '../data';
 import StepHeader from '../StepHeader';
-import ChoiceCard from '../ChoiceCard';
-
-const TABS = ['universal', 'training'] as const;
-type TabId = typeof TABS[number];
+import TabbedStepPanel from '../TabbedStepPanel';
+import CheckboxSquare from '../CheckboxSquare';
 
 const LEVEL_ON = { background: '#e8c874', color: '#1a1108' };
 const LEVEL_OFF = { background: 'transparent', color: '#7f948f' };
@@ -53,14 +51,7 @@ function TechniqueCard({
       }}
     >
       <div className="flex items-start gap-3 px-4 py-3.5">
-        <button
-          onClick={onToggle}
-          aria-label={`Select ${t.name}`}
-          className="w-5 h-5 rounded-[5px] border-[1.5px] border-gold shrink-0 mt-0.5 flex items-center justify-center"
-          style={{ background: level ? '#e8c874' : 'transparent' }}
-        >
-          {level && <span className="text-[#1a1108] text-xs font-bold">&#10003;</span>}
-        </button>
+        <CheckboxSquare checked={!!level} onClick={onToggle} ariaLabel={`Select ${t.name}`} className="mt-0.5" />
         <button onClick={onToggleOpen} className="flex-1 min-w-0 flex items-start justify-between gap-3 text-left">
           <div className="min-w-0">
             <div className="flex items-center gap-2 flex-wrap mb-0.5">
@@ -111,8 +102,6 @@ export default function StepTechniques({
   techniqueLevels: Record<string, TechniqueLevel>;
   onSetLevel: (name: string, level: TechniqueLevel | null) => void;
 }) {
-  const [tab, setTab] = useState<TabId>('universal');
-  const [mobileTabFocused, setMobileTabFocused] = useState(false);
   const [openTechnique, setOpenTechnique] = useState<string | null>(null);
   const [browseAll, setBrowseAll] = useState(false);
 
@@ -126,16 +115,6 @@ export default function StepTechniques({
 
   const masteredCount = Object.values(techniqueLevels).filter((v) => v === 'M').length;
   const learnedCount = Object.values(techniqueLevels).filter((v) => v === 'L').length;
-
-  const tabLabels: Record<TabId, string> = {
-    universal: 'Universal Techniques',
-    training: `${trainingName || 'Training'} Techniques`,
-  };
-
-  function selectTab(id: TabId) {
-    setTab(id);
-    setMobileTabFocused(true);
-  }
 
   function renderCard(t: Technique) {
     const level = techniqueLevels[t.name] || null;
@@ -153,6 +132,30 @@ export default function StepTechniques({
       />
     );
   }
+
+  const universalTab = (
+    <>
+      <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Universal techniques</p>
+      <p className="text-[12.5px] leading-relaxed text-muted mb-3.5">
+        Available to every character regardless of training. Your playbook’s starting technique is pre-selected as mastered — change or remove it if you prefer.
+      </p>
+      <div className="flex flex-col gap-2.5">{universalPool.map(renderCard)}</div>
+    </>
+  );
+
+  const trainingTab = (
+    <>
+      <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">{trainingName || 'Training'} techniques</p>
+      <p className="text-[12.5px] leading-relaxed text-muted mb-2.5">
+        Techniques unique to your training{browseAll ? ' and every other training (ask your GM to convert one)' : ''}.
+      </p>
+      {!trainingName && <p className="text-[13.5px] text-muted mb-3">Choose a training first to see its techniques.</p>}
+      <button onClick={() => setBrowseAll((v) => !v)} className="block w-fit whitespace-nowrap text-gold text-xs font-semibold mb-3.5">
+        {browseAll ? 'Show only my training' : 'Browse other trainings'}
+      </button>
+      <div className="flex flex-col gap-2.5">{trainingPool.map(renderCard)}</div>
+    </>
+  );
 
   return (
     <section>
@@ -175,57 +178,14 @@ export default function StepTechniques({
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 items-start">
-        <div className={`bg-ink-soft border border-gold/25 rounded-2xl p-3.5 flex-col gap-2.5 ${mobileTabFocused ? 'hidden md:flex' : 'flex'}`}>
-          <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/15">
-            <p className="font-display font-semibold text-[15.5px] text-parchment min-w-0 break-words">{trainingName || 'No training yet'}</p>
-            <span className="shrink-0 text-[11px] tracking-[0.12em] uppercase text-gold">Techniques</span>
-          </div>
-          {TABS.map((id) => (
-            <ChoiceCard key={id} selected={tab === id} onClick={() => selectTab(id)} className="flex items-center gap-3 text-left px-4 py-3.5">
-              <div className="w-2 h-2 rounded-full shrink-0" style={{ background: tab === id ? '#e8c874' : 'rgba(245,238,221,0.25)' }} />
-              <p className="font-display font-semibold text-sm text-parchment">{tabLabels[id]}</p>
-            </ChoiceCard>
-          ))}
-        </div>
-
-        <div
-          className={`hide-scrollbar bg-ink-soft border border-gold/20 rounded-2xl flex-col box-border ${mobileTabFocused ? 'flex' : 'hidden md:flex'}`}
-          style={{ height: 480, overflowY: 'auto' }}
-        >
-          <div className="sticky top-0 z-10 bg-ink-soft px-7 pt-4 pb-3 border-b border-white/15 md:hidden">
-            <button onClick={() => setMobileTabFocused(false)} className="px-3.5 py-1.5 rounded-full bg-white/8 border border-white/20 text-[#e8ddc4] text-xs font-semibold">
-              &larr; Back to tabs
-            </button>
-          </div>
-
-          <div className="px-7 pt-6.5 pb-7">
-            {tab === 'universal' && (
-              <>
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Universal techniques</p>
-                <p className="text-[12.5px] leading-relaxed text-muted mb-3.5">
-                  Available to every character regardless of training. Your playbook’s starting technique is pre-selected as mastered — change or remove it if you prefer.
-                </p>
-                <div className="flex flex-col gap-2.5">{universalPool.map(renderCard)}</div>
-              </>
-            )}
-
-            {tab === 'training' && (
-              <>
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">{trainingName || 'Training'} techniques</p>
-                <p className="text-[12.5px] leading-relaxed text-muted mb-2.5">
-                  Techniques unique to your training{browseAll ? ' and every other training (ask your GM to convert one)' : ''}.
-                </p>
-                {!trainingName && <p className="text-[13.5px] text-muted mb-3">Choose a training first to see its techniques.</p>}
-                <button onClick={() => setBrowseAll((v) => !v)} className="block w-fit whitespace-nowrap text-gold text-xs font-semibold mb-3.5">
-                  {browseAll ? 'Show only my training' : 'Browse other trainings'}
-                </button>
-                <div className="flex flex-col gap-2.5">{trainingPool.map(renderCard)}</div>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      <TabbedStepPanel
+        headerTitle={trainingName || 'No training yet'}
+        headerLabel="Techniques"
+        tabs={[
+          { id: 'universal', label: 'Universal Techniques', content: universalTab },
+          { id: 'training', label: `${trainingName || 'Training'} Techniques`, content: trainingTab },
+        ]}
+      />
     </section>
   );
 }
