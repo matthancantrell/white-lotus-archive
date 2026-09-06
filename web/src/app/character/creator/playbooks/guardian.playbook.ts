@@ -22,4 +22,10 @@ export const guardian: Playbook = {
   ],
   feature: { name: 'Sworn Oath', effect: 'Name who you’ve sworn to protect; your balance shifts whenever that bond is tested.' },
   growth: 'Did protecting your charge cost you something you wanted?',
+  history: [
+    'Who is your ward, and why do they need protecting?',
+    'What did you give up to take on this duty?',
+    'Who trained you, and what do they think of your ward?',
+    'Which companion do you trust to help you, and which one worries you?',
+  ],
 };

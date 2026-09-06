@@ -22,4 +22,10 @@ export const successor: Playbook = {
   ],
   feature: { name: 'The Weight of What’s Next', effect: 'Once per session, ask the GM what your predecessor would have done in this exact moment.' },
   growth: 'Did the pull between legacy and your own path come up today?',
+  history: [
+    'What legacy are you next in line for, and who held it before you?',
+    'What part of that legacy do you want no part of?',
+    'Who is waiting for you to take your place, and who hopes you never will?',
+    'Which companion knows what you truly want?',
+  ],
 };

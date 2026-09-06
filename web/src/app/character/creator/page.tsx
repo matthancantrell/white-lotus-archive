@@ -7,12 +7,12 @@ import LotusMark from '@/components/LotusMark';
 import StepProgress from './StepProgress';
 import Step1Setup from './Step1Setup';
 import StepPlaybook from './steps/StepPlaybook';
+import StepConcept from './steps/StepConcept';
 import StepTraining from './steps/StepTraining';
 import StepStats from './steps/StepStats';
 import StepBalance from './steps/StepBalance';
 import StepMoves from './steps/StepMoves';
 import StepTechniques from './steps/StepTechniques';
-import StepIdentity from './steps/StepIdentity';
 import StepConnections from './steps/StepConnections';
 import StepGrowth from './steps/StepGrowth';
 import { CharacterDraft, INITIAL_DRAFT, PLAYBOOKS, TOTAL_STEPS, Stats } from './data';
@@ -39,7 +39,10 @@ function CharacterCreatorInner() {
     // Any other visit to the creator always starts a blank character.
     if (typeof window !== 'undefined' && editId) {
       const existing = loadSavedList().find((c) => c.characterId === editId);
-      if (existing) return existing;
+      // Merge under INITIAL_DRAFT rather than returning the saved record as-is — a
+      // draft saved before a field (hometown, backgrounds, history, ...) existed
+      // would otherwise come back with that field undefined instead of its default.
+      if (existing) return { ...INITIAL_DRAFT, ...existing };
     }
     return { ...INITIAL_DRAFT, characterId: makeCharacterId() } as CharacterDraft;
   });
@@ -124,6 +127,32 @@ function CharacterCreatorInner() {
           />
         )}
         {draft.step === 3 && (
+          <StepConcept
+            name={draft.name}
+            playbook={playbook}
+            hometown={draft.hometown}
+            onHometown={(hometown) => update({ hometown })}
+            look={draft.look}
+            onLook={(look) => update({ look })}
+            demeanor={draft.demeanor}
+            onDemeanor={(demeanor) => update({ demeanor })}
+            backgrounds={draft.backgrounds}
+            onToggleBackground={(name) => {
+              const has = draft.backgrounds.includes(name);
+              let next = draft.backgrounds;
+              if (has) next = next.filter((n) => n !== name);
+              else if (next.length < 2) next = [...next, name];
+              update({ backgrounds: next });
+            }}
+            history={draft.history}
+            onHistoryChange={(i, value) => {
+              const next = draft.history.slice();
+              next[i] = value;
+              update({ history: next });
+            }}
+          />
+        )}
+        {draft.step === 4 && (
           <StepTraining
             trainingName={draft.trainingName}
             fightingStyle={draft.fightingStyle}
@@ -131,21 +160,21 @@ function CharacterCreatorInner() {
             onFightingStyleChange={(fightingStyle) => update({ fightingStyle })}
           />
         )}
-        {draft.step === 4 && (
+        {draft.step === 5 && (
           <StepStats
             playbook={playbook}
             statBonus={draft.statBonus}
             onBump={(key: keyof Stats) => update({ statBonus: draft.statBonus === key ? null : key })}
           />
         )}
-        {draft.step === 5 && (
+        {draft.step === 6 && (
           <StepBalance
             playbook={playbook}
             balanceShift={draft.balanceShift}
             onShift={(delta) => update({ balanceShift: Math.max(-1, Math.min(1, draft.balanceShift + delta)) })}
           />
         )}
-        {draft.step === 6 && (
+        {draft.step === 7 && (
           <StepMoves
             playbook={playbook}
             selectedMoves={draft.selectedMoves}
@@ -158,21 +187,11 @@ function CharacterCreatorInner() {
             }}
           />
         )}
-        {draft.step === 7 && (
+        {draft.step === 8 && (
           <StepTechniques
             trainingName={draft.trainingName}
             selectedTechnique={draft.selectedTechnique}
             onSelect={(selectedTechnique) => update({ selectedTechnique })}
-          />
-        )}
-        {draft.step === 8 && (
-          <StepIdentity
-            look={draft.look}
-            background={draft.background}
-            demeanor={draft.demeanor}
-            onLook={(look) => update({ look })}
-            onBackground={(background) => update({ background })}
-            onDemeanor={(demeanor) => update({ demeanor })}
           />
         )}
         {draft.step === 9 && (

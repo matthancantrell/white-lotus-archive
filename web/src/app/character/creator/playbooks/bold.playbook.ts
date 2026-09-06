@@ -22,4 +22,10 @@ export const bold: Playbook = {
   ],
   feature: { name: 'All In', effect: 'When the odds are worst, take +1 to your next roll for committing fully to the moment.' },
   growth: 'Did your confidence talk the group into a plan today?',
+  history: [
+    'What feat are you most proud of, and who doubted you could do it?',
+    'Who do you owe your loyalty to, and why?',
+    'What is the one thing you are secretly afraid of?',
+    'Which companion have you promised to have their back, no matter what?',
+  ],
 };

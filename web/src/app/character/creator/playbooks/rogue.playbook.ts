@@ -22,4 +22,10 @@ export const rogue: Playbook = {
   ],
   feature: { name: 'Always an Out', effect: 'You always know a way out of the room you’re in, however unlikely.' },
   growth: 'Did you choose to rely on someone else today?',
+  history: [
+    'Who betrayed you, and how did it change you?',
+    'What are you running from, and how close is it?',
+    'What is the one job you refused to take?',
+    'Which companion are you starting to trust despite yourself?',
+  ],
 };

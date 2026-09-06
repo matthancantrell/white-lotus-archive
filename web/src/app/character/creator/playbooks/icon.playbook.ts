@@ -22,4 +22,10 @@ export const icon: Playbook = {
   ],
   feature: { name: 'Small Freedoms', effect: 'You mark growth whenever you find joy in an ordinary, unburdened moment — no growth question needed.' },
   growth: 'Did your role and your own wishes pull you in different directions today?',
+  history: [
+    'What title or legacy do you carry, and who gave it to you?',
+    'What do people expect of you that you cannot deliver?',
+    'When did you last get to be simply yourself?',
+    'Which companion sees past the title, and which one only sees it?',
+  ],
 };

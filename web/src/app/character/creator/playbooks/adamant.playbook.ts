@@ -23,4 +23,10 @@ export const adamant: Playbook = {
   ],
   feature: { name: 'By Any Means', effect: 'Once per session, ignore the consequences of a harsh method to get a result — the fiction remembers it, though.' },
   growth: 'Did you get results at someone else’s expense today?',
+  history: [
+    'What is broken in the world that you are determined to fix?',
+    'Who taught you that results matter more than methods?',
+    'What did fixing something once cost you?',
+    'Which companion do you suspect is too soft to do what’s necessary?',
+  ],
 };

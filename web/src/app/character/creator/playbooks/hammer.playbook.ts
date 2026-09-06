@@ -22,4 +22,10 @@ export const hammer: Playbook = {
   ],
   feature: { name: 'First to the Fight', effect: 'You act first when a fight breaks out, before initiative is otherwise decided.' },
   growth: 'Did you solve a problem with force today?',
+  history: [
+    'Who hurt someone you cared about, and what did you do about it?',
+    'When did force fail you, and who saw it?',
+    'Who first told you that you hit too hard?',
+    'Which companion keeps trying to talk you down, and does it work?',
+  ],
 };

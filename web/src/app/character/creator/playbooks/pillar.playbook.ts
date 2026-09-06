@@ -23,4 +23,10 @@ export const pillar: Playbook = {
   ],
   feature: { name: 'Command Presence', effect: 'Allies who follow your called plan take +1 to the roll.' },
   growth: 'Did you have to choose between leading and supporting today?',
+  history: [
+    'Who taught you to lead, and what did they get wrong?',
+    'When did a plan of yours fail, and who paid for it?',
+    'Why does this group need you to hold it together?',
+    'Which companion do you rely on most, and which one won’t follow orders?',
+  ],
 };

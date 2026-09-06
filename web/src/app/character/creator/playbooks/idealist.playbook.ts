@@ -22,4 +22,10 @@ export const idealist: Playbook = {
   ],
   feature: { name: 'Benefit of the Doubt', effect: 'The first time you extend trust to an antagonist each session, mark growth.' },
   growth: 'Did your faith in someone get tested today?',
+  history: [
+    'What do you believe the world could become?',
+    'Who shattered your faith once, and how did you rebuild it?',
+    'Who did you refuse to give up on, and were you right?',
+    'Which companion do you think has more good in them than they admit?',
+  ],
 };

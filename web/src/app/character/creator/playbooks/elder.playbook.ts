@@ -23,4 +23,10 @@ export const elder: Playbook = {
   ],
   feature: { name: 'Mastered Techniques', effect: 'Start with four mastered techniques instead of one, chosen freely from your training.' },
   growth: 'Did your age and experience change how you handled something today?',
+  history: [
+    'What mastery have you spent a lifetime earning?',
+    'What great mistake of your youth still follows you?',
+    'Why are you traveling with people so much younger than you?',
+    'Which companion reminds you of who you used to be?',
+  ],
 };

@@ -22,4 +22,10 @@ export const prodigy: Playbook = {
   ],
   feature: { name: 'Prodigious', effect: 'Choose one extra technique at character creation beyond the usual number.' },
   growth: 'Did living up to expectations weigh on you today?',
+  history: [
+    'Who are you constantly compared to, and how do you fall short?',
+    'What comes effortlessly to you that others struggle with?',
+    'What did your training cost you as a child?',
+    'Which companion do you secretly envy, and which one looks up to you?',
+  ],
 };

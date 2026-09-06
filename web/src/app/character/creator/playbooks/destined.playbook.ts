@@ -23,4 +23,10 @@ export const destined: Playbook = {
   ],
   feature: { name: 'Destiny Sign', effect: 'Choose one destiny sign at creation; it grants a special ability tied to your fate.' },
   growth: 'Did your destiny pull you somewhere you didn’t choose to go?',
+  history: [
+    'What is your destiny sign, and when did you first feel it?',
+    'Who told you what your destiny means, and do you believe them?',
+    'What have you already lost to your fate?',
+    'Which companion grounds you, and which one is tangled in your destiny?',
+  ],
 };
