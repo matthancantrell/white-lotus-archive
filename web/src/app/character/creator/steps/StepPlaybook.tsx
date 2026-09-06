@@ -2,19 +2,9 @@
 
 import { useRef, useState } from 'react';
 import Image from 'next/image';
-import { PLAYBOOKS, PLAYBOOK_ICON_COLORS, PLAYBOOK_BANNER_FILES, Stats } from '../data';
-import { PlaybookCard } from '../PlaybookCard';
-import rokuEraImg from '../../../../assets/eras/roku.jpg';
-import aangEraImg from '../../../../assets/eras/aang.jpg';
-import kyoshiEraImg from '../../../../assets/eras/kyoshi.jpg';
-import hywEraImg from '../../../../assets/eras/hundred-year-war.jpg';
-import korraEraImg from '../../../../assets/eras/korra.jpg';
-import customEraImg from '../../../../assets/eras/custom.jpg';
 
-const BANNER_IMAGES: Record<string, typeof rokuEraImg> = {
-  roku: rokuEraImg, aang: aangEraImg, kyoshi: kyoshiEraImg,
-  'hundred-year-war': hywEraImg, korra: korraEraImg, custom: customEraImg,
-};
+import { PLAYBOOKS, Stats } from '../data';
+import PlaybookCard from '../PlaybookCard';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 const TABS = ['about', 'principles', 'feature', 'stats', 'moves'] as const;
@@ -53,8 +43,7 @@ export default function StepPlaybook({
   const confirmed = playbookId ? PLAYBOOKS.find((p) => p.id === playbookId) ?? null : null;
   const preview = !confirmed && previewId ? PLAYBOOKS.find((p) => p.id === previewId) ?? null : null;
   const active = confirmed ?? preview;
-  const activeIndex = active ? PLAYBOOKS.findIndex((p) => p.id === active.id) : -1;
-  const bannerFile = active ? PLAYBOOK_BANNER_FILES[activeIndex % PLAYBOOK_BANNER_FILES.length] : null;
+  const bannerFile = active ? active.bannerFile : null;
 
   function handleListScroll(e: React.UIEvent<HTMLDivElement>) {
     const el = e.currentTarget;
@@ -101,12 +90,14 @@ export default function StepPlaybook({
         {!confirmed && (
           <div className={`relative ${preview ? 'hidden md:block' : 'block'}`}>
             <div ref={listRef} onScroll={handleListScroll} className="hide-scrollbar flex flex-col gap-2 pr-1.5" style={{ height: 480, overflowY: 'auto' }}>
-              {PLAYBOOKS.map((p, i) => (
+              {PLAYBOOKS.map((p) => (
                 <PlaybookCard
                   key={p.id}
                   name={p.name}
                   principlesLabel={p.principles.join(' / ')}
-                  iconBg={`linear-gradient(155deg, ${PLAYBOOK_ICON_COLORS[i % PLAYBOOK_ICON_COLORS.length]}, #1a3238)`}
+                  iconColor={p.iconColor}
+                  icon={p.iconImage}
+                  background={p.backgroundImage}
                   selected={previewId === p.id}
                   onClick={() => togglePreview(p.id)}
                 />
@@ -177,7 +168,14 @@ export default function StepPlaybook({
               </div>
 
               <div className="px-7 pt-5 pb-7">
-                {bannerFile && <Image src={BANNER_IMAGES[bannerFile]} alt={preview.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
+                {bannerFile && (
+                  <Image 
+                    src={bannerFile}
+                    alt={preview.name}
+                    className="w-full aspect-[1920/600] object-cover mb-5"
+                    style={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }} 
+                  />
+                )}
 
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
                 <div className="flex flex-wrap gap-2 mb-5">
@@ -214,7 +212,7 @@ export default function StepPlaybook({
             <div className="px-7 pt-6.5 pb-7">
               {tab === 'about' && (
                 <>
-                  {bannerFile && <Image src={BANNER_IMAGES[bannerFile]} alt={confirmed.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
+                  {bannerFile && <Image src={bannerFile} alt={confirmed.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
                   <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">About {confirmed.name}</p>
                   <p className="text-[13.5px] leading-relaxed text-parchment-dim">{confirmed.tagline}</p>
                 </>

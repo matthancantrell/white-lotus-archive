@@ -92,7 +92,7 @@ function CharacterCreatorInner() {
 
       <StepProgress draft={draft} playbookName={playbook ? playbook.name : 'No playbook yet'} onGoTo={(n) => update({ step: n })} />
 
-      <main className="max-w-4xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(24px,5vw,36px)] pb-15">
+      <main className="max-w-7xl mx-auto px-[clamp(16px,5vw,40px)] pt-[clamp(24px,5vw,36px)] pb-15">
         {draft.step === 1 && (
           <Step1Setup
             eraName={draft.eraName}
