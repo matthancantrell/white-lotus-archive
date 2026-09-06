@@ -1,4 +1,5 @@
 import { Playbook, STANDARD_GROWTH } from '../data';
+import StepHeader from '../StepHeader';
 
 export default function StepGrowth({
   playbook,
@@ -17,8 +18,7 @@ export default function StepGrowth({
 }) {
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Growth questions</h1>
-      <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Answered at the end of every session. Four &ldquo;yes&rdquo; answers let you mark an advancement.</p>
+      <StepHeader title="Growth questions" subtitle={<>Answered at the end of every session. Four &ldquo;yes&rdquo; answers let you mark an advancement.</>} />
 
       <div className="flex flex-col gap-3 mb-6">
         {STANDARD_GROWTH.map((q) => (

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import LotusMark from "@/components/LotusMark";
+import SimpleElementsOrbs from "./components/simple-elements-orbs";
 import Image from "next/image";
 import rokuEraImg from '../assets/eras/roku.jpg';
 import aangEraImg from '../assets/eras/aang.jpg'
@@ -76,12 +77,7 @@ export default function Home() {
           <Link href="/signup" className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">Sign up &amp; create your character</Link>
           <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore the eras</a>
         </div>
-        <div className="relative flex justify-center max-w-xl mx-auto">
-          <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#3a6ea5", boxShadow: "0 0 14px rgba(58,110,165,0.6)" }} />
-          <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#4a7c3a", boxShadow: "0 0 14px rgba(74,124,58,0.6)" }} />
-          <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#b3492e", boxShadow: "0 0 14px rgba(179,73,46,0.6)" }} />
-          <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#d9c98a", boxShadow: "0 0 14px rgba(217,201,138,0.6)" }} />
-        </div>
+        <SimpleElementsOrbs />
       </section>
 
       {/* CHARACTER CREATOR PREVIEW */}

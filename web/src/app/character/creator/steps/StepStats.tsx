@@ -1,4 +1,5 @@
 import { Playbook, Stats } from '../data';
+import StepHeader from '../StepHeader';
 
 const STAT_ROWS: [keyof Stats, string][] = [
   ['creativity', 'Creativity'],
@@ -18,8 +19,7 @@ export default function StepStats({
 }) {
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Stats</h1>
-      <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Your playbook sets your starting array. You may add +1 to one stat (max +2).</p>
+      <StepHeader title="Stats" subtitle="Your playbook sets your starting array. You may add +1 to one stat (max +2)." />
       <div className="grid grid-cols-[repeat(auto-fit,minmax(130px,1fr))] gap-3.5">
         {STAT_ROWS.map(([key, label]) => {
           const base = playbook ? playbook.stats[key] : 0;

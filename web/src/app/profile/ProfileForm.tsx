@@ -2,10 +2,8 @@
 
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
+import { AuthTextField, AuthTextArea } from '@/components/AuthTextField';
 import type { Profile } from './types';
-
-const inputCls =
-  'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20 font-body';
 
 export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
   const supabase = createClient();
@@ -75,36 +73,34 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="display_name" className="text-[13px] font-semibold text-parchment-dim">Display name</label>
-        <input
+        <AuthTextField
           id="display_name"
           type="text"
           value={profile.display_name ?? ''}
           onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
-          className={inputCls}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="bio" className="text-[13px] font-semibold text-parchment-dim">Bio</label>
-        <textarea
+        <AuthTextArea
           id="bio"
           value={profile.bio ?? ''}
           onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
           placeholder="Say something about yourself…"
           rows={3}
-          className={`${inputCls} resize-y min-h-[88px]`}
+          className="resize-y min-h-[88px]"
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="avatar_url" className="text-[13px] font-semibold text-parchment-dim">Avatar URL</label>
-        <input
+        <AuthTextField
           id="avatar_url"
           type="text"
           value={profile.avatar_url ?? ''}
           onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
           placeholder="https://…"
-          className={inputCls}
         />
       </div>
 

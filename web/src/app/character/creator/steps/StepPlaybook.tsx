@@ -1,22 +1,17 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Image from 'next/image';
 
 import { PLAYBOOKS, Stats } from '../data';
 import PlaybookCard from '../PlaybookCard';
+import PlaybookBanner from '../PlaybookBanner';
+import StepHeader from '../StepHeader';
+import ChoiceCard from '../ChoiceCard';
+import { highlightStats } from '../highlightStats';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 const TABS = ['about', 'principles', 'feature', 'stats', 'moves'] as const;
 type TabId = typeof TABS[number];
-
-function highlightStats(text: string) {
-  return text.split(/(Creativity|Focus|Harmony|Passion)/g).map((part, i) =>
-    /^(Creativity|Focus|Harmony|Passion)$/.test(part)
-      ? <strong key={i} className="text-gold font-bold">{part}</strong>
-      : part
-  );
-}
 
 export default function StepPlaybook({
   playbookId,
@@ -42,8 +37,6 @@ export default function StepPlaybook({
 
   const confirmed = playbookId ? PLAYBOOKS.find((p) => p.id === playbookId) ?? null : null;
   const preview = !confirmed && previewId ? PLAYBOOKS.find((p) => p.id === previewId) ?? null : null;
-  const active = confirmed ?? preview;
-  const bannerFile = active ? active.bannerFile : null;
 
   function handleListScroll(e: React.UIEvent<HTMLDivElement>) {
     const el = e.currentTarget;
@@ -80,10 +73,10 @@ export default function StepPlaybook({
 
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Choose your playbook</h1>
-      <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">
-        Your playbook is your archetype &mdash; it sets your stats, your balance principles, and the moves available to you. Only one player per playbook in a party.
-      </p>
+      <StepHeader
+        title="Choose your playbook"
+        subtitle="Your playbook is your archetype — it sets your stats, your balance principles, and the moves available to you. Only one player per playbook in a party."
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 items-start">
         {/* Browse list */}
@@ -118,15 +111,10 @@ export default function StepPlaybook({
               </button>
             </div>
             {TABS.map((id) => (
-              <button
-                key={id}
-                onClick={() => { setTab(id); setMobileTabFocused(true); }}
-                className="flex items-center gap-3 text-left px-4 py-3.5 rounded-xl border"
-                style={{ background: tab === id ? 'rgba(232,200,116,0.14)' : '#142a2e', borderColor: tab === id ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
-              >
+              <ChoiceCard key={id} selected={tab === id} onClick={() => { setTab(id); setMobileTabFocused(true); }} className="flex items-center gap-3 text-left px-4 py-3.5">
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ background: tab === id ? '#e8c874' : 'rgba(245,238,221,0.25)' }} />
                 <p className="font-display font-semibold text-sm text-parchment">{tabLabels[id]}</p>
-              </button>
+              </ChoiceCard>
             ))}
           </div>
         )}
@@ -168,14 +156,7 @@ export default function StepPlaybook({
               </div>
 
               <div className="px-7 pt-5 pb-7">
-                {bannerFile && (
-                  <Image 
-                    src={bannerFile}
-                    alt={preview.name}
-                    className="w-full aspect-[1920/600] object-cover mb-5"
-                    style={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }} 
-                  />
-                )}
+                <PlaybookBanner playbook={preview} />
 
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
                 <div className="flex flex-wrap gap-2 mb-5">
@@ -192,10 +173,10 @@ export default function StepPlaybook({
                 <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Moves</p>
                 <div className="flex flex-col gap-2.5 mb-5">
                   {preview.moves.map((mv) => (
-                    <div key={mv.name} className="p-3.5 rounded-xl bg-[#142a2e] border border-gold/15">
+                    <ChoiceCard key={mv.name} as="div" selected={false} className="p-3.5">
                       <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
                       <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
-                    </div>
+                    </ChoiceCard>
                   ))}
                 </div>
 
@@ -212,7 +193,7 @@ export default function StepPlaybook({
             <div className="px-7 pt-6.5 pb-7">
               {tab === 'about' && (
                 <>
-                  {bannerFile && <Image src={bannerFile} alt={confirmed.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
+                  <PlaybookBanner playbook={confirmed} />
                   <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">About {confirmed.name}</p>
                   <p className="text-[13.5px] leading-relaxed text-parchment-dim">{confirmed.tagline}</p>
                 </>
@@ -241,16 +222,11 @@ export default function StepPlaybook({
                       const val = confirmed.stats[key] + bonus;
                       const isActive = statBonus === key;
                       return (
-                        <button
-                          key={key}
-                          onClick={() => onBump(key)}
-                          className="relative p-4 rounded-xl border text-center"
-                          style={{ background: isActive ? 'rgba(232,200,116,0.14)' : '#142a2e', borderColor: isActive ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
-                        >
+                        <ChoiceCard key={key} selected={isActive} onClick={() => onBump(key)} className="relative p-4 text-center">
                           <p className="absolute top-2 right-2.5 text-[10.5px] text-muted">({bonus}/1)</p>
                           <p className="font-display text-xs text-gold tracking-wide uppercase mb-2">{label}</p>
                           <p className="font-display font-bold text-2xl text-parchment">{val >= 0 ? `+${val}` : val}</p>
-                        </button>
+                        </ChoiceCard>
                       );
                     })}
                   </div>
@@ -263,15 +239,10 @@ export default function StepPlaybook({
                     {confirmed.moves.map((mv) => {
                       const checked = selectedMoves.includes(mv.name);
                       return (
-                        <button
-                          key={mv.name}
-                          onClick={() => onToggleMove(mv.name)}
-                          className="text-left w-full px-4 py-3.5 rounded-xl border box-border"
-                          style={{ background: checked ? 'rgba(232,200,116,0.12)' : '#142a2e', borderColor: checked ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
-                        >
+                        <ChoiceCard key={mv.name} selected={checked} onClick={() => onToggleMove(mv.name)} className="text-left w-full px-4 py-3.5 box-border">
                           <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
                           <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
-                        </button>
+                        </ChoiceCard>
                       );
                     })}
                   </div>

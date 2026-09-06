@@ -1,4 +1,7 @@
 import { BACKGROUNDS, DEMEANORS } from '../data';
+import StepHeader from '../StepHeader';
+import PillButton from '../PillButton';
+import { TextArea } from '../TextField';
 
 export default function StepIdentity({
   look, background, demeanor,
@@ -8,21 +11,18 @@ export default function StepIdentity({
   onLook: (v: string) => void;
   onBackground: (v: string) => void; onDemeanor: (v: string) => void;
 }) {
-  const inputCls = 'w-full box-border bg-white/6 border border-white/18 rounded-[10px] px-3.5 py-3 text-parchment text-[14.5px] placeholder:text-[#6f827d] focus:outline-none focus:border-gold';
-
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Look &amp; background</h1>
-      <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">Be as creative as you like &mdash; use your GM for inspiration.</p>
+      <StepHeader title="Look & background" subtitle="Be as creative as you like — use your GM for inspiration." />
 
       <div className="mb-5">
         <label className="block text-[13px] text-muted mb-2">Look</label>
-        <textarea
+        <TextArea
           value={look}
           onChange={(e) => onLook(e.target.value)}
           placeholder="Age, build, clothing, marks or scars, the way they carry themselves..."
           rows={3}
-          className={`${inputCls} resize-y`}
+          className="resize-y"
         />
       </div>
 
@@ -30,37 +30,17 @@ export default function StepIdentity({
         <div>
           <p className="text-[13px] text-muted mb-2">Background</p>
           <div className="flex flex-wrap gap-2">
-            {BACKGROUNDS.map((b) => {
-              const selected = background === b;
-              return (
-                <button
-                  key={b}
-                  onClick={() => onBackground(b)}
-                  className="px-3.5 py-2 rounded-full text-[13px] border"
-                  style={{ background: selected ? '#e8c874' : 'rgba(245,238,221,0.06)', color: selected ? '#1a1108' : '#cfc7b3', borderColor: selected ? '#e8c874' : 'rgba(245,238,221,0.18)' }}
-                >
-                  {b}
-                </button>
-              );
-            })}
+            {BACKGROUNDS.map((b) => (
+              <PillButton key={b} selected={background === b} onClick={() => onBackground(b)}>{b}</PillButton>
+            ))}
           </div>
         </div>
         <div>
           <p className="text-[13px] text-muted mb-2">Demeanor</p>
           <div className="flex flex-wrap gap-2">
-            {DEMEANORS.map((d) => {
-              const selected = demeanor === d;
-              return (
-                <button
-                  key={d}
-                  onClick={() => onDemeanor(d)}
-                  className="px-3.5 py-2 rounded-full text-[13px] border"
-                  style={{ background: selected ? '#e8c874' : 'rgba(245,238,221,0.06)', color: selected ? '#1a1108' : '#cfc7b3', borderColor: selected ? '#e8c874' : 'rgba(245,238,221,0.18)' }}
-                >
-                  {d}
-                </button>
-              );
-            })}
+            {DEMEANORS.map((d) => (
+              <PillButton key={d} selected={demeanor === d} onClick={() => onDemeanor(d)}>{d}</PillButton>
+            ))}
           </div>
         </div>
       </div>
