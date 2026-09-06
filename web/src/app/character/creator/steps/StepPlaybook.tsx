@@ -1,10 +1,10 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import Image from 'next/image';
 
 import { PLAYBOOKS, Stats } from '../data';
 import PlaybookCard from '../PlaybookCard';
-import ImageWithSkeleton from '../ImageWithSkeleton';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 const TABS = ['about', 'principles', 'feature', 'stats', 'moves'] as const;
@@ -90,7 +90,7 @@ export default function StepPlaybook({
         {!confirmed && (
           <div className={`relative ${preview ? 'hidden md:block' : 'block'}`}>
             <div ref={listRef} onScroll={handleListScroll} className="hide-scrollbar flex flex-col gap-2 pr-1.5" style={{ height: 480, overflowY: 'auto' }}>
-              {PLAYBOOKS.map((p, i) => (
+              {PLAYBOOKS.map((p) => (
                 <PlaybookCard
                   key={p.id}
                   name={p.name}
@@ -100,10 +100,6 @@ export default function StepPlaybook({
                   background={p.backgroundImage}
                   selected={previewId === p.id}
                   onClick={() => togglePreview(p.id)}
-                  // First few cards are visible the instant this step mounts, before any
-                  // scrolling — load those eagerly instead of waiting on the same
-                  // lazy-load/IntersectionObserver path as the offscreen ones below.
-                  priority={i < 4}
                 />
               ))}
             </div>
@@ -173,19 +169,11 @@ export default function StepPlaybook({
 
               <div className="px-7 pt-5 pb-7">
                 {bannerFile && (
-                  <ImageWithSkeleton
-                    key={active?.id}
+                  <Image 
                     src={bannerFile}
                     alt={preview.name}
-                    fill
-                    // Real banner art is 1920x600, but it's only ever displayed at roughly
-                    // this width in the detail panel — telling the browser that (instead of
-                    // leaving it to assume full-viewport-width) lets it fetch a properly
-                    // downsized variant instead of one close to the full source resolution.
-                    sizes="(min-width: 768px) 600px, 100vw"
-                    className="object-cover"
-                    wrapperClassName="relative w-full aspect-[1920/600] overflow-hidden mb-5"
-                    wrapperStyle={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }}
+                    className="w-full aspect-[1920/600] object-cover mb-5"
+                    style={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }} 
                   />
                 )}
 
@@ -224,18 +212,7 @@ export default function StepPlaybook({
             <div className="px-7 pt-6.5 pb-7">
               {tab === 'about' && (
                 <>
-                  {bannerFile && (
-                    <ImageWithSkeleton
-                      key={active?.id}
-                      src={bannerFile}
-                      alt={confirmed.name}
-                      fill
-                      sizes="(min-width: 768px) 600px, 100vw"
-                      className="object-cover"
-                      wrapperClassName="relative w-full aspect-[1920/600] overflow-hidden mb-5"
-                      wrapperStyle={{ outline: '2px solid #e8c874', outlineOffset: '-8px' }}
-                    />
-                  )}
+                  {bannerFile && <Image src={bannerFile} alt={confirmed.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
                   <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">About {confirmed.name}</p>
                   <p className="text-[13.5px] leading-relaxed text-parchment-dim">{confirmed.tagline}</p>
                 </>
