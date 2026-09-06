@@ -28,4 +28,6 @@ export const idealist: Playbook = {
     'Who did you refuse to give up on, and were you right?',
     'Which companion do you think has more good in them than they admit?',
   ],
+  startingTechnique: { name: 'Open Hand', approach: 'defend', effect: 'Refuse to strike back; a foe who attacks you marks a condition instead.' },
+  momentOfBalance: 'You reach someone no one else could. Tell the GM how you turn an enemy aside from their path through sheer faith in who they could be.',
 };

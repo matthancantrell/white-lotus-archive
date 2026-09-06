@@ -29,4 +29,6 @@ export const destined: Playbook = {
     'What have you already lost to your fate?',
     'Which companion grounds you, and which one is tangled in your destiny?',
   ],
+  startingTechnique: { name: 'Fated Step', approach: 'evade', effect: 'Move as your destiny guides; you avoid a threat before it fully forms.' },
+  momentOfBalance: 'Your destiny and your choice align for one moment. Tell the GM how you change the course of events in a way that echoes far beyond this scene.',
 };

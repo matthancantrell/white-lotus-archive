@@ -28,4 +28,6 @@ export const icon: Playbook = {
     'When did you last get to be simply yourself?',
     'Which companion sees past the title, and which one only sees it?',
   ],
+  startingTechnique: { name: 'Commanding Presence', approach: 'evade', effect: 'Your bearing halts a foe; they hesitate and cannot act against you this exchange.' },
+  momentOfBalance: 'You embody what your title was meant to mean. Tell the GM how your presence alone changes the hearts of everyone in the scene.',
 };

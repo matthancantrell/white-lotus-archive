@@ -28,4 +28,6 @@ export const hammer: Playbook = {
     'Who first told you that you hit too hard?',
     'Which companion keeps trying to talk you down, and does it work?',
   ],
+  startingTechnique: { name: 'Overwhelming Blow', approach: 'attack', effect: 'Put everything into one strike; a foe marks 2-fatigue and is knocked back.' },
+  momentOfBalance: 'You choose the moment to hold back — or not. Tell the GM how you end a conflict by knowing exactly how much force it needs, and no more.',
 };

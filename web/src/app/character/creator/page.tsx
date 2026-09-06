@@ -9,13 +9,11 @@ import Step1Setup from './Step1Setup';
 import StepPlaybook from './steps/StepPlaybook';
 import StepConcept from './steps/StepConcept';
 import StepTraining from './steps/StepTraining';
-import StepStats from './steps/StepStats';
 import StepBalance from './steps/StepBalance';
-import StepMoves from './steps/StepMoves';
 import StepTechniques from './steps/StepTechniques';
 import StepConnections from './steps/StepConnections';
 import StepGrowth from './steps/StepGrowth';
-import { CharacterDraft, INITIAL_DRAFT, PLAYBOOKS, TOTAL_STEPS, Stats } from './data';
+import { CharacterDraft, INITIAL_DRAFT, PLAYBOOKS, TOTAL_STEPS, Stats, TechniqueLevel } from './data';
 
 const SAVED_KEY = 'wla_saved_characters';
 
@@ -113,7 +111,20 @@ function CharacterCreatorInner() {
         {draft.step === 2 && (
           <StepPlaybook
             playbookId={draft.playbookId}
-            onSelect={(playbookId) => update({ playbookId, statBonus: null, balanceShift: 0, selectedMoves: [] })}
+            onSelect={(playbookId) => {
+              // Confirming a playbook grants its starting technique at Mastered and
+              // clears out anything tied to whichever playbook was picked before
+              // (its stat bump, balance shift, moves, history answers, techniques).
+              const newPlaybook = playbookId ? PLAYBOOKS.find((p) => p.id === playbookId) ?? null : null;
+              update({
+                playbookId,
+                statBonus: null,
+                balanceShift: 0,
+                selectedMoves: [],
+                history: [],
+                techniqueLevels: newPlaybook ? { [newPlaybook.startingTechnique.name]: 'M' } : {},
+              });
+            }}
             statBonus={draft.statBonus}
             onBump={(key: keyof Stats) => update({ statBonus: draft.statBonus === key ? null : key })}
             selectedMoves={draft.selectedMoves}
@@ -154,47 +165,41 @@ function CharacterCreatorInner() {
         )}
         {draft.step === 4 && (
           <StepTraining
+            playbookName={playbook ? playbook.name : 'No playbook yet'}
             trainingName={draft.trainingName}
             fightingStyle={draft.fightingStyle}
-            onSelectTraining={(trainingName) => update({ trainingName, selectedTechnique: null })}
+            onSelectTraining={(trainingName) => {
+              // Switching (or clearing) training drops any training-specific technique
+              // choices, but keeps the playbook's own granted technique if it had a level set.
+              const startName = playbook?.startingTechnique.name;
+              const keep: Record<string, TechniqueLevel> = startName && draft.techniqueLevels[startName]
+                ? { [startName]: draft.techniqueLevels[startName] }
+                : {};
+              update({ trainingName, techniqueLevels: keep });
+            }}
             onFightingStyleChange={(fightingStyle) => update({ fightingStyle })}
           />
         )}
         {draft.step === 5 && (
-          <StepStats
-            playbook={playbook}
-            statBonus={draft.statBonus}
-            onBump={(key: keyof Stats) => update({ statBonus: draft.statBonus === key ? null : key })}
-          />
-        )}
-        {draft.step === 6 && (
           <StepBalance
             playbook={playbook}
             balanceShift={draft.balanceShift}
             onShift={(delta) => update({ balanceShift: Math.max(-1, Math.min(1, draft.balanceShift + delta)) })}
           />
         )}
-        {draft.step === 7 && (
-          <StepMoves
+        {draft.step === 6 && (
+          <StepTechniques
             playbook={playbook}
-            selectedMoves={draft.selectedMoves}
-            onToggle={(name) => {
-              const has = draft.selectedMoves.includes(name);
-              let next = draft.selectedMoves;
-              if (has) next = next.filter((n) => n !== name);
-              else if (next.length < 2) next = [...next, name];
-              update({ selectedMoves: next });
+            trainingName={draft.trainingName}
+            techniqueLevels={draft.techniqueLevels}
+            onSetLevel={(name, level) => {
+              const next = { ...draft.techniqueLevels };
+              if (level === null) delete next[name]; else next[name] = level;
+              update({ techniqueLevels: next });
             }}
           />
         )}
-        {draft.step === 8 && (
-          <StepTechniques
-            trainingName={draft.trainingName}
-            selectedTechnique={draft.selectedTechnique}
-            onSelect={(selectedTechnique) => update({ selectedTechnique })}
-          />
-        )}
-        {draft.step === 9 && (
+        {draft.step === 7 && (
           <StepConnections
             connections={draft.connections}
             onAdd={() => update({ connections: [...draft.connections, { name: '', note: '' }] })}
@@ -206,7 +211,7 @@ function CharacterCreatorInner() {
             }}
           />
         )}
-        {draft.step === 10 && (
+        {draft.step === 8 && (
           <StepGrowth
             playbook={playbook}
             trainingName={draft.trainingName}

@@ -29,4 +29,6 @@ export const elder: Playbook = {
     'Why are you traveling with people so much younger than you?',
     'Which companion reminds you of who you used to be?',
   ],
+  startingTechnique: { name: 'Old Reliable', approach: 'defend', effect: 'A form drilled for decades; you deflect an attack and the foe marks 1-fatigue.' },
+  momentOfBalance: 'A lifetime of skill flows through you. Tell the GM how you demonstrate true mastery, resolving a conflict in a way only someone who has seen everything could.',
 };

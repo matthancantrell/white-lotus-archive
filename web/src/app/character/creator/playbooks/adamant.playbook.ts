@@ -29,4 +29,6 @@ export const adamant: Playbook = {
     'What did fixing something once cost you?',
     'Which companion do you suspect is too soft to do what’s necessary?',
   ],
+  startingTechnique: { name: 'Pinpoint Aim', approach: 'attack', effect: 'Wait for the perfect moment; mark 1-fatigue to become Prepared and use an attack technique.' },
+  momentOfBalance: 'You see the whole board and the one move that fixes it. Tell the GM how you resolve the crisis in front of you with a single, decisive act — and what it costs you.',
 };

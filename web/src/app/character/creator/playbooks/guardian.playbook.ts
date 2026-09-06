@@ -28,4 +28,6 @@ export const guardian: Playbook = {
     'Who trained you, and what do they think of your ward?',
     'Which companion do you trust to help you, and which one worries you?',
   ],
+  startingTechnique: { name: 'Interpose', approach: 'defend', effect: 'Step between your ward and harm; take the hit’s fatigue in their place and become Prepared.' },
+  momentOfBalance: 'Nothing gets through you. Tell the GM how you protect your ward and your companions from a threat that should have overwhelmed them all.',
 };

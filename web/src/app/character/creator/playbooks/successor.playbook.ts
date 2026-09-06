@@ -28,4 +28,6 @@ export const successor: Playbook = {
     'Who is waiting for you to take your place, and who hopes you never will?',
     'Which companion knows what you truly want?',
   ],
+  startingTechnique: { name: 'Inherited Form', approach: 'defend', effect: 'Fall back on drilled technique; you are Prepared and clear 1-fatigue.' },
+  momentOfBalance: 'You honor your legacy in a way that is wholly your own. Tell the GM how you resolve a crisis in a way your predecessor never could have.',
 };

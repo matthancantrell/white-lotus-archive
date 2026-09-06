@@ -15,6 +15,11 @@ export interface Playbook {
   growth: string;
   // Four history questions answered in the Concept step, specific to this playbook.
   history: string[];
+  // Auto-granted at Mastered when this playbook is confirmed (see StepTechniques), and
+  // the passage shown in Growth's "Moment of Balance" tab once unlocked.
+  // PLACEHOLDER — replace with the Core Book (Appendix A) text for this playbook.
+  startingTechnique: { name: string; approach: Approach; effect: string };
+  momentOfBalance: string;
   // Icon/background/banner art (plus an icon accent color), imported and
   // owned directly by each playbook's own file (see ./playbooks/*.playbook.ts)
   // — so adding, removing, or reordering entries in PLAYBOOKS can't shift
@@ -29,7 +34,11 @@ export interface Playbook {
 }
 
 export interface Era { name: string; tag: string; accent: string; overview: string; avatarStatus: string; events: string; tone: string; tension: string; }
-export interface Technique { name: string; effect: string; }
+export interface Training { name: string; desc: string; }
+// The three approaches a technique can take — shown as a label, e.g. "Waterbending · Defend & Maneuver".
+export type Approach = 'attack' | 'defend' | 'evade';
+export interface Technique { name: string; training: string; approach: Approach; effect: string; rare?: boolean; groupOnly?: boolean; }
+export type TechniqueLevel = 'L' | 'P' | 'M';
 export interface Connection { name: string; note: string; }
 export interface Background { name: string; desc: string; detail: string; knows: string; }
 
@@ -42,7 +51,8 @@ export interface CharacterDraft {
   statBonus: keyof Stats | null;
   balanceShift: number;
   selectedMoves: string[];
-  selectedTechnique: string | null;
+  // Keyed by technique name; a technique with no entry hasn't been picked at all.
+  techniqueLevels: Record<string, TechniqueLevel>;
   name: string;
   portraitId: string | null;
   scopeText: string;
@@ -57,7 +67,7 @@ export interface CharacterDraft {
   status?: 'draft' | 'complete';
 }
 
-export const STEP_LABELS = ['Setup', 'Playbook', 'Concept', 'Training', 'Stats', 'Balance', 'Moves', 'Techniques', 'Connections', 'Growth'];
+export const STEP_LABELS = ['Setup', 'Playbook', 'Concept', 'Training', 'Balance', 'Techniques', 'Connections', 'Growth'];
 
 export const ERA_HEADER_LABEL: Record<string, string> = {
   'Avatar Roku': 'Roku Era',
@@ -82,7 +92,7 @@ export const INITIAL_DRAFT: CharacterDraft = {
   statBonus: null,
   balanceShift: 0,
   selectedMoves: [],
-  selectedTechnique: null,
+  techniqueLevels: {},
   name: '',
   portraitId: null,
   scopeText: '',
@@ -134,52 +144,69 @@ export const ERAS: Era[] = [
     tension: 'Decide with your GM what technology level, state of bending, and central conflicts will define your saga.' },
 ];
 
-export const TRAININGS = ['Airbending', 'Waterbending', 'Earthbending', 'Firebending', 'Weapons', 'Technology', 'Hand-to-Hand'];
+export const TRAININGS: Training[] = [
+  { name: 'Waterbending', desc: 'Flowing, adaptive, and defensive \u2014 redirecting force, healing, and ice.' },
+  { name: 'Earthbending', desc: 'Grounded and patient, waiting for the moment to strike with overwhelming weight.' },
+  { name: 'Firebending', desc: 'Aggressive and direct, fueled by breath and drive; reach and raw power.' },
+  { name: 'Airbending', desc: 'Evasive and free, turning aside attacks and controlling space without harm.' },
+  { name: 'Weapons', desc: 'Any martial discipline \u2014 blades, staves, thrown weapons, chi-blocking, bare hands.' },
+  { name: 'Technology', desc: 'Gadgets, machines, and clever engineering standing in for bending.' },
+];
 
-export const TECHNIQUES: Record<string, Technique[]> = {
-  Airbending: [
-    { name: 'Evasive Current', effect: 'Slip past an incoming attack by riding a cushion of air.' },
-    { name: 'Updraft', effect: 'Launch yourself or an ally upward out of danger.' },
-    { name: 'Air Shield', effect: 'Spin a defensive barrier of air around yourself.' },
-    { name: 'Gale Push', effect: 'Knock an opponent back with a burst of wind.' },
-  ],
-  Waterbending: [
-    { name: 'Wave Crash', effect: 'Pull water into a wave that sweeps opponents off their feet.' },
-    { name: 'Healing Flow', effect: 'Use bent water to soothe fatigue or a minor injury.' },
-    { name: 'Ice Lock', effect: 'Freeze water around a target\u2019s limbs to immobilize them.' },
-    { name: 'Redirect', effect: 'Catch and redirect an incoming attack using water\u2019s flow.' },
-  ],
-  Earthbending: [
-    { name: 'Stone Wall', effect: 'Raise a wall of earth for cover in an instant.' },
-    { name: 'Seismic Sense', effect: 'Read the ground to sense movement and hidden threats.' },
-    { name: 'Rock Slide', effect: 'Send a wave of rubble at your opponents.' },
-    { name: 'Pillar Launch', effect: 'Propel yourself upward on a column of stone.' },
-  ],
-  Firebending: [
-    { name: 'Flame Whip', effect: 'Lash out with a controlled arc of fire at range.' },
-    { name: 'Breath of Fire', effect: 'Exhale a burst of flame to clear space around you.' },
-    { name: 'Redirect the Spark', effect: 'Absorb and reroute an incoming bolt of lightning or fire.' },
-    { name: 'Smoke Screen', effect: 'Cloud the area to cover an escape or approach.' },
-  ],
-  Weapons: [
-    { name: 'Precise Strike', effect: 'Land a controlled hit that finds the gap in a guard.' },
-    { name: 'Disarm', effect: 'Twist an opponent\u2019s weapon from their grip.' },
-    { name: 'Parry and Riposte', effect: 'Turn a blocked attack into your own opening.' },
-    { name: 'Thrown Weapon', effect: 'Hit a distant target with a thrown blade or projectile.' },
-  ],
-  Technology: [
-    { name: 'Field Rig', effect: 'Jury-rig a device on the spot from whatever\u2019s on hand.' },
-    { name: 'Overcharge', effect: 'Push a mechanism past its limits for one big effect.' },
-    { name: 'Remote Trigger', effect: 'Set up a device to activate later, from a distance.' },
-    { name: 'Quick Repair', effect: 'Patch damaged gear well enough to keep going.' },
-  ],
-  'Hand-to-Hand': [
-    { name: 'Pressure Point', effect: 'Strike a nerve cluster to numb a limb or block a bender\u2019s chi.' },
-    { name: 'Throw', effect: 'Use an opponent\u2019s own momentum to put them on the ground.' },
-    { name: 'Iron Guard', effect: 'Hold a defensive stance that\u2019s nearly impossible to break.' },
-    { name: 'Counter Grab', effect: 'Turn a grapple attempt back on your attacker.' },
-  ],
-};
+export const APPROACH_LABEL: Record<Approach, string> = { defend: 'Defend & Maneuver', attack: 'Advance & Attack', evade: 'Evade & Observe' };
+
+// Available to every character regardless of training. A playbook's own starting
+// technique (see each playbook's `startingTechnique`) is shown alongside these, not
+// listed here, so it isn't duplicated for playbooks that happen to share a name.
+// PLACEHOLDER catalog \u2014 replace with the Core Book (Appendix A) technique list.
+export const UNIVERSAL_TECHNIQUES: Technique[] = [
+  { name: 'Pinpoint Aim', training: 'Universal', approach: 'attack', effect: 'Wait for the perfect moment; mark 1-fatigue to become Prepared and use an advance & attack technique.' },
+  { name: 'Ready Stance', training: 'Universal', approach: 'defend', effect: 'Set your feet and read the fight; you become Prepared and shrug off the next attempt to knock you down.' },
+  { name: 'Feint', training: 'Universal', approach: 'evade', effect: 'Sell a false opening; a foe commits and is Impaired against your next action.' },
+  { name: 'Press the Advantage', training: 'Universal', approach: 'attack', effect: 'Against an Impaired or Stunned foe, inflict 1 extra fatigue.' },
+  { name: 'Retreat', training: 'Universal', approach: 'evade', effect: 'Break contact cleanly; leave the exchange and take no consequences from foes you were engaged with.' },
+  { name: 'Group Up', training: 'Universal', approach: 'defend', groupOnly: true, effect: 'You and every adjacent ally become Prepared together.' },
+];
+
+// PLACEHOLDER catalog \u2014 replace with the Core Book (Appendix A) technique list.
+export const TECHNIQUES: Technique[] = [
+  { name: 'Water Whip', training: 'Waterbending', approach: 'attack', effect: 'Lash a foe with a tendril of water; they mark 1-fatigue and are knocked off-balance.' },
+  { name: 'Flow as Water', training: 'Waterbending', approach: 'defend', effect: 'Mark 1-fatigue to shift to a new position and impair a foe you slip past.' },
+  { name: 'Ice Prison', training: 'Waterbending', approach: 'attack', effect: 'Freeze a foe in place; they are Trapped until they break free.' },
+  { name: 'Healing Waters', training: 'Waterbending', approach: 'evade', rare: true, effect: 'Soothe a wound; you or an ally clears 1-fatigue.' },
+  { name: 'Bloodbending', training: 'Waterbending', approach: 'attack', rare: true, effect: 'Under a full moon, seize control of a foe\u2019s body for one exchange. Forbidden nearly everywhere.' },
+  { name: 'Stone Wall', training: 'Earthbending', approach: 'defend', effect: 'Raise a barrier of earth; you and an adjacent ally are Prepared against the next attack.' },
+  { name: 'Seismic Sense', training: 'Earthbending', approach: 'evade', effect: 'Read the ground; learn a foe\u2019s position and next intention even if you cannot see them.' },
+  { name: 'Rock Slide', training: 'Earthbending', approach: 'attack', effect: 'Send a wave of rubble at foes in a line; each marks 1-fatigue or is knocked down.' },
+  { name: 'Metalbending', training: 'Earthbending', approach: 'attack', rare: true, effect: 'Bend refined metal as if it were earth; bypass metal armor or bind a foe in their own gear.' },
+  { name: 'Lavabending', training: 'Earthbending', approach: 'attack', rare: true, effect: 'Melt stone into lava; create an impassable hazard or force a foe to mark 2-fatigue.' },
+  { name: 'Flame Whip', training: 'Firebending', approach: 'attack', effect: 'Strike a foe at range with a controlled arc of fire.' },
+  { name: 'Breath of Fire', training: 'Firebending', approach: 'defend', effect: 'Exhale a burst of flame to clear space; foes engaged with you must mark 1-fatigue or back off.' },
+  { name: 'Jet Stepping', training: 'Firebending', approach: 'evade', effect: 'Propel yourself with bursts of flame to reposition anywhere in the scene.' },
+  { name: 'Lightning Generation', training: 'Firebending', approach: 'attack', rare: true, effect: 'Separate the energies and release lightning; a foe marks 3-fatigue or is taken out.' },
+  { name: 'Lightning Redirection', training: 'Firebending', approach: 'defend', rare: true, effect: 'Catch lightning through your body and release it elsewhere, unharmed.' },
+  { name: 'Air Scooter', training: 'Airbending', approach: 'evade', effect: 'Ride a sphere of air to move quickly across any terrain.' },
+  { name: 'Air Shield', training: 'Airbending', approach: 'defend', effect: 'Spin a barrier of wind; the next attack against you is deflected.' },
+  { name: 'Gale Push', training: 'Airbending', approach: 'attack', effect: 'Knock a foe back with a burst of wind, moving them where you choose.' },
+  { name: 'Flight', training: 'Airbending', approach: 'evade', rare: true, effect: 'Untethered flight without a glider; only for those who have let go of earthly attachment.' },
+  { name: 'Precise Strike', training: 'Weapons', approach: 'attack', effect: 'Land a hit that finds the gap in a guard; the foe marks 1-fatigue and a condition.' },
+  { name: 'Disarm', training: 'Weapons', approach: 'attack', effect: 'Twist a foe\u2019s weapon from their grip; they are Impaired until they recover it.' },
+  { name: 'Parry and Riposte', training: 'Weapons', approach: 'defend', effect: 'Turn a blocked attack into your own opening; take +1 forward.' },
+  { name: 'Chi Blocking', training: 'Weapons', approach: 'attack', rare: true, effect: 'Strike a bender\u2019s pressure points; they cannot bend for the rest of the exchange.' },
+  { name: 'Pincer Movement', training: 'Weapons', approach: 'defend', groupOnly: true, effect: 'You and an ally flank a foe together; both take +1 forward against them.' },
+  { name: 'Field Rig', training: 'Technology', approach: 'evade', effect: 'Jury-rig a device from whatever is on hand to solve a problem this exchange.' },
+  { name: 'Smoke Bomb', training: 'Technology', approach: 'defend', effect: 'Fill the area with smoke; foes are Impaired trying to target you or an ally.' },
+  { name: 'Electrified Glove', training: 'Technology', approach: 'attack', effect: 'Deliver a stunning shock; the foe is Stunned and marks 1-fatigue.' },
+  { name: 'Mecha Tank', training: 'Technology', approach: 'attack', rare: true, groupOnly: true, effect: 'Pilot a mechanized suit; while inside, ignore the first 2-fatigue each exchange.' },
+];
+
+export const ADVANCEMENTS = [
+  'Take a new move from your playbook',
+  'Take a new move from another playbook',
+  'Raise a stat by +1 (maximum of +2 in any given stat)',
+  'Shift your center one step',
+  'Unlock your Moment of Balance',
+];
 
 export const BACKGROUNDS: Background[] = [
   { name: 'Military', desc: 'Raised in or around an army, navy, or city guard.',
@@ -203,9 +230,9 @@ export const BACKGROUNDS: Background[] = [
 ];
 
 export const STANDARD_GROWTH = [
-  'Did you learn something new about the world, a person, or yourself today?',
-  'Did you fail to live up to your own standards, and did you notice?',
-  'Did you help someone else grow, even in a small way?',
+  'Did you learn something challenging, exciting, or complicated about the world?',
+  'Did you stop a dangerous threat or solve a community problem?',
+  'Did you guide a companion towards balance or end the session at your center?',
 ];
 
 // Broken out into one file per playbook \u2014 see ./playbooks/*.playbook.ts \u2014 so

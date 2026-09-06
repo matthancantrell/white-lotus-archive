@@ -28,4 +28,6 @@ export const rogue: Playbook = {
     'What is the one job you refused to take?',
     'Which companion are you starting to trust despite yourself?',
   ],
+  startingTechnique: { name: 'Dirty Trick', approach: 'attack', effect: 'Fight unfairly; a foe is Impaired and you slip out of their reach.' },
+  momentOfBalance: 'You let people in and it makes you stronger. Tell the GM how you save your companions by trusting them completely, and what that changes.',
 };

@@ -29,4 +29,6 @@ export const pillar: Playbook = {
     'Why does this group need you to hold it together?',
     'Which companion do you rely on most, and which one won’t follow orders?',
   ],
+  startingTechnique: { name: 'Coordinated Assault', approach: 'attack', effect: 'Direct an ally’s attack; they take +1 and the foe is Impaired.' },
+  momentOfBalance: 'The team moves as one under your guidance. Tell the GM how you lead your companions through a situation that should have broken them apart.',
 };

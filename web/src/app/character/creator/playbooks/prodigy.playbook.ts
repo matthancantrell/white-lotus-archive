@@ -28,4 +28,6 @@ export const prodigy: Playbook = {
     'What did your training cost you as a child?',
     'Which companion do you secretly envy, and which one looks up to you?',
   ],
+  startingTechnique: { name: 'Effortless Form', approach: 'evade', effect: 'Execute a technique you have only seen once, at Practiced level, this exchange.' },
+  momentOfBalance: 'You finally stop performing and simply act. Tell the GM how you accomplish a feat of skill that no one — including you — thought possible.',
 };

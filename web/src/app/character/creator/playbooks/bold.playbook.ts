@@ -28,4 +28,6 @@ export const bold: Playbook = {
     'What is the one thing you are secretly afraid of?',
     'Which companion have you promised to have their back, no matter what?',
   ],
+  startingTechnique: { name: 'Showboating Strike', approach: 'attack', effect: 'Land a flashy blow; a foe marks 1-fatigue and everyone watching believes your next boast.' },
+  momentOfBalance: 'You find a way to stand with your companions like no one else could. Tell the GM how you strike down an impossibly strong enemy or obstacle to protect your friends as the best version of yourself.',
 };
