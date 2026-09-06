@@ -1,4 +1,5 @@
-import Image, { type StaticImageData } from 'next/image';
+import { type StaticImageData } from 'next/image';
+import ImageWithSkeleton from './ImageWithSkeleton';
 
 export default function PlaybookCard({
   name,
@@ -8,6 +9,7 @@ export default function PlaybookCard({
   background,
   selected,
   onClick,
+  priority,
 }: {
   name: string;
   principlesLabel: string;
@@ -16,6 +18,7 @@ export default function PlaybookCard({
   background: StaticImageData;
   selected: boolean;
   onClick: () => void;
+  priority?: boolean;
 }) {
   return (
     <button
@@ -24,14 +27,30 @@ export default function PlaybookCard({
       style={{ borderColor: selected ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
     >
       {/* Card background photo, dimmed so the name/principles stay legible over any picture. */}
-      <Image src={background} alt="" fill sizes="280px" className="object-cover object-right" />
+      <ImageWithSkeleton
+        src={background}
+        alt=""
+        fill
+        sizes="280px"
+        priority={priority}
+        className="object-cover object-right"
+        wrapperClassName="absolute inset-0"
+      />
       <div
         className="absolute inset-0"
         style={{ background: selected ? 'linear-gradient(90deg, rgba(232,200,116,0.28), rgba(20,42,46,0.86))' : 'linear-gradient(90deg, rgba(20,42,46,0.55), rgba(20,42,46,0.86))' }}
       />
 
       <div className="relative w-9 h-9 rounded-lg overflow-hidden shrink-0" style={{ border: `2px solid ${iconColor}` }}>
-        <Image src={icon} alt="" fill sizes="36px" className="object-cover" />
+        <ImageWithSkeleton
+          src={icon}
+          alt=""
+          fill
+          sizes="36px"
+          priority={priority}
+          className="object-cover"
+          wrapperClassName="absolute inset-0"
+        />
         {/* Color-code the icon per playbook even though the photo underneath is a shared placeholder. */}
         <div className="absolute inset-0" style={{ background: `${iconColor}4d` }} />
       </div>
