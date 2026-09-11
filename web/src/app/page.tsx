@@ -1,35 +1,16 @@
-'use client';
-
-import { useState } from "react";
 import Link from "next/link";
 import LotusMark from "@/components/LotusMark";
 import SimpleElementsOrbs from "./components/simple-elements-orbs";
-import Image from "next/image";
-import rokuEraImg from '../assets/eras/roku.jpg';
-import aangEraImg from '../assets/eras/aang.jpg'
-import kyoshiEraImg from '../assets/eras/kyoshi.jpg'
-import hywEraImg from '../assets/eras/hundred-year-war.jpg';
-import korraEraImg from '../assets/eras/korra.jpg';
-import customEraImg from '../assets/eras/custom.jpg';
+import EraGallery from "./components/EraGallery";
+import { createClient } from "@/lib/supabase/server";
 
-const ERAS = [
-  { name: "Avatar Roku", tag: "Fire Nation dawn", img: rokuEraImg, accent: "text-[#e8927a]", accentHex: "#e8927a",
-    desc: "A generation before the war begins. Firebending is still a source of pride, not fear, and the world hasn\u2019t yet split into occupier and occupied. Play out the friendships and choices that plant the seeds of what\u2019s coming." },
-  { name: "Avatar Aang", tag: "Hundred Year War\u2019s end", img: aangEraImg, accent: "text-[#9ec4e8]", accentHex: "#9ec4e8",
-    desc: "The war is in its final year and the Avatar has just returned to a broken world. Join the fight to end the Fire Nation\u2019s conquest, whether that means striking at the Fire Lord directly or rebuilding what\u2019s been lost along the way." },
-  { name: "Avatar Kyoshi", tag: "Age of the Daofei", img: kyoshiEraImg, accent: "text-[#a3c98a]", accentHex: "#a3c98a",
-    desc: "Centuries before Aang, the Earth Kingdom is vast, lawless, and run as much by outlaw societies as by its own government. Make your name as a bandit, a lawkeeper, or something in between in a world without an Avatar to keep the balance." },
-  { name: "Hundred Year War", tag: "A world at war", img: hywEraImg, accent: "text-[#d97a5c]", accentHex: "#d97a5c",
-    desc: "Set your own chapter anywhere across the century of Fire Nation conquest, away from the events of the main story. Occupied villages, resistance cells, and refugee camps all make for stories worth telling." },
-  { name: "Avatar Korra", tag: "Age of industry", img: korraEraImg, accent: "text-[#9ec4e8]", accentHex: "#9ec4e8",
-    desc: "Decades after Aang, the world has modernized: spirit vines power cities, and old grudges wear new political clothes. Navigate a world of industry, revolution, and a spirit world pressing back in." },
-  { name: "Your own era", tag: "Build a custom setting", img: customEraImg, accent: "text-gold", accentHex: "#e8c874",
-    desc: "Not tied to a canon era? Build your own timeframe and backdrop with your group \u2014 pick the technology level, the state of bending, and the conflicts that matter to your table." },
-];
+export default async function Home() {
+  const supabase = await createClient();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  const isLoggedIn = !!session;
 
-export default function Home() {
-  const [activeEraName, setActiveEraName] = useState<string | null>(null);
-  const activeEra = activeEraName ? ERAS.find((e) => e.name === activeEraName) ?? null : null;
   return (
     <div className="bg-ink text-parchment min-h-screen font-body">
       {/* NAV */}
@@ -52,8 +33,14 @@ export default function Home() {
               <Link href="/character/manager" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
             </div>
           </div>
-          <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log in</Link>
-          <Link href="/signup" className="bg-gold text-gold-ink px-5.5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap hover:brightness-95">Sign up free</Link>
+          {isLoggedIn ? (
+            <Link href="/profile" className="text-parchment text-[15px] font-semibold">Profile</Link>
+          ) : (
+            <>
+              <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log in</Link>
+              <Link href="/signup" className="bg-gold text-gold-ink px-5.5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap hover:brightness-95">Sign up free</Link>
+            </>
+          )}
         </nav>
       </header>
 
@@ -74,7 +61,9 @@ export default function Home() {
           Build characters, track your growth, and carry your Avatar Legends saga from your first spark to your final bending &mdash; all in one place.
         </p>
         <div className="relative flex gap-4 justify-center flex-wrap mb-18">
-          <Link href="/signup" className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">Sign up &amp; create your character</Link>
+          <Link href={isLoggedIn ? "/character/creator" : "/signup"} className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">
+            {isLoggedIn ? "Create your character" : "Sign up & create your character"}
+          </Link>
           <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore the eras</a>
         </div>
         <SimpleElementsOrbs />
@@ -125,59 +114,15 @@ export default function Home() {
       </section>
 
       {/* ERA GALLERY */}
-      <section id="eras" className="px-[clamp(20px,6vw,56px)] py-[clamp(64px,12vw,120px)] bg-ink">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-14">
-            <p className="font-display text-[12.5px] tracking-[0.28em] uppercase text-gold mb-4">Choose your era</p>
-            <h2 className="font-display font-semibold text-[clamp(27px,4.2vw,38px)] mb-4 text-parchment">Six chapters of the Avatar world</h2>
-            <p className="text-base text-parchment-dim max-w-lg mx-auto">Play in a time you know by heart, or build a setting entirely your own.</p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_340px] gap-8 items-center">
-            <div className="grid grid-cols-3 gap-3.5">
-              {ERAS.map((era) => {
-                const selected = activeEraName === era.name;
-                return (
-                  <button
-                    key={era.name}
-                    onClick={() => setActiveEraName(selected ? null : era.name)}
-                    className="relative block aspect-[3/4] rounded-2xl overflow-hidden border-2 transition-colors"
-                    style={{ borderColor: selected ? era.accentHex : 'rgba(232,200,116,0.18)' }}
-                  >
-                    <Image src={era.img} alt={era.name} fill className="absolute inset-0 w-full h-full object-cover" />
-                    <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(180deg, rgba(13,27,30,0) 40%, rgba(13,27,30,0.9) 100%)" }} />
-                    <div className="absolute left-3.5 right-3.5 bottom-3">
-                      <p className={`mb-0.5 text-[10.5px] tracking-[0.16em] uppercase ${era.accent}`}>{era.tag}</p>
-                      <p className="font-display font-semibold text-base text-parchment">{era.name}</p>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div className="flex flex-col rounded-[20px] p-7.5 border border-gold/20 shadow-2xl min-h-[280px]" style={{ background: "linear-gradient(155deg, #1a3238, #10262a)" }}>
-              {activeEra ? (
-                <>
-                  <p className={`mb-2 text-xs tracking-[0.2em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>
-                  <h3 className="font-display font-semibold text-2xl text-parchment mb-4">{activeEra.name}</h3>
-                  <p className="text-[15px] leading-relaxed text-parchment-dim mb-6.5">{activeEra.desc}</p>
-                  <Link href="/signup" className="inline-block bg-gold text-gold-ink px-6.5 py-3 rounded-full text-[14.5px] font-bold w-fit hover:brightness-95">Create a character in this era</Link>
-                </>
-              ) : (
-                <div className="m-auto text-center">
-                  <p className="font-display font-semibold text-lg text-gold mb-2">Which era calls to you?</p>
-                  <p className="text-sm leading-relaxed text-muted">Select one of the six chapters to read its story before you begin.</p>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </section>
+      <EraGallery isLoggedIn={isLoggedIn} />
 
       {/* CTA BAND */}
       <section className="px-[clamp(20px,6vw,56px)] py-[clamp(56px,10vw,100px)] text-center border-t border-gold/10" style={{ background: "linear-gradient(180deg, #0d1b1e, #142a2e)" }}>
         <h2 className="font-display font-semibold text-[clamp(25px,3.8vw,34px)] mb-4.5 text-parchment">Your journey starts with a single spark</h2>
         <p className="text-base text-parchment-dim mb-9">Free to join. Your characters and progress travel with you.</p>
-        <Link href="/signup" className="bg-gold text-gold-ink px-9 py-4 rounded-full text-base font-bold hover:brightness-95">Sign up &amp; create a character</Link>
+        <Link href={isLoggedIn ? "/character/creator" : "/signup"} className="bg-gold text-gold-ink px-9 py-4 rounded-full text-base font-bold hover:brightness-95">
+          {isLoggedIn ? "Create a character" : "Sign up & create a character"}
+        </Link>
       </section>
 
       {/* FOOTER */}
@@ -203,8 +148,14 @@ export default function Home() {
             <div>
               <p className="font-display text-[13px] text-gold mb-3.5">Account</p>
               <div className="flex flex-col gap-2.5">
-                <Link href="/login" className="text-[13.5px] text-muted">Log in</Link>
-                <Link href="/signup" className="text-[13.5px] text-muted">Sign up</Link>
+                {isLoggedIn ? (
+                  <Link href="/profile" className="text-[13.5px] text-muted">Profile</Link>
+                ) : (
+                  <>
+                    <Link href="/login" className="text-[13.5px] text-muted">Log in</Link>
+                    <Link href="/signup" className="text-[13.5px] text-muted">Sign up</Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
