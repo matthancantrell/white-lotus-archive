@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { apiFetch } from '@/lib/api';
 import LotusMark from '@/components/LotusMark';
 import { ProfileForm } from './ProfileForm';
+import { resolveIcon } from '../character/creator/data';
 import type { Profile } from './types';
 
 export default async function ProfilePage() {
@@ -26,6 +27,7 @@ export default async function ProfilePage() {
   }
   const profile: Profile = await res.json();
   const displayName = profile.display_name || profile.username;
+  const icon = resolveIcon(profile.avatar_icon_id);
 
   return (
     <div className="bg-ink text-parchment min-h-screen font-body">
@@ -45,7 +47,7 @@ export default async function ProfilePage() {
             </button>
             <div className="hidden group-hover:block group-focus-within:block absolute top-full left-1/2 -translate-x-1/2 mt-3.5 bg-ink-soft border border-gold/20 rounded-2xl p-2 min-w-[200px] shadow-2xl z-30">
               <Link href="/character/creator" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Create a character</Link>
-              <Link href="/signup" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
+              <Link href="/character/manager" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
             </div>
           </div>
           <Link href="/profile" className="text-parchment text-[15px] font-semibold">Profile</Link>
@@ -65,9 +67,9 @@ export default async function ProfilePage() {
           <div className="rounded-[22px] p-[clamp(24px,6vw,40px)] border border-gold/20 shadow-2xl" style={{ background: 'linear-gradient(155deg, #1a3238, #10262a)' }}>
             <div className="flex items-center gap-4 mb-7.5">
               <div className="w-[58px] h-[58px] rounded-full border border-gold/35 text-gold flex items-center justify-center font-display text-xl font-bold shrink-0 overflow-hidden" style={{ background: 'radial-gradient(circle at 35% 30%, #3a6ea5, #1a3238)' }}>
-                {profile.avatar_url ? (
+                {icon ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={profile.avatar_url} alt="" className="w-full h-full object-cover" />
+                  <img src={icon.url} alt="" className="w-full h-full object-cover" />
                 ) : (
                   displayName.charAt(0).toUpperCase()
                 )}

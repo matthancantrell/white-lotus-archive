@@ -7,6 +7,24 @@ compatibility_date = "2024-09-23"
 SUPABASE_URL = "https://eatmqkekulibhzdkqwez.supabase.co"
 ALLOWED_ORIGIN = "https://white-lotus-archive.matthancantrell.workers.dev"
 
+# Character data lives in D1, not Supabase — see schema/0001_characters.sql.
+[[d1_databases]]
+binding = "DB"
+database_name = "white-lotus-characters"
+database_id = "0f8459e5-5059-440d-93e3-37731da8c2ea"
+
+# Character icon art. Deliberately NOT a public bucket — no r2.dev subdomain, no
+# custom domain. Access goes only through this Worker's binding (see
+# src/routes/media.ts), which edge-caches reads so repeat requests never touch
+# R2 at all. Create the bucket once with:
+#   wrangler r2 bucket create white-lotus-media
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "white-lotus-media"
+# Without this, `wrangler dev` talks to an empty *local* simulated bucket
+# instead of the real one you uploaded icons to — every icon would 404.
+remote = true
+
 [observability]
 enabled = false
 head_sampling_rate = 1

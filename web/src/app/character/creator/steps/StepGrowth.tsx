@@ -7,6 +7,8 @@ export default function StepGrowth({
   trainingName,
   eraName,
   name,
+  saving,
+  saveError,
   justSaved,
   onSave,
 }: {
@@ -14,6 +16,8 @@ export default function StepGrowth({
   trainingName: string | null;
   eraName: string | null;
   name: string;
+  saving: boolean;
+  saveError: string | null;
   justSaved: boolean;
   onSave: () => void;
 }) {
@@ -101,10 +105,15 @@ export default function StepGrowth({
           <p><span className="text-faint">Training:</span> {trainingName || 'not chosen'}</p>
           <p><span className="text-faint">Era:</span> {eraName || 'not chosen'}</p>
         </div>
-        <button onClick={onSave} className="bg-gold text-gold-ink px-7.5 py-3.5 rounded-full text-[15px] font-bold hover:brightness-95">
-          Save character to my archive
+        <button
+          onClick={onSave}
+          disabled={saving}
+          className="bg-gold text-gold-ink px-7.5 py-3.5 rounded-full text-[15px] font-bold hover:brightness-95 disabled:opacity-60"
+        >
+          {saving ? 'Saving…' : 'Save character to my archive'}
         </button>
-        {justSaved && <p className="mt-3.5 text-[#a3c98a] text-[13.5px]">Saved. This will sync to your account once the archive is connected.</p>}
+        {saveError && <p className="mt-3.5 text-[#e8927a] text-[13.5px]">{saveError}</p>}
+        {justSaved && !saveError && <p className="mt-3.5 text-[#a3c98a] text-[13.5px]">Saved to your archive.</p>}
       </div>
     </section>
   );

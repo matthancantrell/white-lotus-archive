@@ -49,7 +49,7 @@ export default function Home() {
             </button>
             <div className="hidden group-hover:block group-focus-within:block absolute top-full left-1/2 -translate-x-1/2 mt-3.5 bg-ink-soft border border-gold/20 rounded-2xl p-2 min-w-[200px] shadow-2xl z-30">
               <Link href="/character/creator" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Create a character</Link>
-              <Link href="/signup" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
+              <Link href="/character/manager" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
             </div>
           </div>
           <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log in</Link>

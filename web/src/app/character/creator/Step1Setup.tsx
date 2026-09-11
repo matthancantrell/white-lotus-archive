@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ERAS, PORTRAITS } from './data';
+import { ERAS, ICONS } from './data';
 import StepHeader from './StepHeader';
 import { TextField, TextArea } from './TextField';
 import rokuEraImg from '../../../assets/eras/roku.jpg';
@@ -30,22 +30,28 @@ const ERA_ACCENT_HEX: Record<string, string> = {
 };
 
 export default function Step1Setup({
-  eraName, name, portraitId, scopeText, groupFocusesText,
-  onSelectEra, onName, onPortrait, onScope, onGroupFocuses,
+  eraName, name, iconId, scopeText, groupFocusesText,
+  onSelectEra, onName, onIcon, onScope, onGroupFocuses,
 }: {
   eraName: string | null;
   name: string;
-  portraitId: string | null;
+  iconId: string | null;
   scopeText: string;
   groupFocusesText: string;
   onSelectEra: (name: string | null) => void;
   onName: (v: string) => void;
-  onPortrait: (id: string) => void;
+  onIcon: (id: string) => void;
   onScope: (v: string) => void;
   onGroupFocuses: (v: string) => void;
 }) {
   const [campaignOpen, setCampaignOpen] = useState(false);
-  const [portraitsExpanded, setPortraitsExpanded] = useState(false);
+  const [iconsExpanded, setIconsExpanded] = useState(false);
+  // Icons are fetched from R2 through the API — a slow network or a
+  // misconfigured/unreachable API must never block finishing this step, so a
+  // broken image just falls back to a plain placeholder instead of a broken
+  // <img> icon, and picking one is optional either way (nothing below gates
+  // moving on).
+  const [brokenIconIds, setBrokenIconIds] = useState<Set<string>>(new Set());
   const [detailAtBottom, setDetailAtBottom] = useState(true);
   const detailRef = useRef<HTMLDivElement>(null);
   const activeEra = eraName ? ERAS.find((e) => e.name === eraName) ?? null : null;
@@ -175,35 +181,46 @@ export default function Step1Setup({
         )}
       </div>
 
-      <h2 className="font-display font-semibold text-lg mb-3.5 text-parchment">Name &amp; portrait</h2>
+      <h2 className="font-display font-semibold text-lg mb-3.5 text-parchment">Name &amp; icon</h2>
       <label className="block text-[13px] text-muted mb-2">Character name</label>
       <TextField type="text" value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Teo of the Northern Air Temple" className="mb-5" />
 
-      <label className="block text-[13px] text-muted mb-2.5">Choose a portrait</label>
+      <label className="block text-[13px] text-muted mb-2.5">Choose an icon (optional)</label>
       <div className="relative">
-        <div className="pr-1 mb-2.5" style={{ maxHeight: portraitsExpanded ? 340 : 176, overflowY: portraitsExpanded ? 'auto' : 'hidden' }}>
+        <div className="pr-1 mb-2.5" style={{ maxHeight: iconsExpanded ? 340 : 176, overflowY: iconsExpanded ? 'auto' : 'hidden' }}>
           <div className="flex flex-wrap justify-center gap-3">
-            {PORTRAITS.map((p) => {
-              const selected = portraitId === p.id;
+            {ICONS.map((icon) => {
+              const selected = iconId === icon.id;
               return (
                 <button
-                  key={p.id}
-                  onClick={() => onPortrait(p.id)}
-                  className="rounded-full flex items-center justify-center shrink-0"
-                  style={{ width: 76, height: 76, background: p.bg, border: `3px solid ${selected ? '#e8c874' : 'transparent'}` }}
+                  key={icon.id}
+                  onClick={() => onIcon(icon.id)}
+                  className="relative rounded-full flex items-center justify-center shrink-0 overflow-hidden bg-white/6"
+                  style={{ width: 76, height: 76, border: `3px solid ${selected ? '#e8c874' : 'transparent'}` }}
                 >
-                  {selected && <span className="text-gold-ink text-lg font-bold">&#10003;</span>}
+                  {brokenIconIds.has(icon.id) ? (
+                    <div className="w-full h-full" />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={icon.url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      onError={() => setBrokenIconIds((prev) => new Set(prev).add(icon.id))}
+                    />
+                  )}
+                  {selected && <span className="absolute text-gold-ink text-lg font-bold drop-shadow">&#10003;</span>}
                 </button>
               );
             })}
           </div>
         </div>
-        {!portraitsExpanded && (
+        {!iconsExpanded && (
           <div className="absolute left-0 right-1 bottom-2.5 h-11 pointer-events-none" style={{ background: 'linear-gradient(rgba(13,27,30,0), #0d1b1e)' }} />
         )}
       </div>
-      <button onClick={() => setPortraitsExpanded((v) => !v)} className="text-gold text-[13.5px] font-semibold">
-        {portraitsExpanded ? 'Show fewer' : `Show all ${PORTRAITS.length} portraits`}
+      <button onClick={() => setIconsExpanded((v) => !v)} className="text-gold text-[13.5px] font-semibold">
+        {iconsExpanded ? 'Show fewer' : `Show all ${ICONS.length} icons`}
       </button>
     </section>
   );

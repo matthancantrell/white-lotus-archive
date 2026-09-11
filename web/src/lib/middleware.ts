@@ -2,7 +2,7 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // !!! Protected routes that require authentication !!!
-const PROTECTED_PREFIXES = ['/profile'];
+const PROTECTED_PREFIXES = ['/profile', '/character'];
 
 export async function middleware(request: NextRequest) {
   let response = NextResponse.next({ request });

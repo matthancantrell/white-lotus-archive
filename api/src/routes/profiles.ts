@@ -44,7 +44,7 @@ profiles.patch('/me', requireAuth, async (c) => {
   if (!body) return c.json({ error: 'Invalid JSON body' }, 400);
 
   // Whitelist editable fields — never let the client set id / created_at / etc.
-  const allowed = ['username', 'display_name', 'avatar_url', 'bio', 'is_private'] as const;
+  const allowed = ['username', 'display_name', 'avatar_icon_id', 'bio', 'is_private'] as const;
   const updates: Record<string, unknown> = {};
   for (const key of allowed) {
     if (key in body) updates[key] = body[key];
@@ -79,7 +79,7 @@ profiles.get('/:id', async (c) => {
   const supabase = userClient(c.env, token);
   const { data, error } = await supabase
     .from('profiles')
-    .select('id, username, display_name, avatar_url, bio, is_private, created_at')
+    .select('id, username, display_name, avatar_icon_id, bio, is_private, created_at')
     .eq('id', id)
     .single();
 

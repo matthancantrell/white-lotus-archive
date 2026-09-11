@@ -1,5 +1,4 @@
 import type { Playbook } from '../data';
-// TODO: swap these for the Adamant's own real icon/background/banner art.
 import iconImg from '../../../../assets/playbooks/adamant.jpg';
 import backgroundImg from '../../../../assets/playbooks/background/adamant.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/adamant.jpg';

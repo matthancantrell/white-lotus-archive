@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
 import { AuthTextField, AuthTextArea } from '@/components/AuthTextField';
+import { ICONS, resolveIcon } from '../character/creator/data';
 import type { Profile } from './types';
 
 export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
@@ -11,6 +12,13 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  // Same reasoning as the character creator's icon picker: icons are fetched
+  // from R2 through the API, and a broken/unreachable one must never block
+  // picking a profile picture or saving the form — it just falls back to a
+  // plain placeholder instead of a broken <img> icon.
+  const [brokenIconIds, setBrokenIconIds] = useState<Set<string>>(new Set());
+  const selectedIcon = resolveIcon(profile.avatar_icon_id);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -37,7 +45,7 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
       body: JSON.stringify({
         display_name: profile.display_name,
         bio: profile.bio,
-        avatar_url: profile.avatar_url,
+        avatar_icon_id: profile.avatar_icon_id,
         is_private: profile.is_private,
       }),
     });
@@ -94,14 +102,58 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="avatar_url" className="text-[13px] font-semibold text-parchment-dim">Avatar URL</label>
-        <AuthTextField
-          id="avatar_url"
-          type="text"
-          value={profile.avatar_url ?? ''}
-          onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
-          placeholder="https://…"
-        />
+        <label className="text-[13px] font-semibold text-parchment-dim">Profile picture</label>
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-full border border-gold/30 overflow-hidden shrink-0 bg-white/6 flex items-center justify-center">
+            {selectedIcon ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={selectedIcon.url} alt="" className="w-full h-full object-cover" />
+            ) : (
+              <span className="text-muted text-[11px]">None</span>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={() => setPickerOpen((v) => !v)}
+            className="px-4 py-2 text-[13.5px] font-semibold text-parchment bg-transparent border border-white/25 rounded-full cursor-pointer hover:bg-white/5"
+          >
+            {pickerOpen ? 'Close' : 'Change profile picture'}
+          </button>
+        </div>
+
+        {pickerOpen && (
+          <div className="mt-1 pr-1" style={{ maxHeight: 220, overflowY: 'auto' }}>
+            <div className="flex flex-wrap gap-2.5">
+              {ICONS.map((icon) => {
+                const selected = profile.avatar_icon_id === icon.id;
+                return (
+                  <button
+                    key={icon.id}
+                    type="button"
+                    onClick={() => {
+                      setProfile({ ...profile, avatar_icon_id: icon.id });
+                      setPickerOpen(false);
+                    }}
+                    className="relative rounded-full flex items-center justify-center shrink-0 overflow-hidden bg-white/6"
+                    style={{ width: 52, height: 52, border: `2px solid ${selected ? '#e8c874' : 'transparent'}` }}
+                  >
+                    {brokenIconIds.has(icon.id) ? (
+                      <div className="w-full h-full" />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={icon.url}
+                        alt=""
+                        className="w-full h-full object-cover"
+                        onError={() => setBrokenIconIds((prev) => new Set(prev).add(icon.id))}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       <label className="flex items-center gap-2.5 py-1 cursor-pointer">

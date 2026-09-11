@@ -54,7 +54,8 @@ export interface CharacterDraft {
   // Keyed by technique name; a technique with no entry hasn't been picked at all.
   techniqueLevels: Record<string, TechniqueLevel>;
   name: string;
-  portraitId: string | null;
+  // A key into ICONS below, not a URL — see IconOption for why.
+  iconId: string | null;
   scopeText: string;
   groupFocusesText: string;
   hometown: string;
@@ -63,8 +64,9 @@ export interface CharacterDraft {
   demeanor: string;
   history: string[];
   connections: Connection[];
+  // Set once saved via StepGrowth's "Save character to my archive"; unset means
+  // this draft only exists in the current session and hasn't reached the DB yet.
   characterId?: string;
-  status?: 'draft' | 'complete';
 }
 
 export const STEP_LABELS = ['Setup', 'Playbook', 'Concept', 'Training', 'Balance', 'Techniques', 'Connections', 'Growth'];
@@ -78,8 +80,54 @@ export const ERA_HEADER_LABEL: Record<string, string> = {
   'Your own era': 'Custom Era',
 };
 
-export const PORTRAIT_COLORS = ['#3a6ea5', '#4a7c3a', '#b3492e', '#d9c98a', '#8a5ca8', '#5c8a8a', '#c98a4c', '#6f8a5c', '#a54e6e', '#4c7ac9', '#8a7c3a', '#3a9e8f', '#9e5c3a', '#5c6f9e', '#7c9e3a', '#9e3a6f', '#4c9e6f', '#9e6f4c', '#6f4c9e', '#3a5c9e', '#9e3a3a', '#3a9e3a', '#9e9e3a'];
-export const PORTRAITS = PORTRAIT_COLORS.map((c, i) => ({ id: `p${i + 1}`, bg: `linear-gradient(155deg,${c},#1a3238)` }));
+export interface IconOption { id: string; url: string; }
+// `id` doubles as the R2 object key under `icons/`, extension included (e.g.
+// "aang-1.png") — served only through api/src/routes/media.ts, never a raw
+// bucket URL. See api/schema/0001_characters.sql for why characters store
+// this id rather than a URL.
+// Some of these ("the-<playbook>-1.jpg") are also meant to become that
+// playbook's card icon (Playbook.iconImage in ./playbooks/*.playbook.ts) —
+// not wired up yet, deliberately held off for now.
+const ICON_IDS: string[] = [
+  'pro-bender-1.jpg',
+  'pro-bender-2.jpg',
+  'the-adamant-1.jpg',
+  'the-adamant-2.jpg',
+  'the-bold-1.jpg',
+  'the-bold-2.jpg',
+  'the-destined-1.jpg',
+  'the-destined-2.jpg',
+  'the-elder-1.jpg',
+  'the-elder-2.jpg',
+  'the-foundling-1.jpg',
+  'the-foundling-2.jpg',
+  'the-guardian-1.jpg',
+  'the-guardian-2.jpg',
+  'the-hammer-1.jpg',
+  'the-hammer-2.jpg',
+  'the-icon-1.jpg',
+  'the-icon-2.jpg',
+  'the-idealist-1.jpg',
+  'the-idealist-2.jpg',
+  'the-pillar-1.jpg',
+  'the-pillar-2.jpg',
+  'the-prodigy-1.jpg',
+  'the-prodigy-2.jpg',
+  'the-razor-1.jpg',
+  'the-razor-2.jpg',
+  'the-rogue-1.jpg',
+  'the-rogue-2.jpg',
+  'the-successor-1.jpg',
+  'the-successor-2.jpg',
+  'cabbage-man.jpg',
+];
+export const ICONS: IconOption[] = ICON_IDS.map((id) => ({
+  id,
+  url: `${process.env.NEXT_PUBLIC_API_URL}/media/icons/${id}`,
+}));
+export function resolveIcon(id: string | null): IconOption | null {
+  return id ? ICONS.find((i) => i.id === id) ?? null : null;
+}
 
 export const TOTAL_STEPS = STEP_LABELS.length;
 
@@ -94,7 +142,7 @@ export const INITIAL_DRAFT: CharacterDraft = {
   selectedMoves: [],
   techniqueLevels: {},
   name: '',
-  portraitId: null,
+  iconId: null,
   scopeText: '',
   groupFocusesText: '',
   hometown: '',
