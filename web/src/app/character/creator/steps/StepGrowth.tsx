@@ -4,22 +4,10 @@ import TabbedStepPanel from '../TabbedStepPanel';
 
 export default function StepGrowth({
   playbook,
-  trainingName,
-  eraName,
   name,
-  saving,
-  saveError,
-  justSaved,
-  onSave,
 }: {
   playbook: Playbook | null;
-  trainingName: string | null;
-  eraName: string | null;
   name: string;
-  saving: boolean;
-  saveError: string | null;
-  justSaved: boolean;
-  onSave: () => void;
 }) {
   const playbookName = playbook ? playbook.name : 'No playbook yet';
 
@@ -96,24 +84,6 @@ export default function StepGrowth({
             { id: 'moment', label: 'Moment of Balance', content: momentTab },
           ]}
         />
-      </div>
-
-      <div className="bg-panel border border-gold/25 rounded-2xl p-7">
-        <p className="font-display font-semibold text-lg text-parchment mb-4">Ready to save {name || 'your character'}</p>
-        <div className="grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-x-6 gap-y-2.5 text-[13.5px] text-[#b9c2bd] mb-5.5">
-          <p><span className="text-faint">Playbook:</span> {playbook ? playbook.name : 'not chosen'}</p>
-          <p><span className="text-faint">Training:</span> {trainingName || 'not chosen'}</p>
-          <p><span className="text-faint">Era:</span> {eraName || 'not chosen'}</p>
-        </div>
-        <button
-          onClick={onSave}
-          disabled={saving}
-          className="bg-gold text-gold-ink px-7.5 py-3.5 rounded-full text-[15px] font-bold hover:brightness-95 disabled:opacity-60"
-        >
-          {saving ? 'Saving…' : 'Save character to my archive'}
-        </button>
-        {saveError && <p className="mt-3.5 text-[#e8927a] text-[13.5px]">{saveError}</p>}
-        {justSaved && !saveError && <p className="mt-3.5 text-[#a3c98a] text-[13.5px]">Saved to your archive.</p>}
       </div>
     </section>
   );

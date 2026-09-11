@@ -28,7 +28,6 @@ function CharacterCreatorInner() {
   const [loadError, setLoadError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [justSaved, setJustSaved] = useState(false);
 
   useEffect(() => {
     if (!editId) return;
@@ -41,7 +40,10 @@ function CharacterCreatorInner() {
         // Merge under INITIAL_DRAFT rather than trusting the saved shape as-is —
         // a character saved before a field (hometown, techniqueLevels, ...) existed
         // would otherwise come back with that field missing instead of its default.
-        setDraft({ ...INITIAL_DRAFT, ...record.data, characterId: record.id });
+        // `step` is always reset to 1 regardless of what was saved — a saved
+        // character's `step` is whatever step it happened to be saved from
+        // (normally the last one), and editing should always start from the top.
+        setDraft({ ...INITIAL_DRAFT, ...record.data, characterId: record.id, step: 1 });
       })
       .catch((err) => {
         if (!cancelled) setLoadError(err instanceof Error ? err.message : 'Could not load that character.');
@@ -56,12 +58,13 @@ function CharacterCreatorInner() {
 
   function update(patch: Partial<CharacterDraft>) {
     setDraft((prev) => (prev ? { ...prev, ...patch } : prev));
-    setJustSaved(false);
   }
 
   // The only way a character reaches the database at all — there's no separate
   // "save draft" path. Called once, from the last step's "Save character to my
-  // archive" (and again on subsequent edits to an already-saved character).
+  // archive" (and again on subsequent edits to an already-saved character). A
+  // successful save goes straight to the character's sheet — no intermediate
+  // "Done" click needed to actually see what you just saved.
   async function persist() {
     if (!draft) return;
     setSaving(true);
@@ -70,16 +73,9 @@ function CharacterCreatorInner() {
       const record = draft.characterId
         ? await updateCharacter(draft.characterId, draft)
         : await createCharacter(draft);
-      setDraft((prev) => (prev ? { ...prev, characterId: record.id } : prev));
-      if (!draft.characterId) {
-        // First save assigns the permanent id — reflect it in the URL so a refresh
-        // (or sharing the link) keeps editing this same character.
-        router.replace(`/character/creator?id=${record.id}`);
-      }
-      setJustSaved(true);
+      router.push(`/character/manager/${record.id}`);
     } catch (err) {
       setSaveError(err instanceof Error ? err.message : 'Could not save your character.');
-    } finally {
       setSaving(false);
     }
   }
@@ -233,16 +229,7 @@ function CharacterCreatorInner() {
               />
             )}
             {draft.step === 8 && (
-              <StepGrowth
-                playbook={playbook}
-                trainingName={draft.trainingName}
-                eraName={draft.eraName}
-                name={draft.name}
-                saving={saving}
-                saveError={saveError}
-                justSaved={justSaved}
-                onSave={persist}
-              />
+              <StepGrowth playbook={playbook} name={draft.name} />
             )}
 
             <div className="flex justify-between flex-wrap gap-3 mt-10 pt-6 border-t border-gold/12">
@@ -255,13 +242,16 @@ function CharacterCreatorInner() {
                 &larr; Back
               </button>
               {draft.step === TOTAL_STEPS ? (
-                draft.characterId ? (
-                  <Link href="/character/manager" className="bg-white/8 text-parchment px-6.5 py-3 rounded-full text-[14.5px] font-semibold border border-white/25">
-                    Done &middot; back to my characters
-                  </Link>
-                ) : (
-                  <span className="text-muted text-[13.5px] italic">Save your character above to finish</span>
-                )
+                <div className="flex flex-col items-end gap-2">
+                  <button
+                    onClick={persist}
+                    disabled={saving}
+                    className="bg-gold text-gold-ink px-7 py-3 rounded-full text-[14.5px] font-bold hover:brightness-95 disabled:opacity-60"
+                  >
+                    {saving ? 'Saving…' : 'Save Character'}
+                  </button>
+                  {saveError && <p className="text-[#e8927a] text-[13.5px]">{saveError}</p>}
+                </div>
               ) : (
                 <button onClick={goNext} className="bg-gold text-gold-ink px-7 py-3 rounded-full text-[14.5px] font-bold hover:brightness-95">
                   Next &rarr;
