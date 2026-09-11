@@ -209,7 +209,6 @@ export default function Step1Setup({
                       onError={() => setBrokenIconIds((prev) => new Set(prev).add(icon.id))}
                     />
                   )}
-                  {selected && <span className="absolute text-gold-ink text-lg font-bold drop-shadow">&#10003;</span>}
                 </button>
               );
             })}

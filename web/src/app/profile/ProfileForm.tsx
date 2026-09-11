@@ -1,13 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { AuthTextField, AuthTextArea } from '@/components/AuthTextField';
-import { ICONS, resolveIcon } from '../character/creator/data';
+import { ICONS } from '../character/creator/data';
 import type { Profile } from './types';
 
 export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
   const supabase = createClient();
+  const router = useRouter();
   const [profile, setProfile] = useState(initialProfile);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +20,6 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
   // picking a profile picture or saving the form — it just falls back to a
   // plain placeholder instead of a broken <img> icon.
   const [brokenIconIds, setBrokenIconIds] = useState<Set<string>>(new Set());
-  const selectedIcon = resolveIcon(profile.avatar_icon_id);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -61,6 +62,11 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
     const updated: Profile = await res.json();
     setProfile(updated);
     setSaved(true);
+    // The header avatar above this form is rendered server-side in page.tsx
+    // from the profile fetched when the page loaded — updating this
+    // component's own state doesn't reach back into that. Refresh so it
+    // re-fetches and shows the newly-saved icon instead of the stale one.
+    router.refresh();
   }
 
   async function handleSignOut() {
@@ -103,15 +109,7 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
 
       <div className="flex flex-col gap-1.5">
         <label className="text-[13px] font-semibold text-parchment-dim">Profile picture</label>
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full border border-gold/30 overflow-hidden shrink-0 bg-white/6 flex items-center justify-center">
-            {selectedIcon ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={selectedIcon.url} alt="" className="w-full h-full object-cover" />
-            ) : (
-              <span className="text-muted text-[11px]">None</span>
-            )}
-          </div>
+        <div>
           <button
             type="button"
             onClick={() => setPickerOpen((v) => !v)}
