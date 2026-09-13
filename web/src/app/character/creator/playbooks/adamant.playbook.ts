@@ -11,8 +11,12 @@ export const adamant: Playbook = {
   bannerFile: bannerImg,
   name: 'The Adamant',
   tagline: 'Fixes what’s broken by any means necessary, even at cost to themselves and others.',
+  // PLACEHOLDER — a longer passage describing The Adamant, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Adamant.',
   principles: ['Restraint', 'Results'],
   stats: { creativity: 0, focus: 1, harmony: -1, passion: 1 },
+  // PLACEHOLDER — suggested demeanors for The Adamant.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'No Half Measures', effect: 'When you push a plan through over others’ objections, roll with Focus; on a hit it works, but mark a condition on a 7-9.' },
     { name: 'Cutting Remark', effect: 'When you tell someone an uncomfortable truth to spur them into action, roll with Passion.' },
@@ -20,6 +24,8 @@ export const adamant: Playbook = {
     { name: 'Iron Will', effect: 'Clear a condition whenever you double down on a decision instead of reconsidering it.' },
     { name: 'Lodestar', effect: 'Name another PC as your Lodestar; they can shift your balance without you contesting it.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Adamant.
+  movesAdvice: 'PLACEHOLDER moves advice for The Adamant.',
   feature: { name: 'By Any Means', effect: 'Once per session, ignore the consequences of a harsh method to get a result — the fiction remembers it, though.' },
   growth: 'Did you get results at someone else’s expense today?',
   history: [
@@ -28,6 +34,8 @@ export const adamant: Playbook = {
     'What did fixing something once cost you?',
     'Which companion do you suspect is too soft to do what’s necessary?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Adamant.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Adamant.', 'PLACEHOLDER connection prompt for The Adamant.'],
   startingTechnique: { name: 'Pinpoint Aim', approach: 'attack', effect: 'Wait for the perfect moment; mark 1-fatigue to become Prepared and use an attack technique.' },
   momentOfBalance: 'You see the whole board and the one move that fixes it. Tell the GM how you resolve the crisis in front of you with a single, decisive act — and what it costs you.',
 };

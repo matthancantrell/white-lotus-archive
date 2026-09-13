@@ -12,8 +12,12 @@ export const elder: Playbook = {
   bannerFile: bannerImg,
   name: 'The Elder',
   tagline: 'Lived longer than the others, mastered their training many times over.',
+  // PLACEHOLDER — a longer passage describing The Elder, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Elder.',
   principles: ['Determination', 'Patience'],
   stats: { creativity: 0, focus: 1, harmony: 1, passion: -1 },
+  // PLACEHOLDER — suggested demeanors for The Elder.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'Decades of Practice', effect: 'When you draw on a lifetime of experience, roll with Focus.' },
     { name: 'Patient Teacher', effect: 'When you guide a companion through a technique, roll with Harmony; on a hit they gain a temporary bonus.' },
@@ -21,6 +25,8 @@ export const elder: Playbook = {
     { name: 'One More Fight', effect: 'When your body pushes past what it should be capable of, roll with Focus.' },
     { name: 'Let It Go', effect: 'Clear a condition when you choose patience over pushing an old grudge.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Elder.
+  movesAdvice: 'PLACEHOLDER moves advice for The Elder.',
   feature: { name: 'Mastered Techniques', effect: 'Start with four mastered techniques instead of one, chosen freely from your training.' },
   growth: 'Did your age and experience change how you handled something today?',
   history: [
@@ -29,6 +35,8 @@ export const elder: Playbook = {
     'Why are you traveling with people so much younger than you?',
     'Which companion reminds you of who you used to be?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Elder.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Elder.', 'PLACEHOLDER connection prompt for The Elder.'],
   startingTechnique: { name: 'Old Reliable', approach: 'defend', effect: 'A form drilled for decades; you deflect an attack and the foe marks 1-fatigue.' },
   momentOfBalance: 'A lifetime of skill flows through you. Tell the GM how you demonstrate true mastery, resolving a conflict in a way only someone who has seen everything could.',
 };

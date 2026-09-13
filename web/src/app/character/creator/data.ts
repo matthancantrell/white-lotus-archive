@@ -4,22 +4,39 @@ export interface Move { name: string; effect: string; }
 export interface Feature { name: string; effect: string; }
 export interface Stats { creativity: number; focus: number; harmony: number; passion: number; }
 
+// The playbook's full information-panel content, in the same order it's rendered
+// (see PlaybookInfoPanel) — banner/tagline/description/principles/stats/demeanor
+// options/history/connections/moment of balance/feature/moves/moves advice/
+// playbook technique/growth question. Every playbook supplies every field so the
+// panel's layout stays identical across playbooks; only the words differ.
 export interface Playbook {
   id: string;
   name: string;
   tagline: string;
+  // A longer flavor passage shown under the tagline — what this playbook is about,
+  // beyond the one-line hook.
+  description: string;
   principles: [string, string];
   stats: Stats;
-  moves: Move[];
-  feature: Feature;
-  growth: string;
+  // Suggested demeanors offered as inspiration for the free-text demeanor a player
+  // fills in during the Concept step (see CharacterDraft.demeanor).
+  demeanorOptions: string[];
   // Four history questions answered in the Concept step, specific to this playbook.
   history: string[];
-  // Auto-granted at Mastered when this playbook is confirmed (see StepTechniques), and
-  // the passage shown in Growth's "Moment of Balance" tab once unlocked.
+  // Suggested connection prompts offered as inspiration for the free-text
+  // connections a player fills in during the Connections step (see
+  // CharacterDraft.connections).
+  connectionPrompts: string[];
+  // The passage shown in Growth's "Moment of Balance" tab once unlocked.
+  momentOfBalance: string;
+  feature: Feature;
+  moves: Move[];
+  // General guidance on choosing among this playbook's moves.
+  movesAdvice: string;
+  // Auto-granted at Mastered when this playbook is confirmed (see StepTechniques).
   // PLACEHOLDER — replace with the Core Book (Appendix A) text for this playbook.
   startingTechnique: { name: string; approach: Approach; effect: string };
-  momentOfBalance: string;
+  growth: string;
   // Icon/background/banner art (plus an icon accent color), imported and
   // owned directly by each playbook's own file (see ./playbooks/*.playbook.ts)
   // — so adding, removing, or reordering entries in PLAYBOOKS can't shift

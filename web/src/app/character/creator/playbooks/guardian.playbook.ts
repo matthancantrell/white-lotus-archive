@@ -11,8 +11,12 @@ export const guardian: Playbook = {
   bannerFile: bannerImg,
   name: 'The Guardian',
   tagline: 'Sworn to protect someone specific, sometimes at the cost of their own goals.',
+  // PLACEHOLDER — a longer passage describing The Guardian, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Guardian.',
   principles: ['Duty', 'Freedom'],
   stats: { creativity: -1, focus: 1, harmony: 1, passion: 0 },
+  // PLACEHOLDER — suggested demeanors for The Guardian.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'Shield', effect: 'When you place yourself between your charge and harm, roll with Focus.' },
     { name: 'Ever Vigilant', effect: 'You always notice a threat to your charge before anyone else at the table does.' },
@@ -20,6 +24,8 @@ export const guardian: Playbook = {
     { name: 'Draw Their Eye', effect: 'Once per exchange, redirect an attacker’s focus onto yourself.' },
     { name: 'Off Duty', effect: 'Clear a condition when you take real time for yourself, away from your charge.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Guardian.
+  movesAdvice: 'PLACEHOLDER moves advice for The Guardian.',
   feature: { name: 'Sworn Oath', effect: 'Name who you’ve sworn to protect; your balance shifts whenever that bond is tested.' },
   growth: 'Did protecting your charge cost you something you wanted?',
   history: [
@@ -28,6 +34,8 @@ export const guardian: Playbook = {
     'Who trained you, and what do they think of your ward?',
     'Which companion do you trust to help you, and which one worries you?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Guardian.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Guardian.', 'PLACEHOLDER connection prompt for The Guardian.'],
   startingTechnique: { name: 'Interpose', approach: 'defend', effect: 'Step between your ward and harm; take the hit’s fatigue in their place and become Prepared.' },
   momentOfBalance: 'Nothing gets through you. Tell the GM how you protect your ward and your companions from a threat that should have overwhelmed them all.',
 };

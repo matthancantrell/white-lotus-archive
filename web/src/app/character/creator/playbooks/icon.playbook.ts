@@ -11,8 +11,12 @@ export const icon: Playbook = {
   bannerFile: bannerImg,
   name: 'The Icon',
   tagline: 'Carries a title or legacy they never asked for, and longs to just be themselves.',
+  // PLACEHOLDER — a longer passage describing The Icon, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Icon.',
   principles: ['Duty', 'Freedom'],
   stats: { creativity: 1, focus: 0, harmony: 0, passion: -1 },
+  // PLACEHOLDER — suggested demeanors for The Icon.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'The Weight of the Role', effect: 'When you invoke your title to open doors, roll with Harmony.' },
     { name: 'Slip Away', effect: 'When you shed your public persona to move unseen, roll with Creativity.' },
@@ -20,6 +24,8 @@ export const icon: Playbook = {
     { name: 'Just for a Moment', effect: 'Once per session, clear a condition by doing something purely for yourself.' },
     { name: 'Inherited Trust', effect: 'People you’ve never met extend you goodwill on your family or office’s reputation.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Icon.
+  movesAdvice: 'PLACEHOLDER moves advice for The Icon.',
   feature: { name: 'Small Freedoms', effect: 'You mark growth whenever you find joy in an ordinary, unburdened moment — no growth question needed.' },
   growth: 'Did your role and your own wishes pull you in different directions today?',
   history: [
@@ -28,6 +34,8 @@ export const icon: Playbook = {
     'When did you last get to be simply yourself?',
     'Which companion sees past the title, and which one only sees it?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Icon.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Icon.', 'PLACEHOLDER connection prompt for The Icon.'],
   startingTechnique: { name: 'Commanding Presence', approach: 'evade', effect: 'Your bearing halts a foe; they hesitate and cannot act against you this exchange.' },
   momentOfBalance: 'You embody what your title was meant to mean. Tell the GM how your presence alone changes the hearts of everyone in the scene.',
 };

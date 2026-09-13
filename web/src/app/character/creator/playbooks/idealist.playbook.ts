@@ -11,8 +11,12 @@ export const idealist: Playbook = {
   bannerFile: bannerImg,
   name: 'The Idealist',
   tagline: 'Sees the good in everyone, sometimes to their own detriment.',
+  // PLACEHOLDER — a longer passage describing The Idealist, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Idealist.',
   principles: ['Hope', 'Pragmatism'],
   stats: { creativity: 0, focus: -1, harmony: 2, passion: 0 },
+  // PLACEHOLDER — suggested demeanors for The Idealist.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'See the Good', effect: 'When you look for the best in someone others have written off, roll with Harmony.' },
     { name: 'Never Turn My Back', effect: 'When you give a second chance to someone who’s wronged you, roll with Harmony.' },
@@ -20,6 +24,8 @@ export const idealist: Playbook = {
     { name: 'Hard Truths', effect: 'Once per session, an ally can force you to face evidence your idealism is misplaced.' },
     { name: 'Faith Rewarded', effect: 'Clear a condition when your belief in someone pays off.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Idealist.
+  movesAdvice: 'PLACEHOLDER moves advice for The Idealist.',
   feature: { name: 'Benefit of the Doubt', effect: 'The first time you extend trust to an antagonist each session, mark growth.' },
   growth: 'Did your faith in someone get tested today?',
   history: [
@@ -28,6 +34,8 @@ export const idealist: Playbook = {
     'Who did you refuse to give up on, and were you right?',
     'Which companion do you think has more good in them than they admit?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Idealist.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Idealist.', 'PLACEHOLDER connection prompt for The Idealist.'],
   startingTechnique: { name: 'Open Hand', approach: 'defend', effect: 'Refuse to strike back; a foe who attacks you marks a condition instead.' },
   momentOfBalance: 'You reach someone no one else could. Tell the GM how you turn an enemy aside from their path through sheer faith in who they could be.',
 };

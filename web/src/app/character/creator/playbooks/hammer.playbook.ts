@@ -11,8 +11,12 @@ export const hammer: Playbook = {
   bannerFile: bannerImg,
   name: 'The Hammer',
   tagline: 'Believes every problem has a direct solution and volunteers to deliver it.',
+  // PLACEHOLDER — a longer passage describing The Hammer, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Hammer.',
   principles: ['Aggression', 'Diplomacy'],
   stats: { creativity: 0, focus: 0, harmony: -1, passion: 2 },
+  // PLACEHOLDER — suggested demeanors for The Hammer.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'Overwhelming Force', effect: 'When you go all-out in a fight, roll with Passion for extra effect on a hit.' },
     { name: 'No Diplomacy Needed', effect: 'When you settle a dispute by force instead of words, roll with Focus.' },
@@ -20,6 +24,8 @@ export const hammer: Playbook = {
     { name: 'Cool Down', effect: 'Once per session, an ally can talk you down before you escalate further.' },
     { name: 'Point Taken', effect: 'Clear a condition when you accept that force wasn’t the answer this time.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Hammer.
+  movesAdvice: 'PLACEHOLDER moves advice for The Hammer.',
   feature: { name: 'First to the Fight', effect: 'You act first when a fight breaks out, before initiative is otherwise decided.' },
   growth: 'Did you solve a problem with force today?',
   history: [
@@ -28,6 +34,8 @@ export const hammer: Playbook = {
     'Who first told you that you hit too hard?',
     'Which companion keeps trying to talk you down, and does it work?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Hammer.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Hammer.', 'PLACEHOLDER connection prompt for The Hammer.'],
   startingTechnique: { name: 'Overwhelming Blow', approach: 'attack', effect: 'Put everything into one strike; a foe marks 2-fatigue and is knocked back.' },
   momentOfBalance: 'You choose the moment to hold back — or not. Tell the GM how you end a conflict by knowing exactly how much force it needs, and no more.',
 };

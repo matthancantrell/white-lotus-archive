@@ -12,8 +12,12 @@ export const pillar: Playbook = {
   bannerFile: bannerImg,
   name: 'The Pillar',
   tagline: 'Leads the group tactically, torn between commanding and supporting.',
+  // PLACEHOLDER — a longer passage describing The Pillar, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Pillar.',
   principles: ['Leadership', 'Support'],
   stats: { creativity: 0, focus: 2, harmony: 0, passion: -1 },
+  // PLACEHOLDER — suggested demeanors for The Pillar.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'Tactical Read', effect: 'When you size up a situation before acting, roll with Focus.' },
     { name: 'Take Point', effect: 'When you take charge of a plan under pressure, roll with Focus.' },
@@ -21,6 +25,8 @@ export const pillar: Playbook = {
     { name: 'Coordinated Strike', effect: 'Once per exchange, direct an ally’s action for a bonus if they follow it.' },
     { name: 'Weight of Command', effect: 'Clear a condition when a plan you called succeeds.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Pillar.
+  movesAdvice: 'PLACEHOLDER moves advice for The Pillar.',
   feature: { name: 'Command Presence', effect: 'Allies who follow your called plan take +1 to the roll.' },
   growth: 'Did you have to choose between leading and supporting today?',
   history: [
@@ -29,6 +35,8 @@ export const pillar: Playbook = {
     'Why does this group need you to hold it together?',
     'Which companion do you rely on most, and which one won’t follow orders?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Pillar.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Pillar.', 'PLACEHOLDER connection prompt for The Pillar.'],
   startingTechnique: { name: 'Coordinated Assault', approach: 'attack', effect: 'Direct an ally’s attack; they take +1 and the foe is Impaired.' },
   momentOfBalance: 'The team moves as one under your guidance. Tell the GM how you lead your companions through a situation that should have broken them apart.',
 };

@@ -4,13 +4,13 @@ import { useRef, useState } from 'react';
 
 import { PLAYBOOKS, Stats } from '../data';
 import PlaybookCard from '../PlaybookCard';
-import PlaybookBanner from '../PlaybookBanner';
+import PlaybookInfoPanel from '../PlaybookInfoPanel';
 import StepHeader from '../StepHeader';
 import ChoiceCard from '../ChoiceCard';
 import { highlightStats } from '../highlightStats';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
-const TABS = ['about', 'principles', 'feature', 'stats', 'moves'] as const;
+const TABS = ['about', 'stats', 'moves'] as const;
 type TabId = typeof TABS[number];
 
 export default function StepPlaybook({
@@ -65,8 +65,6 @@ export default function StepPlaybook({
 
   const tabLabels: Record<TabId, string> = {
     about: `About ${confirmed?.name ?? ''}`,
-    principles: 'Principles',
-    feature: `Feature: ${confirmed?.feature.name ?? ''}`,
     stats: `Boost Stats (${statBonus ? 1 : 0}/1)`,
     moves: `Select Moves (${selectedMoves.length}/2)`,
   };
@@ -151,67 +149,18 @@ export default function StepPlaybook({
                     </button>
                   </div>
                 </div>
-                <p className="text-[14.5px] leading-relaxed text-parchment-dim mb-4">{preview.tagline}</p>
                 <div className="h-px bg-white/15" />
               </div>
 
               <div className="px-7 pt-5 pb-7">
-                <PlaybookBanner playbook={preview} />
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {STAT_ROWS.map(([key, label]) => {
-                    const val = preview.stats[key];
-                    return (
-                      <div key={key} className="px-3 py-1.5 rounded-full bg-white/6 border border-white/15 text-[12.5px] text-[#e8ddc4]">
-                        <strong className="text-gold font-bold">{label}</strong> {val >= 0 ? `+${val}` : val}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Moves</p>
-                <div className="flex flex-col gap-2.5 mb-5">
-                  {preview.moves.map((mv) => (
-                    <ChoiceCard key={mv.name} as="div" selected={false} className="p-3.5">
-                      <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
-                      <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
-                    </ChoiceCard>
-                  ))}
-                </div>
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Feature &middot; {preview.feature.name}</p>
-                <p className="text-[13px] leading-relaxed text-[#b9c2bd] mb-5">{preview.feature.effect}</p>
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Growth question</p>
-                <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{preview.growth}</p>
+                <PlaybookInfoPanel playbook={preview} />
               </div>
             </>
           )}
 
           {confirmed && (
             <div className="px-7 pt-6.5 pb-7">
-              {tab === 'about' && (
-                <>
-                  <PlaybookBanner playbook={confirmed} />
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">About {confirmed.name}</p>
-                  <p className="text-[13.5px] leading-relaxed text-parchment-dim">{confirmed.tagline}</p>
-                </>
-              )}
-              {tab === 'principles' && (
-                <>
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Principles</p>
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd] mb-5">{confirmed.principles.join(' / ')}</p>
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Growth question</p>
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{confirmed.growth}</p>
-                </>
-              )}
-              {tab === 'feature' && (
-                <>
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Feature &middot; {confirmed.feature.name}</p>
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{confirmed.feature.effect}</p>
-                </>
-              )}
+              {tab === 'about' && <PlaybookInfoPanel playbook={confirmed} />}
               {tab === 'stats' && (
                 <>
                   <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Boost stats</p>

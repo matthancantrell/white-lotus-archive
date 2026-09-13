@@ -12,8 +12,12 @@ export const destined: Playbook = {
   bannerFile: bannerImg,
   name: 'The Destined',
   tagline: 'Touched by something spiritual and otherworldly they don’t fully understand yet.',
+  // PLACEHOLDER — a longer passage describing The Destined, expanding on the tagline.
+  description: 'PLACEHOLDER description for The Destined.',
   principles: ['Control', 'Connection'],
   stats: { creativity: 1, focus: 0, harmony: 0, passion: 0 },
+  // PLACEHOLDER — suggested demeanors for The Destined.
+  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
     { name: 'Reach Beyond', effect: 'When you open yourself to your destiny sign’s influence, roll with Harmony.' },
     { name: 'Hold the Line', effect: 'When you suppress the pull of your destiny to stay in control, roll with Focus.' },
@@ -21,6 +25,8 @@ export const destined: Playbook = {
     { name: 'Marked', effect: 'Your destiny sign is visible to those who know to look; roll with Passion to use it to unsettle someone.' },
     { name: 'Anchor', effect: 'Clear a condition when a companion helps ground you against your destiny’s pull.' },
   ],
+  // PLACEHOLDER — guidance on choosing moves for The Destined.
+  movesAdvice: 'PLACEHOLDER moves advice for The Destined.',
   feature: { name: 'Destiny Sign', effect: 'Choose one destiny sign at creation; it grants a special ability tied to your fate.' },
   growth: 'Did your destiny pull you somewhere you didn’t choose to go?',
   history: [
@@ -29,6 +35,8 @@ export const destined: Playbook = {
     'What have you already lost to your fate?',
     'Which companion grounds you, and which one is tangled in your destiny?',
   ],
+  // PLACEHOLDER — suggested connection prompts for The Destined.
+  connectionPrompts: ['PLACEHOLDER connection prompt for The Destined.', 'PLACEHOLDER connection prompt for The Destined.'],
   startingTechnique: { name: 'Fated Step', approach: 'evade', effect: 'Move as your destiny guides; you avoid a threat before it fully forms.' },
   momentOfBalance: 'Your destiny and your choice align for one moment. Tell the GM how you change the course of events in a way that echoes far beyond this scene.',
 };
