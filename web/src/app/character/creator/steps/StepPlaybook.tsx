@@ -91,10 +91,10 @@ export default function StepPlaybook({
 
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Choose your playbook</h1>
-      <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">
-        Your playbook is your archetype &mdash; it sets your stats, your balance principles, and the moves available to you. Only one player per playbook in a party.
-      </p>
+      <StepHeader
+        title="Choose Your Playbook"
+        subtitle="Your playbook is your archetype. It sets your stats, your balance principles, and the moves available to you. Only one player per playbook in a party."
+      />
 
       <div className="grid grid-cols-1 md:grid-cols-[280px_1fr] gap-6 items-start">
         {/* Browse list */}

@@ -47,12 +47,18 @@ export default function Home() {
               </svg>
             </button>
             <div className="hidden group-hover:block group-focus-within:block absolute top-full left-1/2 -translate-x-1/2 mt-3.5 bg-ink-soft border border-gold/20 rounded-2xl p-2 min-w-[200px] shadow-2xl z-30">
-              <Link href="/character/creator" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Create a character</Link>
-              <Link href="/signup" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
+              <Link href="/character/creator" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Create Character</Link>
+              <Link href="/character/manager" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
             </div>
           </div>
-          <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log in</Link>
-          <Link href="/signup" className="bg-gold text-gold-ink px-5.5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap hover:brightness-95">Sign up free</Link>
+          {isLoggedIn ? (
+            <Link href="/profile" className="text-parchment text-[15px] font-semibold">Profile</Link>
+          ) : (
+            <>
+              <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log In</Link>
+              <Link href="/signup" className="bg-gold text-gold-ink px-5.5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap hover:brightness-95">Sign Up</Link>
+            </>
+          )}
         </nav>
       </header>
 
@@ -73,8 +79,10 @@ export default function Home() {
           Build characters, track your growth, and carry your Avatar Legends saga from your first spark to your final bending &mdash; all in one place.
         </p>
         <div className="relative flex gap-4 justify-center flex-wrap mb-18">
-          <Link href="/signup" className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">Sign up &amp; create your character</Link>
-          <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore the eras</a>
+          <Link href={isLoggedIn ? "/character/creator" : "/signup"} className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">
+            {isLoggedIn ? "Create Your Character" : "Sign Up Now"}
+          </Link>
+          <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore The Eras</a>
         </div>
         <div className="relative flex justify-center max-w-xl mx-auto">
           <div className="w-3 h-3 rounded-full -mx-0.5" style={{ background: "#3a6ea5", boxShadow: "0 0 14px rgba(58,110,165,0.6)" }} />
@@ -181,7 +189,9 @@ export default function Home() {
       <section className="px-[clamp(20px,6vw,56px)] py-[clamp(56px,10vw,100px)] text-center border-t border-gold/10" style={{ background: "linear-gradient(180deg, #0d1b1e, #142a2e)" }}>
         <h2 className="font-display font-semibold text-[clamp(25px,3.8vw,34px)] mb-4.5 text-parchment">Your journey starts with a single spark</h2>
         <p className="text-base text-parchment-dim mb-9">Free to join. Your characters and progress travel with you.</p>
-        <Link href="/signup" className="bg-gold text-gold-ink px-9 py-4 rounded-full text-base font-bold hover:brightness-95">Sign up &amp; create a character</Link>
+        <Link href={isLoggedIn ? "/character/creator" : "/signup"} className="bg-gold text-gold-ink px-9 py-4 rounded-full text-base font-bold hover:brightness-95">
+          {isLoggedIn ? "Create Your Character" : "Sign Up Now"}
+        </Link>
       </section>
 
       {/* FOOTER */}
@@ -201,14 +211,20 @@ export default function Home() {
               <p className="font-display text-[13px] text-gold mb-3.5">Explore</p>
               <div className="flex flex-col gap-2.5">
                 <a href="#eras" className="text-[13.5px] text-muted">Eras</a>
-                <a href="#creator" className="text-[13.5px] text-muted">Character creator</a>
+                <a href="#creator" className="text-[13.5px] text-muted">Character Creator</a>
               </div>
             </div>
             <div>
               <p className="font-display text-[13px] text-gold mb-3.5">Account</p>
               <div className="flex flex-col gap-2.5">
-                <Link href="/login" className="text-[13.5px] text-muted">Log in</Link>
-                <Link href="/signup" className="text-[13.5px] text-muted">Sign up</Link>
+                {isLoggedIn ? (
+                  <Link href="/profile" className="text-[13.5px] text-muted">Profile</Link>
+                ) : (
+                  <>
+                    <Link href="/login" className="text-[13.5px] text-muted">Log In</Link>
+                    <Link href="/signup" className="text-[13.5px] text-muted">Sign Up</Link>
+                  </>
+                )}
               </div>
             </div>
           </div>
