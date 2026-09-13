@@ -29,7 +29,7 @@ export default async function Home() {
               </svg>
             </button>
             <div className="hidden group-hover:block group-focus-within:block absolute top-full left-1/2 -translate-x-1/2 mt-3.5 bg-ink-soft border border-gold/20 rounded-2xl p-2 min-w-[200px] shadow-2xl z-30">
-              <Link href="/character/creator" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Create a character</Link>
+              <Link href="/character/creator" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Create Character</Link>
               <Link href="/character/manager" className="block px-3.5 py-2.5 rounded-lg text-parchment text-sm font-medium hover:bg-white/5">Manage characters</Link>
             </div>
           </div>
@@ -37,8 +37,8 @@ export default async function Home() {
             <Link href="/profile" className="text-parchment text-[15px] font-semibold">Profile</Link>
           ) : (
             <>
-              <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log in</Link>
-              <Link href="/signup" className="bg-gold text-gold-ink px-5.5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap hover:brightness-95">Sign up free</Link>
+              <Link href="/login" className="hidden sm:inline text-parchment-dim text-[15px] font-medium hover:text-parchment">Log In</Link>
+              <Link href="/signup" className="bg-gold text-gold-ink px-5.5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap hover:brightness-95">Sign Up</Link>
             </>
           )}
         </nav>
@@ -62,9 +62,9 @@ export default async function Home() {
         </p>
         <div className="relative flex gap-4 justify-center flex-wrap mb-18">
           <Link href={isLoggedIn ? "/character/creator" : "/signup"} className="bg-gold text-gold-ink px-8.5 py-4 rounded-full text-base font-bold hover:brightness-95">
-            {isLoggedIn ? "Create your character" : "Sign up & create your character"}
+            {isLoggedIn ? "Create Your Character" : "Sign Up Now"}
           </Link>
-          <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore the eras</a>
+          <a href="#eras" className="bg-white/8 text-parchment px-8.5 py-4 rounded-full text-base font-semibold border border-white/25">Explore The Eras</a>
         </div>
         <SimpleElementsOrbs />
       </section>
@@ -121,7 +121,7 @@ export default async function Home() {
         <h2 className="font-display font-semibold text-[clamp(25px,3.8vw,34px)] mb-4.5 text-parchment">Your journey starts with a single spark</h2>
         <p className="text-base text-parchment-dim mb-9">Free to join. Your characters and progress travel with you.</p>
         <Link href={isLoggedIn ? "/character/creator" : "/signup"} className="bg-gold text-gold-ink px-9 py-4 rounded-full text-base font-bold hover:brightness-95">
-          {isLoggedIn ? "Create a character" : "Sign up & create a character"}
+          {isLoggedIn ? "Create Your Character" : "Sign Up Now"}
         </Link>
       </section>
 
@@ -142,7 +142,7 @@ export default async function Home() {
               <p className="font-display text-[13px] text-gold mb-3.5">Explore</p>
               <div className="flex flex-col gap-2.5">
                 <a href="#eras" className="text-[13.5px] text-muted">Eras</a>
-                <a href="#creator" className="text-[13.5px] text-muted">Character creator</a>
+                <a href="#creator" className="text-[13.5px] text-muted">Character Creator</a>
               </div>
             </div>
             <div>
@@ -152,8 +152,8 @@ export default async function Home() {
                   <Link href="/profile" className="text-[13.5px] text-muted">Profile</Link>
                 ) : (
                   <>
-                    <Link href="/login" className="text-[13.5px] text-muted">Log in</Link>
-                    <Link href="/signup" className="text-[13.5px] text-muted">Sign up</Link>
+                    <Link href="/login" className="text-[13.5px] text-muted">Log In</Link>
+                    <Link href="/signup" className="text-[13.5px] text-muted">Sign Up</Link>
                   </>
                 )}
               </div>
