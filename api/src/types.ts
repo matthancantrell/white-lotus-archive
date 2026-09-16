@@ -4,7 +4,7 @@ export type Env = {
   SUPABASE_PRIVATE_KEY: string; // set via `wrangler secret put`, only used for account deletion
   ALLOWED_ORIGIN: string;
   DB: D1Database; // character data — see schema/0001_characters.sql
-  MEDIA: R2Bucket; // icon art — privately bound, never a public bucket; see routes/media.ts
+  MEDIA: R2Bucket; // icon and playbook art — privately bound, never a public bucket; see routes/media.ts
 };
 
 // A saved character record — columns match schema/0001_characters.sql, which

@@ -1,22 +1,28 @@
 import type { StaticImageData } from 'next/image';
 
 export interface Move { name: string; effect: string; }
-export interface Feature { name: string; effect: string; }
+// `effect` is a set of paragraphs, not one block — see the Feature section of
+// PlaybookInfoPanel, which renders each entry as its own <p>.
+export interface Feature { name: string; effect: string[]; }
 export interface Stats { creativity: number; focus: number; harmony: number; passion: number; }
 
 // The playbook's full information-panel content, in the same order it's rendered
 // (see PlaybookInfoPanel) — banner/tagline/description/principles/stats/demeanor
 // options/history/connections/moment of balance/feature/moves/moves advice/
-// playbook technique/growth question. Every playbook supplies every field so the
-// panel's layout stays identical across playbooks; only the words differ.
+// (secondary image)/playbook technique/growth question. Every playbook supplies
+// every field so the panel's layout stays identical across playbooks; only the
+// words (and art) differ.
 export interface Playbook {
   id: string;
   name: string;
   tagline: string;
-  // A longer flavor passage shown under the tagline — what this playbook is about,
-  // beyond the one-line hook.
-  description: string;
+  // A longer flavor passage shown under the tagline, one paragraph per entry —
+  // what this playbook is about, beyond the one-line hook.
+  description: string[];
   principles: [string, string];
+  // Flavor text shown under the Principles emblem, explaining what it means to
+  // live by these two principles. Distinct from `description` above.
+  principlesDescription: string;
   stats: Stats;
   // Suggested demeanors offered as inspiration for the free-text demeanor a player
   // fills in during the Concept step (see CharacterDraft.demeanor).
@@ -25,29 +31,42 @@ export interface Playbook {
   history: string[];
   // Suggested connection prompts offered as inspiration for the free-text
   // connections a player fills in during the Connections step (see
-  // CharacterDraft.connections).
+  // CharacterDraft.connections). A run of 3+ underscores (e.g. "___") marks a
+  // fill-in-the-blank spot and is rendered as a blank line, not literal text —
+  // see renderBlanks in PlaybookInfoPanel.
   connectionPrompts: string[];
   // The passage shown in Growth's "Moment of Balance" tab once unlocked.
   momentOfBalance: string;
   feature: Feature;
   moves: Move[];
-  // General guidance on choosing among this playbook's moves.
-  movesAdvice: string;
+  // General guidance on choosing among this playbook's moves, one paragraph per entry.
+  movesAdvice: string[];
   // Auto-granted at Mastered when this playbook is confirmed (see StepTechniques).
   // PLACEHOLDER — replace with the Core Book (Appendix A) text for this playbook.
   startingTechnique: { name: string; approach: Approach; effect: string };
   growth: string;
+  // Flavor text shown under the growth question, explaining what it's getting at.
+  growthDescription: string;
   // Icon/background/banner art (plus an icon accent color), imported and
   // owned directly by each playbook's own file (see ./playbooks/*.playbook.ts)
   // — so adding, removing, or reordering entries in PLAYBOOKS can't shift
   // anyone else's visuals, and each playbook's own file is the one place to
-  // look to change its art. The three image fields are deliberately
+  // look to change its art. The three local image fields are deliberately
   // independent — a playbook's card icon, its card background, and its
   // detail-panel banner (StepPlaybook) aren't meant to be the same picture.
   iconColor: string;
   iconImage: StaticImageData;
   backgroundImage: StaticImageData;
+  // Bundled fallback for the banner — see PlaybookBanner, which tries
+  // `bannerImageKey` from the media bucket first and falls back to this local
+  // file if that request 404s (e.g. before the bucket object is uploaded).
   bannerFile: StaticImageData;
+  // R2 object key (under `playbooks/`) for the banner — see resolvePlaybookMedia.
+  bannerImageKey: string;
+  // R2 object key (under `playbooks/`) for the image shown between Moves Advice
+  // and Playbook Technique. No local fallback — this art doesn't exist yet, so
+  // PlaybookInfoPanel just hides the slot until the bucket object is uploaded.
+  secondaryImageKey: string;
 }
 
 export interface Era { name: string; tag: string; accent: string; overview: string; avatarStatus: string; events: string; tone: string; tension: string; }
@@ -145,6 +164,18 @@ export const ICONS: IconOption[] = ICON_IDS.map((id) => ({
 export function resolveIcon(id: string | null): IconOption | null {
   return id ? ICONS.find((i) => i.id === id) ?? null : null;
 }
+
+// Resolves a playbook-art R2 object key (see Playbook.bannerImageKey and
+// .secondaryImageKey, plus PRINCIPLES_EMBLEM_URL below) to a fetchable URL,
+// same pattern as the icons served through /media/icons/:key above.
+export function resolvePlaybookMedia(key: string): string {
+  return `${process.env.NEXT_PUBLIC_API_URL}/media/playbooks/${key}`;
+}
+
+// The yin-yang "fish" emblem behind every playbook's Principles section (see
+// PlaybookInfoPanel) — one shared asset, not per-playbook, since every playbook
+// uses the same art with different words laid over it.
+export const PRINCIPLES_EMBLEM_URL = resolvePlaybookMedia('principles-emblem.png');
 
 export const TOTAL_STEPS = STEP_LABELS.length;
 
