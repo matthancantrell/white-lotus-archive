@@ -5,9 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import LotusMark from '@/components/LotusMark';
-
-const inputCls =
-  'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20';
+import { AuthTextField } from '@/components/AuthTextField';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -67,7 +65,7 @@ export default function LoginPage() {
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-[13px] font-semibold text-parchment-dim">Email</label>
-              <input
+              <AuthTextField
                 id="email"
                 type="email"
                 autoComplete="email"
@@ -75,14 +73,13 @@ export default function LoginPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 aria-invalid={!!error}
                 required
-                className={inputCls}
               />
             </div>
 
             <div className="flex flex-col gap-1.5">
               <label htmlFor="password" className="text-[13px] font-semibold text-parchment-dim">Password</label>
               <div className="relative">
-                <input
+                <AuthTextField
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   autoComplete="current-password"
@@ -90,7 +87,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   aria-invalid={!!error}
                   required
-                  className={`${inputCls} pr-[68px]`}
+                  className="pr-[68px]"
                 />
                 <button
                   type="button"

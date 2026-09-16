@@ -1,32 +1,17 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import Image from 'next/image';
-import { PLAYBOOKS, PLAYBOOK_ICON_COLORS, PLAYBOOK_BANNER_FILES, Stats } from '../data';
-import { PlaybookCard } from '../PlaybookCard';
-import rokuEraImg from '../../../../assets/eras/roku.jpg';
-import aangEraImg from '../../../../assets/eras/aang.jpg';
-import kyoshiEraImg from '../../../../assets/eras/kyoshi.jpg';
-import hywEraImg from '../../../../assets/eras/hundred-year-war.jpg';
-import korraEraImg from '../../../../assets/eras/korra.jpg';
-import customEraImg from '../../../../assets/eras/custom.jpg';
 
-const BANNER_IMAGES: Record<string, typeof rokuEraImg> = {
-  roku: rokuEraImg, aang: aangEraImg, kyoshi: kyoshiEraImg,
-  'hundred-year-war': hywEraImg, korra: korraEraImg, custom: customEraImg,
-};
+import { PLAYBOOKS, Stats } from '../data';
+import PlaybookCard from '../PlaybookCard';
+import PlaybookInfoPanel from '../PlaybookInfoPanel';
+import StepHeader from '../StepHeader';
+import ChoiceCard from '../ChoiceCard';
+import { highlightStats } from '../highlightStats';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
-const TABS = ['about', 'principles', 'feature', 'stats', 'moves'] as const;
+const TABS = ['about', 'stats', 'moves'] as const;
 type TabId = typeof TABS[number];
-
-function highlightStats(text: string) {
-  return text.split(/(Creativity|Focus|Harmony|Passion)/g).map((part, i) =>
-    /^(Creativity|Focus|Harmony|Passion)$/.test(part)
-      ? <strong key={i} className="text-gold font-bold">{part}</strong>
-      : part
-  );
-}
 
 export default function StepPlaybook({
   playbookId,
@@ -52,9 +37,6 @@ export default function StepPlaybook({
 
   const confirmed = playbookId ? PLAYBOOKS.find((p) => p.id === playbookId) ?? null : null;
   const preview = !confirmed && previewId ? PLAYBOOKS.find((p) => p.id === previewId) ?? null : null;
-  const active = confirmed ?? preview;
-  const activeIndex = active ? PLAYBOOKS.findIndex((p) => p.id === active.id) : -1;
-  const bannerFile = active ? PLAYBOOK_BANNER_FILES[activeIndex % PLAYBOOK_BANNER_FILES.length] : null;
 
   function handleListScroll(e: React.UIEvent<HTMLDivElement>) {
     const el = e.currentTarget;
@@ -83,8 +65,6 @@ export default function StepPlaybook({
 
   const tabLabels: Record<TabId, string> = {
     about: `About ${confirmed?.name ?? ''}`,
-    principles: 'Principles',
-    feature: `Feature: ${confirmed?.feature.name ?? ''}`,
     stats: `Boost Stats (${statBonus ? 1 : 0}/1)`,
     moves: `Select Moves (${selectedMoves.length}/2)`,
   };
@@ -101,12 +81,14 @@ export default function StepPlaybook({
         {!confirmed && (
           <div className={`relative ${preview ? 'hidden md:block' : 'block'}`}>
             <div ref={listRef} onScroll={handleListScroll} className="hide-scrollbar flex flex-col gap-2 pr-1.5" style={{ height: 480, overflowY: 'auto' }}>
-              {PLAYBOOKS.map((p, i) => (
+              {PLAYBOOKS.map((p) => (
                 <PlaybookCard
                   key={p.id}
                   name={p.name}
                   principlesLabel={p.principles.join(' / ')}
-                  iconBg={`linear-gradient(155deg, ${PLAYBOOK_ICON_COLORS[i % PLAYBOOK_ICON_COLORS.length]}, #1a3238)`}
+                  iconColor={p.iconColor}
+                  icon={p.iconImage}
+                  background={p.backgroundImage}
                   selected={previewId === p.id}
                   onClick={() => togglePreview(p.id)}
                 />
@@ -127,15 +109,10 @@ export default function StepPlaybook({
               </button>
             </div>
             {TABS.map((id) => (
-              <button
-                key={id}
-                onClick={() => { setTab(id); setMobileTabFocused(true); }}
-                className="flex items-center gap-3 text-left px-4 py-3.5 rounded-xl border"
-                style={{ background: tab === id ? 'rgba(232,200,116,0.14)' : '#142a2e', borderColor: tab === id ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
-              >
+              <ChoiceCard key={id} selected={tab === id} onClick={() => { setTab(id); setMobileTabFocused(true); }} className="flex items-center gap-3 text-left px-4 py-3.5">
                 <div className="w-2 h-2 rounded-full shrink-0" style={{ background: tab === id ? '#e8c874' : 'rgba(245,238,221,0.25)' }} />
                 <p className="font-display font-semibold text-sm text-parchment">{tabLabels[id]}</p>
-              </button>
+              </ChoiceCard>
             ))}
           </div>
         )}
@@ -172,67 +149,18 @@ export default function StepPlaybook({
                     </button>
                   </div>
                 </div>
-                <p className="text-[14.5px] leading-relaxed text-parchment-dim mb-4">{preview.tagline}</p>
                 <div className="h-px bg-white/15" />
               </div>
 
               <div className="px-7 pt-5 pb-7">
-                {bannerFile && <Image src={BANNER_IMAGES[bannerFile]} alt={preview.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Starting stats</p>
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {STAT_ROWS.map(([key, label]) => {
-                    const val = preview.stats[key];
-                    return (
-                      <div key={key} className="px-3 py-1.5 rounded-full bg-white/6 border border-white/15 text-[12.5px] text-[#e8ddc4]">
-                        <strong className="text-gold font-bold">{label}</strong> {val >= 0 ? `+${val}` : val}
-                      </div>
-                    );
-                  })}
-                </div>
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Moves</p>
-                <div className="flex flex-col gap-2.5 mb-5">
-                  {preview.moves.map((mv) => (
-                    <div key={mv.name} className="p-3.5 rounded-xl bg-[#142a2e] border border-gold/15">
-                      <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
-                      <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Feature &middot; {preview.feature.name}</p>
-                <p className="text-[13px] leading-relaxed text-[#b9c2bd] mb-5">{preview.feature.effect}</p>
-
-                <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Growth question</p>
-                <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{preview.growth}</p>
+                <PlaybookInfoPanel playbook={preview} />
               </div>
             </>
           )}
 
           {confirmed && (
             <div className="px-7 pt-6.5 pb-7">
-              {tab === 'about' && (
-                <>
-                  {bannerFile && <Image src={BANNER_IMAGES[bannerFile]} alt={confirmed.name} className="w-full mb-5" style={{ height: 150, objectFit: 'cover' }} />}
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">About {confirmed.name}</p>
-                  <p className="text-[13.5px] leading-relaxed text-parchment-dim">{confirmed.tagline}</p>
-                </>
-              )}
-              {tab === 'principles' && (
-                <>
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-2">Principles</p>
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd] mb-5">{confirmed.principles.join(' / ')}</p>
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Growth question</p>
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{confirmed.growth}</p>
-                </>
-              )}
-              {tab === 'feature' && (
-                <>
-                  <p className="font-display text-xs tracking-wide uppercase text-gold mb-1.5">Feature &middot; {confirmed.feature.name}</p>
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{confirmed.feature.effect}</p>
-                </>
-              )}
+              {tab === 'about' && <PlaybookInfoPanel playbook={confirmed} />}
               {tab === 'stats' && (
                 <>
                   <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Boost stats</p>
@@ -243,16 +171,11 @@ export default function StepPlaybook({
                       const val = confirmed.stats[key] + bonus;
                       const isActive = statBonus === key;
                       return (
-                        <button
-                          key={key}
-                          onClick={() => onBump(key)}
-                          className="relative p-4 rounded-xl border text-center"
-                          style={{ background: isActive ? 'rgba(232,200,116,0.14)' : '#142a2e', borderColor: isActive ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
-                        >
+                        <ChoiceCard key={key} selected={isActive} onClick={() => onBump(key)} className="relative p-4 text-center">
                           <p className="absolute top-2 right-2.5 text-[10.5px] text-muted">({bonus}/1)</p>
                           <p className="font-display text-xs text-gold tracking-wide uppercase mb-2">{label}</p>
                           <p className="font-display font-bold text-2xl text-parchment">{val >= 0 ? `+${val}` : val}</p>
-                        </button>
+                        </ChoiceCard>
                       );
                     })}
                   </div>
@@ -265,15 +188,10 @@ export default function StepPlaybook({
                     {confirmed.moves.map((mv) => {
                       const checked = selectedMoves.includes(mv.name);
                       return (
-                        <button
-                          key={mv.name}
-                          onClick={() => onToggleMove(mv.name)}
-                          className="text-left w-full px-4 py-3.5 rounded-xl border box-border"
-                          style={{ background: checked ? 'rgba(232,200,116,0.12)' : '#142a2e', borderColor: checked ? 'rgba(232,200,116,0.5)' : 'rgba(232,200,116,0.15)' }}
-                        >
+                        <ChoiceCard key={mv.name} selected={checked} onClick={() => onToggleMove(mv.name)} className="text-left w-full px-4 py-3.5 box-border">
                           <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
                           <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
-                        </button>
+                        </ChoiceCard>
                       );
                     })}
                   </div>
