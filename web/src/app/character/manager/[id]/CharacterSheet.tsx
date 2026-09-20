@@ -172,62 +172,45 @@ export default function CharacterSheet({
             <div>
               <p className="font-display text-xs tracking-[0.15em] uppercase text-gold mb-3 text-center">Balance</p>
               <div
-                className="relative rounded-xl border border-gold/20 py-4 px-3 overflow-hidden"
+                className="relative rounded-xl border border-gold/20 px-3 pt-14 pb-14 overflow-hidden min-h-[168px]"
                 style={{ background: 'radial-gradient(circle, rgba(232,200,116,0.06), rgba(0,0,0,0.15))' }}
               >
-                <div className="relative flex items-center justify-between text-[10px] font-display uppercase tracking-wide text-parchment-dim mb-2 px-1">
+                {/* Dark koi arcing over the top half, light koi arcing under the bottom
+                    half — together framing the single balance row like a yin-yang. */}
+                {!darkFishFailed && (
+                  // eslint-disable-next-line @next/next/no-img-element -- bucket-hosted, hidden gracefully if not uploaded yet.
+                  <img
+                    src={BALANCE_TRACK_DARK_FISH_URL}
+                    alt=""
+                    className="absolute inset-x-0 top-0 w-full h-20 object-contain opacity-60 pointer-events-none"
+                    onError={() => setDarkFishFailed(true)}
+                  />
+                )}
+                {!lightFishFailed && (
+                  // eslint-disable-next-line @next/next/no-img-element -- bucket-hosted, hidden gracefully if not uploaded yet.
+                  <img
+                    src={BALANCE_TRACK_LIGHT_FISH_URL}
+                    alt=""
+                    className="absolute inset-x-0 bottom-0 w-full h-20 object-contain opacity-60 pointer-events-none"
+                    onError={() => setLightFishFailed(true)}
+                  />
+                )}
+
+                <div className="relative flex items-center justify-between text-[10px] font-display uppercase tracking-wide text-parchment-dim mb-3 px-1">
                   <span>{playbook ? playbook.principles[0] : 'Principle'}</span>
                   <span>{playbook ? playbook.principles[1] : 'Principle'}</span>
                 </div>
-
-                {/* Descending row (+3..-3), dark fish arcing over it */}
-                <div className="relative mb-1">
-                  {!darkFishFailed && (
-                    // eslint-disable-next-line @next/next/no-img-element -- bucket-hosted, hidden gracefully if not uploaded yet.
-                    <img
-                      src={BALANCE_TRACK_DARK_FISH_URL}
-                      alt=""
-                      className="absolute inset-x-0 -top-2 w-full h-10 object-contain opacity-25 pointer-events-none"
-                      onError={() => setDarkFishFailed(true)}
-                    />
-                  )}
-                  <div className="relative flex items-center justify-center gap-1.5">
-                    {[3, 2, 1, 0, -1, -2, -3].map((n) => (
-                      <div
-                        key={`top-${n}`}
-                        className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold border ${
-                          n === balancePos ? 'bg-gold text-gold-ink border-gold' : 'bg-ink/60 text-parchment-dim border-white/15'
-                        }`}
-                      >
-                        {n > 0 ? `+${n}` : n}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Ascending row (-3..+3), light fish arcing under it */}
-                <div className="relative">
-                  {!lightFishFailed && (
-                    // eslint-disable-next-line @next/next/no-img-element -- bucket-hosted, hidden gracefully if not uploaded yet.
-                    <img
-                      src={BALANCE_TRACK_LIGHT_FISH_URL}
-                      alt=""
-                      className="absolute inset-x-0 -bottom-2 w-full h-10 object-contain opacity-25 pointer-events-none"
-                      onError={() => setLightFishFailed(true)}
-                    />
-                  )}
-                  <div className="relative flex items-center justify-center gap-1.5">
-                    {[-3, -2, -1, 0, 1, 2, 3].map((n) => (
-                      <div
-                        key={`bottom-${n}`}
-                        className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold border ${
-                          n === balancePos ? 'bg-gold text-gold-ink border-gold' : 'bg-ink/60 text-parchment-dim border-white/15'
-                        }`}
-                      >
-                        {n > 0 ? `+${n}` : n}
-                      </div>
-                    ))}
-                  </div>
+                <div className="relative flex items-center justify-center gap-1.5">
+                  {[-3, -2, -1, 0, 1, 2, 3].map((n) => (
+                    <div
+                      key={n}
+                      className={`w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold border ${
+                        n === balancePos ? 'bg-gold text-gold-ink border-gold' : 'bg-ink/70 text-parchment-dim border-white/20'
+                      }`}
+                    >
+                      {n > 0 ? `+${n}` : n}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
