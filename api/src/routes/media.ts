@@ -51,3 +51,10 @@ media.get('/icons/:key', (c) => serveMediaObject(c, 'icons', c.req.param('key'))
 // resolvePlaybookMedia in web/src/app/character/creator/data.ts. Same
 // unauthenticated, cache-hard treatment as icons.
 media.get('/playbooks/:key', (c) => serveMediaObject(c, 'playbooks', c.req.param('key')));
+
+// GET /media/content/:key — one-off site art that isn't playbook- or
+// icon-specific, e.g. the character sheet's two Balance-track koi images
+// (`white-koi.png`, `black-koi.png`) — see resolveContentMedia in
+// web/src/app/character/creator/data.ts. Same unauthenticated, cache-hard
+// treatment as icons/playbooks.
+media.get('/content/:key', (c) => serveMediaObject(c, 'content', c.req.param('key')));

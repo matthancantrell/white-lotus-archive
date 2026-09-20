@@ -77,6 +77,17 @@ export interface Technique { name: string; training: string; approach: Approach;
 export type TechniqueLevel = 'L' | 'P' | 'M';
 export interface Connection { name: string; note: string; }
 export interface Background { name: string; desc: string; detail: string; knows: string; }
+// A basic move every character can use regardless of playbook, shown in the
+// character sheet's "Moves & Features" tab alongside the two playbook moves
+// chosen in selectedMoves. `rollsWith` is null for moves that aren't rolled
+// against a stat (e.g. Help, Stance Move) or that resolve against Balance
+// rather than a stat (category 'Balance').
+export interface UniversalMove { name: string; category: 'Basic' | 'Balance'; rollsWith: keyof Stats | null; effect: string; }
+// A short-lived condition a character can be marked with, clearing at the end
+// of a session (or per GM ruling) — shown as a checklist in the sheet's main
+// panel. `effect` names which moves take the penalty while it's marked.
+export interface ConditionDef { name: string; effect: string; }
+export interface JournalEntry { id: string; title: string; body: string; createdAt: string; }
 
 export interface CharacterDraft {
   step: number;
@@ -100,6 +111,16 @@ export interface CharacterDraft {
   demeanor: string;
   history: string[];
   connections: Connection[];
+  // Where the character currently is, campaign-wise — shown alongside scopeText
+  // and groupFocusesText in the sheet's Campaign Details section.
+  location: string;
+  // How many of MAX_FATIGUE boxes are currently marked — cleared independently
+  // of conditions via the sheet's own Reset controls.
+  fatigueMarked: number;
+  // Names of currently-marked entries from CONDITIONS below.
+  conditions: string[];
+  // Free-form session log, newest-first — added to from the sheet's Journal tab.
+  journalEntries: JournalEntry[];
   // Set once saved via StepGrowth's "Save character to my archive"; unset means
   // this draft only exists in the current session and hasn't reached the DB yet.
   characterId?: string;
@@ -177,6 +198,21 @@ export function resolvePlaybookMedia(key: string): string {
 // uses the same art with different words laid over it.
 export const PRINCIPLES_EMBLEM_URL = resolvePlaybookMedia('principles-emblem.png');
 
+// Resolves a one-off content-art R2 object key (under `content/`, e.g. the
+// Balance-track koi images below) to a fetchable URL — same
+// serve-through-a-Worker pattern as resolvePlaybookMedia, just a different
+// bucket prefix for art that isn't playbook- or icon-specific.
+export function resolveContentMedia(key: string): string {
+  return `${process.env.NEXT_PUBLIC_API_URL}/media/content/${key}`;
+}
+
+// The Balance dial is two mirrored pip rows (+3..-3 on top, -3..+3 on the
+// bottom) with one koi fish arcing behind each — the black koi over the top
+// row, the white koi under the bottom row, together forming the yin-yang
+// shape. The sheet hides either slot independently on a 404.
+export const BALANCE_TRACK_DARK_FISH_URL = resolveContentMedia('black-koi.png');
+export const BALANCE_TRACK_LIGHT_FISH_URL = resolveContentMedia('white-koi.png');
+
 export const TOTAL_STEPS = STEP_LABELS.length;
 
 export const INITIAL_DRAFT: CharacterDraft = {
@@ -199,6 +235,10 @@ export const INITIAL_DRAFT: CharacterDraft = {
   demeanor: '',
   history: [],
   connections: [{ name: '', note: '' }],
+  location: '',
+  fatigueMarked: 0,
+  conditions: [],
+  journalEntries: [],
 };
 
 export const ERAS: Era[] = [
@@ -329,6 +369,41 @@ export const STANDARD_GROWTH = [
   'Did you learn something challenging, exciting, or complicated about the world?',
   'Did you stop a dangerous threat or solve a community problem?',
   'Did you guide a companion towards balance or end the session at your center?',
+];
+
+export const MAX_FATIGUE = 5;
+
+// Names match the Core Book's five Conditions; effects are placeholder text
+// (written fresh for this project, not copied from any source) pending the
+// real per-move penalties from the book.
+export const CONDITIONS: ConditionDef[] = [
+  { name: 'Afraid', effect: 'Take -2 to moves that roll with Focus.' },
+  { name: 'Angry', effect: 'Take -2 to moves that roll with Passion.' },
+  { name: 'Guilty', effect: 'Take -2 to moves that roll with Harmony.' },
+  { name: 'Insecure', effect: 'Take -2 to moves that roll with Creativity.' },
+  { name: 'Troubled', effect: 'Take -2 to Balance moves.' },
+];
+
+// PLACEHOLDER catalog — replace with the Core Book (Appendix A) basic-move
+// list. Written fresh for this project, not copied from any source; category
+// 'Balance' covers moves resolved against your Balance track rather than a
+// stat, and a null rollsWith covers moves with no roll at all.
+export const UNIVERSAL_MOVES: UniversalMove[] = [
+  { name: 'Assess a Situation', category: 'Basic', rollsWith: 'creativity', effect: 'Size up a scene for hidden angles, dangers, or opportunities.' },
+  { name: 'Guide and Comfort', category: 'Basic', rollsWith: 'harmony', effect: 'Steady someone through fear or grief; they clear a condition or act on your advice.' },
+  { name: 'Intimidate', category: 'Basic', rollsWith: 'passion', effect: 'Press someone with force of will until they back down or give something up.' },
+  { name: 'Plead', category: 'Basic', rollsWith: 'harmony', effect: 'Appeal to someone’s better nature to get help or mercy you haven’t earned yet.' },
+  { name: 'Push Your Luck', category: 'Basic', rollsWith: 'passion', effect: 'Throw yourself at a risky, uncertain action with no clean fallback.' },
+  { name: 'Rely on Your Skills and Training', category: 'Basic', rollsWith: 'focus', effect: 'Use hard-won expertise to accomplish something exacting or technical.' },
+  { name: 'Trick', category: 'Basic', rollsWith: 'creativity', effect: 'Mislead or misdirect someone into a mistake they don’t see coming.' },
+  { name: 'Help', category: 'Basic', rollsWith: null, effect: 'Lend an ally your aid; they take +1 forward, at some cost or risk to you.' },
+  { name: 'Live Up to Your Principle', category: 'Balance', rollsWith: null, effect: 'Act decisively in line with one of your principles to shift your Balance toward it.' },
+  { name: 'Call Someone Out', category: 'Balance', rollsWith: null, effect: 'Confront someone drifting from their own principle and push them to reckon with it.' },
+  { name: 'Deny a Callout', category: 'Balance', rollsWith: null, effect: 'Refuse a callout aimed at you, holding your ground against the push to shift.' },
+  { name: 'Resist Shifting Your Balance', category: 'Balance', rollsWith: null, effect: 'Fight to stay where you are on your Balance track against outside pressure.' },
+  { name: 'Lose Your Balance', category: 'Balance', rollsWith: null, effect: 'Tip fully into one principle, gaining power at your center’s expense.' },
+  { name: 'Stance Move', category: 'Basic', rollsWith: null, effect: 'Your training’s signature stance — see your Training for its specific effect.' },
+  { name: 'Training', category: 'Basic', rollsWith: null, effect: 'The baseline benefit every character gets from their chosen Training.' },
 ];
 
 // Broken out into one file per playbook \u2014 see ./playbooks/*.playbook.ts \u2014 so
