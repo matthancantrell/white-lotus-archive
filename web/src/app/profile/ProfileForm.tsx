@@ -1,18 +1,25 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { AuthTextField, AuthTextArea } from '@/components/AuthTextField';
+import { ICONS } from '../character/creator/data';
 import type { Profile } from './types';
-
-const inputCls =
-  'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20 font-body';
 
 export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
   const supabase = createClient();
+  const router = useRouter();
   const [profile, setProfile] = useState(initialProfile);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [pickerOpen, setPickerOpen] = useState(false);
+  // Same reasoning as the character creator's icon picker: icons are fetched
+  // from R2 through the API, and a broken/unreachable one must never block
+  // picking a profile picture or saving the form — it just falls back to a
+  // plain placeholder instead of a broken <img> icon.
+  const [brokenIconIds, setBrokenIconIds] = useState<Set<string>>(new Set());
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();
@@ -39,7 +46,7 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
       body: JSON.stringify({
         display_name: profile.display_name,
         bio: profile.bio,
-        avatar_url: profile.avatar_url,
+        avatar_icon_id: profile.avatar_icon_id,
         is_private: profile.is_private,
       }),
     });
@@ -55,6 +62,11 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
     const updated: Profile = await res.json();
     setProfile(updated);
     setSaved(true);
+    // The header avatar above this form is rendered server-side in page.tsx
+    // from the profile fetched when the page loaded — updating this
+    // component's own state doesn't reach back into that. Refresh so it
+    // re-fetches and shows the newly-saved icon instead of the stale one.
+    router.refresh();
   }
 
   async function handleSignOut() {
@@ -75,37 +87,71 @@ export function ProfileForm({ initialProfile }: { initialProfile: Profile }) {
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="display_name" className="text-[13px] font-semibold text-parchment-dim">Display name</label>
-        <input
+        <AuthTextField
           id="display_name"
           type="text"
           value={profile.display_name ?? ''}
           onChange={(e) => setProfile({ ...profile, display_name: e.target.value })}
-          className={inputCls}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <label htmlFor="bio" className="text-[13px] font-semibold text-parchment-dim">Bio</label>
-        <textarea
+        <AuthTextArea
           id="bio"
           value={profile.bio ?? ''}
           onChange={(e) => setProfile({ ...profile, bio: e.target.value })}
           placeholder="Say something about yourself…"
           rows={3}
-          className={`${inputCls} resize-y min-h-[88px]`}
+          className="resize-y min-h-[88px]"
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <label htmlFor="avatar_url" className="text-[13px] font-semibold text-parchment-dim">Avatar URL</label>
-        <input
-          id="avatar_url"
-          type="text"
-          value={profile.avatar_url ?? ''}
-          onChange={(e) => setProfile({ ...profile, avatar_url: e.target.value })}
-          placeholder="https://…"
-          className={inputCls}
-        />
+        <label className="text-[13px] font-semibold text-parchment-dim">Profile picture</label>
+        <div>
+          <button
+            type="button"
+            onClick={() => setPickerOpen((v) => !v)}
+            className="px-4 py-2 text-[13.5px] font-semibold text-parchment bg-transparent border border-white/25 rounded-full cursor-pointer hover:bg-white/5"
+          >
+            {pickerOpen ? 'Close' : 'Change profile picture'}
+          </button>
+        </div>
+
+        {pickerOpen && (
+          <div className="mt-1 pr-1" style={{ maxHeight: 220, overflowY: 'auto' }}>
+            <div className="flex flex-wrap gap-2.5">
+              {ICONS.map((icon) => {
+                const selected = profile.avatar_icon_id === icon.id;
+                return (
+                  <button
+                    key={icon.id}
+                    type="button"
+                    onClick={() => {
+                      setProfile({ ...profile, avatar_icon_id: icon.id });
+                      setPickerOpen(false);
+                    }}
+                    className="relative rounded-full flex items-center justify-center shrink-0 overflow-hidden bg-white/6"
+                    style={{ width: 52, height: 52, border: `2px solid ${selected ? '#e8c874' : 'transparent'}` }}
+                  >
+                    {brokenIconIds.has(icon.id) ? (
+                      <div className="w-full h-full" />
+                    ) : (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={icon.url}
+                        alt=""
+                        className="w-full h-full object-cover"
+                        onError={() => setBrokenIconIds((prev) => new Set(prev).add(icon.id))}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       <label className="flex items-center gap-2.5 py-1 cursor-pointer">
