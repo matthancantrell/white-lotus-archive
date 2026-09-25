@@ -69,6 +69,8 @@ export interface Playbook {
   secondaryImageKey: string;
 }
 
+
+
 export interface Era { name: string; tag: string; accent: string; overview: string; avatarStatus: string; events: string; tone: string; tension: string; }
 export interface Training { name: string; desc: string; }
 // The three approaches a technique can take — shown as a label, e.g. "Waterbending · Defend & Maneuver".
@@ -76,7 +78,6 @@ export type Approach = 'attack' | 'defend' | 'evade';
 export interface Technique { name: string; training: string; approach: Approach; effect: string; rare?: boolean; groupOnly?: boolean; }
 export type TechniqueLevel = 'L' | 'P' | 'M';
 export interface Connection { name: string; note: string; }
-export interface Background { name: string; desc: string; detail: string; knows: string; }
 // A basic move every character can use regardless of playbook, shown in the
 // character sheet's "Moves & Features" tab alongside the two playbook moves
 // chosen in selectedMoves. `rollsWith` is null for moves that aren't rolled
@@ -344,26 +345,26 @@ export const ADVANCEMENTS = [
   'Unlock your Moment of Balance',
 ];
 
-export const BACKGROUNDS: Background[] = [
-  { name: 'Military', desc: 'Raised in or around an army, navy, or city guard.',
-    detail: 'Discipline, rank, and orders shaped you. You may have served yourself, followed a parent from post to post, or grown up in a garrison town where soldiers outnumbered farmers. You know how a chain of command works and how it breaks.',
-    knows: 'Drills and formations, military history, how to read a uniform, who commands where, and what a soldier will and won’t do for a cause.' },
-  { name: 'Monastic', desc: 'Grew up in a temple or spiritual community.',
-    detail: 'Your days were ordered by study, ritual, and practice. Whether an Air Temple, a Fire Sage sanctuary, or a remote mountain retreat, the community taught you patience, tradition, and a way of seeing the spirit world behind the physical one.',
-    knows: 'Scripture and philosophy, meditation, spirit lore, ceremonies of the four nations, and the quiet politics of religious orders.' },
-  { name: 'Outlaw', desc: 'Lived outside the law.',
-    detail: 'You came up among bandits, smugglers, daofei, or a criminal family. Rules were things other people followed. You learned early that loyalty is earned in a pinch and that the law protects those who already have something.',
-    knows: 'Fences and safehouses, how to spot a mark or a tail, underworld codes and oaths, and which officials can be bought.' },
-  { name: 'Privileged', desc: 'Born to wealth, nobility, or influence.',
-    detail: 'Doors opened before you knocked. You grew up with tutors, servants, and expectations — and perhaps a nagging sense that none of it was earned. You know how power moves in drawing rooms and courts.',
-    knows: 'Etiquette and court protocol, noble houses and their feuds, high culture, trade and finance, and how to make a request sound like a favor.' },
-  { name: 'Urban', desc: 'A child of the city.',
-    detail: 'Crowds, markets, politics, and hustle raised you. Ba Sing Se, Republic City, or a Fire Nation port — you know a city is a hundred neighborhoods, each with its own rules, and you know how to move between them.',
-    knows: 'Street layouts and shortcuts, local gossip and rumor, guilds and gangs, how bureaucracy actually works, and where to find anything for a price.' },
-  { name: 'Wilderness', desc: 'Raised far from towns.',
-    detail: 'Forests, mountains, tundra, or the open sea shaped you more than any teacher. You learned to read weather, track animals, and rely on yourself. Crowds still feel stranger to you than a week alone in the wild.',
-    knows: 'Survival and navigation, animals and plants, spirits of wild places, weather signs, and the small settlements most maps forget.' },
-];
+// export const BACKGROUNDS: Background[] = [
+//   { name: 'Military', desc: 'Raised in or around an army, navy, or city guard.',
+//     detail: 'Discipline, rank, and orders shaped you. You may have served yourself, followed a parent from post to post, or grown up in a garrison town where soldiers outnumbered farmers. You know how a chain of command works and how it breaks.',
+//     knows: 'Drills and formations, military history, how to read a uniform, who commands where, and what a soldier will and won’t do for a cause.' },
+//   { name: 'Monastic', desc: 'Grew up in a temple or spiritual community.',
+//     detail: 'Your days were ordered by study, ritual, and practice. Whether an Air Temple, a Fire Sage sanctuary, or a remote mountain retreat, the community taught you patience, tradition, and a way of seeing the spirit world behind the physical one.',
+//     knows: 'Scripture and philosophy, meditation, spirit lore, ceremonies of the four nations, and the quiet politics of religious orders.' },
+//   { name: 'Outlaw', desc: 'Lived outside the law.',
+//     detail: 'You came up among bandits, smugglers, daofei, or a criminal family. Rules were things other people followed. You learned early that loyalty is earned in a pinch and that the law protects those who already have something.',
+//     knows: 'Fences and safehouses, how to spot a mark or a tail, underworld codes and oaths, and which officials can be bought.' },
+//   { name: 'Privileged', desc: 'Born to wealth, nobility, or influence.',
+//     detail: 'Doors opened before you knocked. You grew up with tutors, servants, and expectations — and perhaps a nagging sense that none of it was earned. You know how power moves in drawing rooms and courts.',
+//     knows: 'Etiquette and court protocol, noble houses and their feuds, high culture, trade and finance, and how to make a request sound like a favor.' },
+//   { name: 'Urban', desc: 'A child of the city.',
+//     detail: 'Crowds, markets, politics, and hustle raised you. Ba Sing Se, Republic City, or a Fire Nation port — you know a city is a hundred neighborhoods, each with its own rules, and you know how to move between them.',
+//     knows: 'Street layouts and shortcuts, local gossip and rumor, guilds and gangs, how bureaucracy actually works, and where to find anything for a price.' },
+//   { name: 'Wilderness', desc: 'Raised far from towns.',
+//     detail: 'Forests, mountains, tundra, or the open sea shaped you more than any teacher. You learned to read weather, track animals, and rely on yourself. Crowds still feel stranger to you than a week alone in the wild.',
+//     knows: 'Survival and navigation, animals and plants, spirits of wild places, weather signs, and the small settlements most maps forget.' },
+// ];
 
 export const STANDARD_GROWTH = [
   'Did you learn something challenging, exciting, or complicated about the world?',

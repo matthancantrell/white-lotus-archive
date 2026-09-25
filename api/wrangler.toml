@@ -12,6 +12,7 @@ ALLOWED_ORIGIN = "https://white-lotus-archive.matthancantrell.workers.dev"
 binding = "DB"
 database_name = "white-lotus-characters"
 database_id = "0f8459e5-5059-440d-93e3-37731da8c2ea"
+remote = true
 
 # Character icon art. Deliberately NOT a public bucket — no r2.dev subdomain, no
 # custom domain. Access goes only through this Worker's binding (see
