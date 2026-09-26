@@ -1,131 +1,26 @@
-import type { StaticImageData } from 'next/image';
+// Catalog data for the character creator/sheet — one flat file for the catalogs
+// that don't warrant their own per-item directory (see TRAININGS, TECHNIQUES,
+// CONDITIONS, ERAS, ICONS below). Playbook and Background each get one file per
+// item instead (see ./playbooks/*.playbook.ts and ./backgrounds/*.background.ts)
+// with their own type colocated alongside; everything else shared across the
+// creator lives in @/types.
+export type {
+  Approach,
+  CharacterDraft,
+  ConditionDef,
+  Connection,
+  Era,
+  IconOption,
+  JournalEntry,
+  Move,
+  MoveCategory,
+  Stats,
+  Technique,
+  TechniqueLevel,
+  Training,
+} from '@/types';
 
-export interface Move { name: string; effect: string; }
-// `effect` is a set of paragraphs, not one block — see the Feature section of
-// PlaybookInfoPanel, which renders each entry as its own <p>.
-export interface Feature { name: string; effect: string[]; }
-export interface Stats { creativity: number; focus: number; harmony: number; passion: number; }
-
-// The playbook's full information-panel content, in the same order it's rendered
-// (see PlaybookInfoPanel) — banner/tagline/description/principles/stats/demeanor
-// options/history/connections/moment of balance/feature/moves/moves advice/
-// (secondary image)/playbook technique/growth question. Every playbook supplies
-// every field so the panel's layout stays identical across playbooks; only the
-// words (and art) differ.
-export interface Playbook {
-  id: string;
-  name: string;
-  tagline: string;
-  // A longer flavor passage shown under the tagline, one paragraph per entry —
-  // what this playbook is about, beyond the one-line hook.
-  description: string[];
-  principles: [string, string];
-  // Flavor text shown under the Principles emblem, explaining what it means to
-  // live by these two principles. Distinct from `description` above.
-  principlesDescription: string;
-  stats: Stats;
-  // Suggested demeanors offered as inspiration for the free-text demeanor a player
-  // fills in during the Concept step (see CharacterDraft.demeanor).
-  demeanorOptions: string[];
-  // Four history questions answered in the Concept step, specific to this playbook.
-  history: string[];
-  // Suggested connection prompts offered as inspiration for the free-text
-  // connections a player fills in during the Connections step (see
-  // CharacterDraft.connections). A run of 3+ underscores (e.g. "___") marks a
-  // fill-in-the-blank spot and is rendered as a blank line, not literal text —
-  // see renderBlanks in PlaybookInfoPanel.
-  connectionPrompts: string[];
-  // The passage shown in Growth's "Moment of Balance" tab once unlocked.
-  momentOfBalance: string;
-  feature: Feature;
-  moves: Move[];
-  // General guidance on choosing among this playbook's moves, one paragraph per entry.
-  movesAdvice: string[];
-  // Auto-granted at Mastered when this playbook is confirmed (see StepTechniques).
-  // PLACEHOLDER — replace with the Core Book (Appendix A) text for this playbook.
-  startingTechnique: { name: string; approach: Approach; effect: string };
-  growth: string;
-  // Flavor text shown under the growth question, explaining what it's getting at.
-  growthDescription: string;
-  // Icon/background/banner art (plus an icon accent color), imported and
-  // owned directly by each playbook's own file (see ./playbooks/*.playbook.ts)
-  // — so adding, removing, or reordering entries in PLAYBOOKS can't shift
-  // anyone else's visuals, and each playbook's own file is the one place to
-  // look to change its art. The three local image fields are deliberately
-  // independent — a playbook's card icon, its card background, and its
-  // detail-panel banner (StepPlaybook) aren't meant to be the same picture.
-  iconColor: string;
-  iconImage: StaticImageData;
-  backgroundImage: StaticImageData;
-  // Bundled fallback for the banner — see PlaybookBanner, which tries
-  // `bannerImageKey` from the media bucket first and falls back to this local
-  // file if that request 404s (e.g. before the bucket object is uploaded).
-  bannerFile: StaticImageData;
-  // R2 object key (under `playbooks/`) for the banner — see resolvePlaybookMedia.
-  bannerImageKey: string;
-  // R2 object key (under `playbooks/`) for the image shown between Moves Advice
-  // and Playbook Technique. No local fallback — this art doesn't exist yet, so
-  // PlaybookInfoPanel just hides the slot until the bucket object is uploaded.
-  secondaryImageKey: string;
-}
-
-
-
-export interface Era { name: string; tag: string; accent: string; overview: string; avatarStatus: string; events: string; tone: string; tension: string; }
-export interface Training { name: string; desc: string; }
-// The three approaches a technique can take — shown as a label, e.g. "Waterbending · Defend & Maneuver".
-export type Approach = 'attack' | 'defend' | 'evade';
-export interface Technique { name: string; training: string; approach: Approach; effect: string; rare?: boolean; groupOnly?: boolean; }
-export type TechniqueLevel = 'L' | 'P' | 'M';
-export interface Connection { name: string; note: string; }
-// A basic move every character can use regardless of playbook, shown in the
-// character sheet's "Moves & Features" tab alongside the two playbook moves
-// chosen in selectedMoves. `rollsWith` is null for moves that aren't rolled
-// against a stat (e.g. Help, Stance Move) or that resolve against Balance
-// rather than a stat (category 'Balance').
-export interface UniversalMove { name: string; category: 'Basic' | 'Balance'; rollsWith: keyof Stats | null; effect: string; }
-// A short-lived condition a character can be marked with, clearing at the end
-// of a session (or per GM ruling) — shown as a checklist in the sheet's main
-// panel. `effect` names which moves take the penalty while it's marked.
-export interface ConditionDef { name: string; effect: string; }
-export interface JournalEntry { id: string; title: string; body: string; createdAt: string; }
-
-export interface CharacterDraft {
-  step: number;
-  eraName: string | null;
-  playbookId: string | null;
-  trainingName: string | null;
-  fightingStyle: string;
-  statBonus: keyof Stats | null;
-  balanceShift: number;
-  selectedMoves: string[];
-  // Keyed by technique name; a technique with no entry hasn't been picked at all.
-  techniqueLevels: Record<string, TechniqueLevel>;
-  name: string;
-  // A key into ICONS below, not a URL — see IconOption for why.
-  iconId: string | null;
-  scopeText: string;
-  groupFocusesText: string;
-  hometown: string;
-  look: string;
-  backgrounds: string[];
-  demeanor: string;
-  history: string[];
-  connections: Connection[];
-  // Where the character currently is, campaign-wise — shown alongside scopeText
-  // and groupFocusesText in the sheet's Campaign Details section.
-  location: string;
-  // How many of MAX_FATIGUE boxes are currently marked — cleared independently
-  // of conditions via the sheet's own Reset controls.
-  fatigueMarked: number;
-  // Names of currently-marked entries from CONDITIONS below.
-  conditions: string[];
-  // Free-form session log, newest-first — added to from the sheet's Journal tab.
-  journalEntries: JournalEntry[];
-  // Set once saved via StepGrowth's "Save character to my archive"; unset means
-  // this draft only exists in the current session and hasn't reached the DB yet.
-  characterId?: string;
-}
+import type { Approach, CharacterDraft, ConditionDef, Era, IconOption, Stats, Training } from '@/types';
 
 export const STEP_LABELS = ['Setup', 'Playbook', 'Concept', 'Training', 'Balance', 'Techniques', 'Connections', 'Growth'];
 
@@ -138,7 +33,6 @@ export const ERA_HEADER_LABEL: Record<string, string> = {
   'Your own era': 'Custom Era',
 };
 
-export interface IconOption { id: string; url: string; }
 // `id` doubles as the R2 object key under `icons/`, extension included (e.g.
 // "aang-1.png") — served only through api/src/routes/media.ts, never a raw
 // bucket URL. See api/schema/0001_characters.sql for why characters store
@@ -292,50 +186,13 @@ export const TRAININGS: Training[] = [
 
 export const APPROACH_LABEL: Record<Approach, string> = { defend: 'Defend & Maneuver', attack: 'Advance & Attack', evade: 'Evade & Observe' };
 
-// Available to every character regardless of training. A playbook's own starting
-// technique (see each playbook's `startingTechnique`) is shown alongside these, not
-// listed here, so it isn't duplicated for playbooks that happen to share a name.
-// PLACEHOLDER catalog \u2014 replace with the Core Book (Appendix A) technique list.
-export const UNIVERSAL_TECHNIQUES: Technique[] = [
-  { name: 'Pinpoint Aim', training: 'Universal', approach: 'attack', effect: 'Wait for the perfect moment; mark 1-fatigue to become Prepared and use an advance & attack technique.' },
-  { name: 'Ready Stance', training: 'Universal', approach: 'defend', effect: 'Set your feet and read the fight; you become Prepared and shrug off the next attempt to knock you down.' },
-  { name: 'Feint', training: 'Universal', approach: 'evade', effect: 'Sell a false opening; a foe commits and is Impaired against your next action.' },
-  { name: 'Press the Advantage', training: 'Universal', approach: 'attack', effect: 'Against an Impaired or Stunned foe, inflict 1 extra fatigue.' },
-  { name: 'Retreat', training: 'Universal', approach: 'evade', effect: 'Break contact cleanly; leave the exchange and take no consequences from foes you were engaged with.' },
-  { name: 'Group Up', training: 'Universal', approach: 'defend', groupOnly: true, effect: 'You and every adjacent ally become Prepared together.' },
-];
-
-// PLACEHOLDER catalog \u2014 replace with the Core Book (Appendix A) technique list.
-export const TECHNIQUES: Technique[] = [
-  { name: 'Water Whip', training: 'Waterbending', approach: 'attack', effect: 'Lash a foe with a tendril of water; they mark 1-fatigue and are knocked off-balance.' },
-  { name: 'Flow as Water', training: 'Waterbending', approach: 'defend', effect: 'Mark 1-fatigue to shift to a new position and impair a foe you slip past.' },
-  { name: 'Ice Prison', training: 'Waterbending', approach: 'attack', effect: 'Freeze a foe in place; they are Trapped until they break free.' },
-  { name: 'Healing Waters', training: 'Waterbending', approach: 'evade', rare: true, effect: 'Soothe a wound; you or an ally clears 1-fatigue.' },
-  { name: 'Bloodbending', training: 'Waterbending', approach: 'attack', rare: true, effect: 'Under a full moon, seize control of a foe\u2019s body for one exchange. Forbidden nearly everywhere.' },
-  { name: 'Stone Wall', training: 'Earthbending', approach: 'defend', effect: 'Raise a barrier of earth; you and an adjacent ally are Prepared against the next attack.' },
-  { name: 'Seismic Sense', training: 'Earthbending', approach: 'evade', effect: 'Read the ground; learn a foe\u2019s position and next intention even if you cannot see them.' },
-  { name: 'Rock Slide', training: 'Earthbending', approach: 'attack', effect: 'Send a wave of rubble at foes in a line; each marks 1-fatigue or is knocked down.' },
-  { name: 'Metalbending', training: 'Earthbending', approach: 'attack', rare: true, effect: 'Bend refined metal as if it were earth; bypass metal armor or bind a foe in their own gear.' },
-  { name: 'Lavabending', training: 'Earthbending', approach: 'attack', rare: true, effect: 'Melt stone into lava; create an impassable hazard or force a foe to mark 2-fatigue.' },
-  { name: 'Flame Whip', training: 'Firebending', approach: 'attack', effect: 'Strike a foe at range with a controlled arc of fire.' },
-  { name: 'Breath of Fire', training: 'Firebending', approach: 'defend', effect: 'Exhale a burst of flame to clear space; foes engaged with you must mark 1-fatigue or back off.' },
-  { name: 'Jet Stepping', training: 'Firebending', approach: 'evade', effect: 'Propel yourself with bursts of flame to reposition anywhere in the scene.' },
-  { name: 'Lightning Generation', training: 'Firebending', approach: 'attack', rare: true, effect: 'Separate the energies and release lightning; a foe marks 3-fatigue or is taken out.' },
-  { name: 'Lightning Redirection', training: 'Firebending', approach: 'defend', rare: true, effect: 'Catch lightning through your body and release it elsewhere, unharmed.' },
-  { name: 'Air Scooter', training: 'Airbending', approach: 'evade', effect: 'Ride a sphere of air to move quickly across any terrain.' },
-  { name: 'Air Shield', training: 'Airbending', approach: 'defend', effect: 'Spin a barrier of wind; the next attack against you is deflected.' },
-  { name: 'Gale Push', training: 'Airbending', approach: 'attack', effect: 'Knock a foe back with a burst of wind, moving them where you choose.' },
-  { name: 'Flight', training: 'Airbending', approach: 'evade', rare: true, effect: 'Untethered flight without a glider; only for those who have let go of earthly attachment.' },
-  { name: 'Precise Strike', training: 'Weapons', approach: 'attack', effect: 'Land a hit that finds the gap in a guard; the foe marks 1-fatigue and a condition.' },
-  { name: 'Disarm', training: 'Weapons', approach: 'attack', effect: 'Twist a foe\u2019s weapon from their grip; they are Impaired until they recover it.' },
-  { name: 'Parry and Riposte', training: 'Weapons', approach: 'defend', effect: 'Turn a blocked attack into your own opening; take +1 forward.' },
-  { name: 'Chi Blocking', training: 'Weapons', approach: 'attack', rare: true, effect: 'Strike a bender\u2019s pressure points; they cannot bend for the rest of the exchange.' },
-  { name: 'Pincer Movement', training: 'Weapons', approach: 'defend', groupOnly: true, effect: 'You and an ally flank a foe together; both take +1 forward against them.' },
-  { name: 'Field Rig', training: 'Technology', approach: 'evade', effect: 'Jury-rig a device from whatever is on hand to solve a problem this exchange.' },
-  { name: 'Smoke Bomb', training: 'Technology', approach: 'defend', effect: 'Fill the area with smoke; foes are Impaired trying to target you or an ally.' },
-  { name: 'Electrified Glove', training: 'Technology', approach: 'attack', effect: 'Deliver a stunning shock; the foe is Stunned and marks 1-fatigue.' },
-  { name: 'Mecha Tank', training: 'Technology', approach: 'attack', rare: true, groupOnly: true, effect: 'Pilot a mechanized suit; while inside, ignore the first 2-fatigue each exchange.' },
-];
+// Broken out into one file per training \u2014 see ./techniques/*.technique.ts \u2014
+// plus a standalone universal list, same reasoning as PLAYBOOKS/BACKGROUNDS:
+// easy to read and edit on its own instead of scrolling one giant array. A
+// playbook's own starting technique (see each playbook's `startingTechnique`)
+// is shown alongside UNIVERSAL_TECHNIQUES, not listed here, so it isn't
+// duplicated for playbooks that happen to share a name.
+export { UNIVERSAL_TECHNIQUES, TECHNIQUES } from './techniques';
 
 export const ADVANCEMENTS = [
   'Take a new move from your playbook',
@@ -345,26 +202,11 @@ export const ADVANCEMENTS = [
   'Unlock your Moment of Balance',
 ];
 
-// export const BACKGROUNDS: Background[] = [
-//   { name: 'Military', desc: 'Raised in or around an army, navy, or city guard.',
-//     detail: 'Discipline, rank, and orders shaped you. You may have served yourself, followed a parent from post to post, or grown up in a garrison town where soldiers outnumbered farmers. You know how a chain of command works and how it breaks.',
-//     knows: 'Drills and formations, military history, how to read a uniform, who commands where, and what a soldier will and won’t do for a cause.' },
-//   { name: 'Monastic', desc: 'Grew up in a temple or spiritual community.',
-//     detail: 'Your days were ordered by study, ritual, and practice. Whether an Air Temple, a Fire Sage sanctuary, or a remote mountain retreat, the community taught you patience, tradition, and a way of seeing the spirit world behind the physical one.',
-//     knows: 'Scripture and philosophy, meditation, spirit lore, ceremonies of the four nations, and the quiet politics of religious orders.' },
-//   { name: 'Outlaw', desc: 'Lived outside the law.',
-//     detail: 'You came up among bandits, smugglers, daofei, or a criminal family. Rules were things other people followed. You learned early that loyalty is earned in a pinch and that the law protects those who already have something.',
-//     knows: 'Fences and safehouses, how to spot a mark or a tail, underworld codes and oaths, and which officials can be bought.' },
-//   { name: 'Privileged', desc: 'Born to wealth, nobility, or influence.',
-//     detail: 'Doors opened before you knocked. You grew up with tutors, servants, and expectations — and perhaps a nagging sense that none of it was earned. You know how power moves in drawing rooms and courts.',
-//     knows: 'Etiquette and court protocol, noble houses and their feuds, high culture, trade and finance, and how to make a request sound like a favor.' },
-//   { name: 'Urban', desc: 'A child of the city.',
-//     detail: 'Crowds, markets, politics, and hustle raised you. Ba Sing Se, Republic City, or a Fire Nation port — you know a city is a hundred neighborhoods, each with its own rules, and you know how to move between them.',
-//     knows: 'Street layouts and shortcuts, local gossip and rumor, guilds and gangs, how bureaucracy actually works, and where to find anything for a price.' },
-//   { name: 'Wilderness', desc: 'Raised far from towns.',
-//     detail: 'Forests, mountains, tundra, or the open sea shaped you more than any teacher. You learned to read weather, track animals, and rely on yourself. Crowds still feel stranger to you than a week alone in the wild.',
-//     knows: 'Survival and navigation, animals and plants, spirits of wild places, weather signs, and the small settlements most maps forget.' },
-// ];
+// Broken out into one file per background — see ./backgrounds/*.background.ts
+// — same reasoning as PLAYBOOKS below: easy to read and edit on its own
+// instead of scrolling one giant array.
+export { BACKGROUNDS } from './backgrounds';
+export type { Background } from './backgrounds/background';
 
 export const STANDARD_GROWTH = [
   'Did you learn something challenging, exciting, or complicated about the world?',
@@ -385,28 +227,15 @@ export const CONDITIONS: ConditionDef[] = [
   { name: 'Troubled', effect: 'Take -2 to Balance moves.' },
 ];
 
-// PLACEHOLDER catalog — replace with the Core Book (Appendix A) basic-move
-// list. Written fresh for this project, not copied from any source; category
-// 'Balance' covers moves resolved against your Balance track rather than a
-// stat, and a null rollsWith covers moves with no roll at all.
-export const UNIVERSAL_MOVES: UniversalMove[] = [
-  { name: 'Assess a Situation', category: 'Basic', rollsWith: 'creativity', effect: 'Size up a scene for hidden angles, dangers, or opportunities.' },
-  { name: 'Guide and Comfort', category: 'Basic', rollsWith: 'harmony', effect: 'Steady someone through fear or grief; they clear a condition or act on your advice.' },
-  { name: 'Intimidate', category: 'Basic', rollsWith: 'passion', effect: 'Press someone with force of will until they back down or give something up.' },
-  { name: 'Plead', category: 'Basic', rollsWith: 'harmony', effect: 'Appeal to someone’s better nature to get help or mercy you haven’t earned yet.' },
-  { name: 'Push Your Luck', category: 'Basic', rollsWith: 'passion', effect: 'Throw yourself at a risky, uncertain action with no clean fallback.' },
-  { name: 'Rely on Your Skills and Training', category: 'Basic', rollsWith: 'focus', effect: 'Use hard-won expertise to accomplish something exacting or technical.' },
-  { name: 'Trick', category: 'Basic', rollsWith: 'creativity', effect: 'Mislead or misdirect someone into a mistake they don’t see coming.' },
-  { name: 'Help', category: 'Basic', rollsWith: null, effect: 'Lend an ally your aid; they take +1 forward, at some cost or risk to you.' },
-  { name: 'Live Up to Your Principle', category: 'Balance', rollsWith: null, effect: 'Act decisively in line with one of your principles to shift your Balance toward it.' },
-  { name: 'Call Someone Out', category: 'Balance', rollsWith: null, effect: 'Confront someone drifting from their own principle and push them to reckon with it.' },
-  { name: 'Deny a Callout', category: 'Balance', rollsWith: null, effect: 'Refuse a callout aimed at you, holding your ground against the push to shift.' },
-  { name: 'Resist Shifting Your Balance', category: 'Balance', rollsWith: null, effect: 'Fight to stay where you are on your Balance track against outside pressure.' },
-  { name: 'Lose Your Balance', category: 'Balance', rollsWith: null, effect: 'Tip fully into one principle, gaining power at your center’s expense.' },
-  { name: 'Stance Move', category: 'Basic', rollsWith: null, effect: 'Your training’s signature stance — see your Training for its specific effect.' },
-  { name: 'Training', category: 'Basic', rollsWith: null, effect: 'The baseline benefit every character gets from their chosen Training.' },
-];
+// Broken out into one file per category — see ./moves/*.move.ts — same
+// reasoning as PLAYBOOKS/BACKGROUNDS/TECHNIQUES: easy to read and edit on its
+// own instead of scrolling one giant array.
+export { UNIVERSAL_MOVES } from './moves';
 
 // Broken out into one file per playbook \u2014 see ./playbooks/*.playbook.ts \u2014 so
 // each is easy to read and edit on its own instead of scrolling one giant array.
+// Playbook (plus Move/Feature, which only ever appear as its fields) is defined
+// in ./playbooks/playbook.ts, not here, so a playbook file never needs to reach
+// into data.ts for its own type.
 export { PLAYBOOKS } from './playbooks';
+export type { Playbook, Feature } from './playbooks/playbook';

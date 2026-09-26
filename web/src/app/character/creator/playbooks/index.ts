@@ -1,4 +1,4 @@
-import type { Playbook } from '../data';
+import type { Playbook } from './playbook';
 import { adamant } from './adamant.playbook';
 import { bold } from './bold.playbook';
 import { guardian } from './guardian.playbook';

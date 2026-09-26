@@ -190,7 +190,7 @@ export default function StepPlaybook({
                       return (
                         <ChoiceCard key={mv.name} selected={checked} onClick={() => onToggleMove(mv.name)} className="text-left w-full px-4 py-3.5 box-border">
                           <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
-                          <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
+                          <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.details)}</p>
                         </ChoiceCard>
                       );
                     })}

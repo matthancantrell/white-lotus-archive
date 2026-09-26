@@ -1,4 +1,4 @@
-import type { Playbook } from '../data';
+import type { Playbook } from './playbook';
 import iconImg from '../../../../assets/playbooks/rogue.jpg';
 import backgroundImg from '../../../../assets/playbooks/background/rogue.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/rogue.jpg';
@@ -24,15 +24,16 @@ export const rogue: Playbook = {
   // PLACEHOLDER — suggested demeanors for The Rogue.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
-    { name: 'Solo Job', effect: 'When you handle something alone rather than ask for help, roll with Creativity.' },
-    { name: 'Leap of Trust', effect: 'When you rely on the party instead of going it alone, roll with Harmony.' },
-    { name: 'Slip the Net', effect: 'When you talk or sneak your way out of trouble, roll with Creativity.' },
-    { name: 'No Strings', effect: 'Once per session, walk away from an obligation with no mechanical consequence.' },
-    { name: 'Found Family', effect: 'Clear a condition the first time you let the party in on something personal.' },
+    { name: 'Solo Job', category: 'Playbook', subcategory: null, rollsWith: 'creativity', details: 'When you handle something alone rather than ask for help, roll with Creativity.' },
+    { name: 'Leap of Trust', category: 'Playbook', subcategory: null, rollsWith: 'harmony', details: 'When you rely on the party instead of going it alone, roll with Harmony.' },
+    { name: 'Slip the Net', category: 'Playbook', subcategory: null, rollsWith: 'creativity', details: 'When you talk or sneak your way out of trouble, roll with Creativity.' },
+    { name: 'No Strings', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Once per session, walk away from an obligation with no mechanical consequence.' },
+    { name: 'Found Family', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Clear a condition the first time you let the party in on something personal.' },
   ],
   // PLACEHOLDER — guidance on choosing moves for The Rogue.
   movesAdvice: ['PLACEHOLDER moves advice for The Rogue.', 'PLACEHOLDER second paragraph of moves advice for The Rogue.'],
   feature: { name: 'Always an Out', effect: ['You always know a way out of the room you’re in, however unlikely.'] },
+  featureMoves: [],
   growth: 'Did you choose to rely on someone else today?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Rogue.',
@@ -49,6 +50,6 @@ export const rogue: Playbook = {
     '___ is the one companion you’re starting to trust despite yourself.',
     'You still haven’t told ___ what you’re really running from.',
   ],
-  startingTechnique: { name: 'Dirty Trick', approach: 'attack', effect: 'Fight unfairly; a foe is Impaired and you slip out of their reach.' },
+  startingTechnique: { name: 'Dirty Trick', approach: 'attack', details: 'Fight unfairly; a foe is Impaired and you slip out of their reach.' },
   momentOfBalance: 'You let people in and it makes you stronger. Tell the GM how you save your companions by trusting them completely, and what that changes.',
 };

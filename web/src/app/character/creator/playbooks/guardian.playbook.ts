@@ -1,4 +1,4 @@
-import type { Playbook } from '../data';
+import type { Playbook } from './playbook';
 import iconImg from '../../../../assets/playbooks/guardian.jpg';
 import backgroundImg from '../../../../assets/playbooks/background/guardian.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/guardian.jpg';
@@ -24,15 +24,16 @@ export const guardian: Playbook = {
   // PLACEHOLDER — suggested demeanors for The Guardian.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
-    { name: 'Shield', effect: 'When you place yourself between your charge and harm, roll with Focus.' },
-    { name: 'Ever Vigilant', effect: 'You always notice a threat to your charge before anyone else at the table does.' },
-    { name: 'Steady Hand', effect: 'When you calm your charge in a tense moment, roll with Harmony.' },
-    { name: 'Draw Their Eye', effect: 'Once per exchange, redirect an attacker’s focus onto yourself.' },
-    { name: 'Off Duty', effect: 'Clear a condition when you take real time for yourself, away from your charge.' },
+    { name: 'Shield', category: 'Playbook', subcategory: null, rollsWith: 'focus', details: 'When you place yourself between your charge and harm, roll with Focus.' },
+    { name: 'Ever Vigilant', category: 'Playbook', subcategory: null, rollsWith: null, details: 'You always notice a threat to your charge before anyone else at the table does.' },
+    { name: 'Steady Hand', category: 'Playbook', subcategory: null, rollsWith: 'harmony', details: 'When you calm your charge in a tense moment, roll with Harmony.' },
+    { name: 'Draw Their Eye', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Once per exchange, redirect an attacker’s focus onto yourself.' },
+    { name: 'Off Duty', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Clear a condition when you take real time for yourself, away from your charge.' },
   ],
   // PLACEHOLDER — guidance on choosing moves for The Guardian.
   movesAdvice: ['PLACEHOLDER moves advice for The Guardian.', 'PLACEHOLDER second paragraph of moves advice for The Guardian.'],
   feature: { name: 'Sworn Oath', effect: ['Name who you’ve sworn to protect; your balance shifts whenever that bond is tested.'] },
+  featureMoves: [],
   growth: 'Did protecting your charge cost you something you wanted?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Guardian.',
@@ -49,6 +50,6 @@ export const guardian: Playbook = {
     '___ worries you more than any threat to your ward ever could.',
     'You trust ___ to watch your back while you watch your charge’s.',
   ],
-  startingTechnique: { name: 'Interpose', approach: 'defend', effect: 'Step between your ward and harm; take the hit’s fatigue in their place and become Prepared.' },
+  startingTechnique: { name: 'Interpose', approach: 'defend', details: 'Step between your ward and harm; take the hit’s fatigue in their place and become Prepared.' },
   momentOfBalance: 'Nothing gets through you. Tell the GM how you protect your ward and your companions from a threat that should have overwhelmed them all.',
 };

@@ -157,7 +157,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
           {playbook.moves.map((mv) => (
             <ChoiceCard key={mv.name} as="div" selected={false} className="p-3.5">
               <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
-              <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.effect)}</p>
+              <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.details)}</p>
             </ChoiceCard>
           ))}
         </div>
@@ -183,7 +183,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
           <p className="font-display font-bold text-base text-gold mb-1">{playbook.startingTechnique.name}</p>
           <p className="text-[11px] text-muted uppercase tracking-wide">{APPROACH_LABEL[playbook.startingTechnique.approach]}</p>
         </ChoiceCard>
-        <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{playbook.startingTechnique.effect}</p>
+        <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{playbook.startingTechnique.details}</p>
       </Section>
 
       <Section label="Growth question">

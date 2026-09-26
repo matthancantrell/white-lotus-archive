@@ -1,4 +1,4 @@
-import type { Playbook } from '../data';
+import type { Playbook } from './playbook';
 import iconImg from '../../../../assets/playbooks/icon.jpg';
 import backgroundImg from '../../../../assets/playbooks/background/icon.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/icon.jpg';
@@ -24,15 +24,16 @@ export const icon: Playbook = {
   // PLACEHOLDER — suggested demeanors for The Icon.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
-    { name: 'The Weight of the Role', effect: 'When you invoke your title to open doors, roll with Harmony.' },
-    { name: 'Slip Away', effect: 'When you shed your public persona to move unseen, roll with Creativity.' },
-    { name: 'Rally the Room', effect: 'When you inspire a crowd with who you represent, roll with Passion.' },
-    { name: 'Just for a Moment', effect: 'Once per session, clear a condition by doing something purely for yourself.' },
-    { name: 'Inherited Trust', effect: 'People you’ve never met extend you goodwill on your family or office’s reputation.' },
+    { name: 'The Weight of the Role', category: 'Playbook', subcategory: null, rollsWith: 'harmony', details: 'When you invoke your title to open doors, roll with Harmony.' },
+    { name: 'Slip Away', category: 'Playbook', subcategory: null, rollsWith: 'creativity', details: 'When you shed your public persona to move unseen, roll with Creativity.' },
+    { name: 'Rally the Room', category: 'Playbook', subcategory: null, rollsWith: 'passion', details: 'When you inspire a crowd with who you represent, roll with Passion.' },
+    { name: 'Just for a Moment', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Once per session, clear a condition by doing something purely for yourself.' },
+    { name: 'Inherited Trust', category: 'Playbook', subcategory: null, rollsWith: null, details: 'People you’ve never met extend you goodwill on your family or office’s reputation.' },
   ],
   // PLACEHOLDER — guidance on choosing moves for The Icon.
   movesAdvice: ['PLACEHOLDER moves advice for The Icon.', 'PLACEHOLDER second paragraph of moves advice for The Icon.'],
   feature: { name: 'Small Freedoms', effect: ['You mark growth whenever you find joy in an ordinary, unburdened moment — no growth question needed.'] },
+  featureMoves: [],
   growth: 'Did your role and your own wishes pull you in different directions today?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Icon.',
@@ -49,6 +50,6 @@ export const icon: Playbook = {
     '___ is one of the only people who sees past your title to who you actually are.',
     'You let your guard down around ___ in a way your title never allows.',
   ],
-  startingTechnique: { name: 'Commanding Presence', approach: 'evade', effect: 'Your bearing halts a foe; they hesitate and cannot act against you this exchange.' },
+  startingTechnique: { name: 'Commanding Presence', approach: 'evade', details: 'Your bearing halts a foe; they hesitate and cannot act against you this exchange.' },
   momentOfBalance: 'You embody what your title was meant to mean. Tell the GM how your presence alone changes the hearts of everyone in the scene.',
 };

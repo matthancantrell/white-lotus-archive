@@ -41,7 +41,7 @@ function TechniqueCard({
   onToggle: () => void;
   onSetLevel: (level: TechniqueLevel) => void;
 }) {
-  const meta = (isStarting ? `${playbookName} · ` : `${t.training} · `) + APPROACH_LABEL[t.approach];
+  const meta = (isStarting ? `${playbookName} · ` : `${t.training.join(' / ')} · `) + APPROACH_LABEL[t.approach];
   return (
     <div
       className="rounded-xl border overflow-hidden"
@@ -59,16 +59,6 @@ function TechniqueCard({
               {isStarting && (
                 <span className="text-[10px] tracking-wide uppercase px-1.5 py-0.5 rounded-full bg-gold text-gold-ink font-bold">Playbook</span>
               )}
-              {t.rare && (
-                <span className="text-[10px] tracking-wide uppercase px-1.5 py-0.5 rounded-full text-[#e8927a] border border-[#e8927a]/40" style={{ background: 'rgba(232,146,122,0.15)' }}>
-                  Rare
-                </span>
-              )}
-              {t.groupOnly && (
-                <span className="text-[10px] tracking-wide uppercase px-1.5 py-0.5 rounded-full text-[#9ec4e8] border border-[#9ec4e8]/40" style={{ background: 'rgba(158,196,232,0.15)' }}>
-                  Group
-                </span>
-              )}
             </div>
             <p className="text-xs text-muted">{meta}</p>
           </div>
@@ -78,13 +68,12 @@ function TechniqueCard({
         </button>
         <div className="flex gap-1 shrink-0">
           <LevelButton label="L" ariaLabel={`Mark ${t.name} learned`} active={level === 'L'} onClick={() => onSetLevel('L')} />
-          <LevelButton label="P" ariaLabel={`Mark ${t.name} practiced`} active={level === 'P'} onClick={() => onSetLevel('P')} />
           <LevelButton label="M" ariaLabel={`Mark ${t.name} mastered`} active={level === 'M'} onClick={() => onSetLevel('M')} />
         </div>
       </div>
       {open && (
         <div className="pt-3.5 pb-4 pr-4 border-t border-white/10" style={{ paddingLeft: 48 }}>
-          <p className="text-[13px] leading-relaxed text-parchment-dim">{t.effect}</p>
+          <p className="text-[13px] leading-relaxed text-parchment-dim">{t.details}</p>
         </div>
       )}
     </div>
@@ -109,9 +98,12 @@ export default function StepTechniques({
   const startingName = playbook ? playbook.startingTechnique.name : null;
 
   const universalPool: Technique[] = playbook
-    ? [{ ...playbook.startingTechnique, training: 'Universal' }, ...UNIVERSAL_TECHNIQUES.filter((t) => t.name !== startingName)]
+    ? [
+        { ...playbook.startingTechnique, training: ['Universal'] },
+        ...UNIVERSAL_TECHNIQUES.filter((t) => t.name !== startingName),
+      ]
     : UNIVERSAL_TECHNIQUES;
-  const trainingPool: Technique[] = trainingName ? TECHNIQUES.filter((t) => browseAll || t.training === trainingName) : [];
+  const trainingPool: Technique[] = trainingName ? TECHNIQUES.filter((t) => browseAll || t.training.includes(trainingName)) : [];
 
   const masteredCount = Object.values(techniqueLevels).filter((v) => v === 'M').length;
   const learnedCount = Object.values(techniqueLevels).filter((v) => v === 'L').length;
@@ -161,12 +153,12 @@ export default function StepTechniques({
     <section>
       <StepHeader
         title="Techniques"
-        subtitle="Special combat abilities rated Learned, Practiced, or Mastered. Your playbook grants one mastered technique (pre-selected); most campaigns add one learned technique. Pick from the universal list or your training."
+        subtitle="Special combat abilities rated Learned or Mastered. Your playbook grants one mastered technique (pre-selected); most campaigns add one learned technique. Pick from the universal list or your training."
       />
 
       <div className="flex items-center justify-between gap-3 flex-wrap mb-6 px-4.5 py-3.5 rounded-xl bg-panel border border-gold/20">
         <p className="text-[12.5px] leading-relaxed text-muted flex-1 min-w-[180px]">
-          Select a technique, then set its level with L / P / M. Counts show the standard start — your GM may allow more.
+          Select a technique, then set its level with L / M. Counts show the standard start — your GM may allow more.
         </p>
         <div className="flex gap-2 shrink-0 flex-nowrap">
           <span className="px-4 py-2 rounded-full text-[12.5px] font-bold whitespace-nowrap inline-block bg-white/6 text-gold border border-gold/50">

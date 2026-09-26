@@ -28,7 +28,7 @@ import {
   UNIVERSAL_TECHNIQUES,
 } from '../../creator/data';
 
-const LEVEL_LABEL: Record<TechniqueLevel, string> = { L: 'Learned', P: 'Practiced', M: 'Mastered' };
+const LEVEL_LABEL: Record<TechniqueLevel, string> = { L: 'Learned', M: 'Mastered' };
 const STAT_ROWS: [keyof Stats, string][] = [
   ['creativity', 'Creativity'],
   ['focus', 'Focus'],
@@ -49,7 +49,7 @@ const TAB_LABELS: Record<Tab, string> = {
 
 function resolveTechnique(name: string, playbook: Playbook | null): Technique | null {
   if (playbook && playbook.startingTechnique.name === name) {
-    return { ...playbook.startingTechnique, training: 'Universal' };
+    return { ...playbook.startingTechnique, training: ['Universal'] };
   }
   return UNIVERSAL_TECHNIQUES.find((t) => t.name === name) ?? TECHNIQUES.find((t) => t.name === name) ?? null;
 }
@@ -300,7 +300,7 @@ function MovesFeaturesTab({ draft, playbook }: { draft: CharacterDraft; playbook
                   {mv.category === 'Balance' ? 'Balance' : mv.rollsWith ?? 'Basic'}
                 </span>
               </div>
-              <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.effect}</p>
+              <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.details}</p>
             </div>
           ))}
         </div>
@@ -314,7 +314,7 @@ function MovesFeaturesTab({ draft, playbook }: { draft: CharacterDraft; playbook
               .map((mv) => (
                 <div key={mv.name} className="p-3.5 rounded-xl bg-panel border border-gold/15">
                   <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
-                  <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.effect}</p>
+                  <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.details}</p>
                 </div>
               ))}
             {draft.selectedMoves.length === 0 && <p className="text-[13px] text-muted">No moves selected yet.</p>}
@@ -367,7 +367,7 @@ function TechniquesTab({ draft, playbook }: { draft: CharacterDraft; playbook: P
             <div key={name} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-ink-soft border border-gold/15">
               <div>
                 <p className="font-display font-semibold text-sm text-parchment">{name}</p>
-                <p className="text-[12px] text-muted">{t.training} &middot; {APPROACH_LABEL[t.approach]}</p>
+                <p className="text-[12px] text-muted">{t.training.join(' / ')} &middot; {APPROACH_LABEL[t.approach]}</p>
               </div>
               <span className="text-[10px] tracking-wide uppercase px-1.5 py-0.5 rounded-full bg-gold text-gold-ink font-bold shrink-0">{LEVEL_LABEL[level]}</span>
             </div>
@@ -390,7 +390,7 @@ function ConceptDetailsTab({ draft, playbook }: { draft: CharacterDraft; playboo
             {selectedBackgrounds.map((b) => (
               <div key={b.name} className="p-3.5 rounded-xl bg-ink-soft border border-gold/15">
                 <p className="font-display font-semibold text-sm text-gold mb-1">{b.name}</p>
-                <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{b.desc}</p>
+                <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{b.tagline}</p>
               </div>
             ))}
           </div>

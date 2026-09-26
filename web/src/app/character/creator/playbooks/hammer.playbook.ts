@@ -1,4 +1,4 @@
-import type { Playbook } from '../data';
+import type { Playbook } from './playbook';
 import iconImg from '../../../../assets/playbooks/hammer.jpg';
 import backgroundImg from '../../../../assets/playbooks/background/hammer.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/hammer.jpg';
@@ -24,15 +24,16 @@ export const hammer: Playbook = {
   // PLACEHOLDER — suggested demeanors for The Hammer.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
-    { name: 'Overwhelming Force', effect: 'When you go all-out in a fight, roll with Passion for extra effect on a hit.' },
-    { name: 'No Diplomacy Needed', effect: 'When you settle a dispute by force instead of words, roll with Focus.' },
-    { name: 'Break Through', effect: 'When you smash through an obstacle rather than go around it, roll with Passion.' },
-    { name: 'Cool Down', effect: 'Once per session, an ally can talk you down before you escalate further.' },
-    { name: 'Point Taken', effect: 'Clear a condition when you accept that force wasn’t the answer this time.' },
+    { name: 'Overwhelming Force', category: 'Playbook', subcategory: null, rollsWith: 'passion', details: 'When you go all-out in a fight, roll with Passion for extra effect on a hit.' },
+    { name: 'No Diplomacy Needed', category: 'Playbook', subcategory: null, rollsWith: 'focus', details: 'When you settle a dispute by force instead of words, roll with Focus.' },
+    { name: 'Break Through', category: 'Playbook', subcategory: null, rollsWith: 'passion', details: 'When you smash through an obstacle rather than go around it, roll with Passion.' },
+    { name: 'Cool Down', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Once per session, an ally can talk you down before you escalate further.' },
+    { name: 'Point Taken', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Clear a condition when you accept that force wasn’t the answer this time.' },
   ],
   // PLACEHOLDER — guidance on choosing moves for The Hammer.
   movesAdvice: ['PLACEHOLDER moves advice for The Hammer.', 'PLACEHOLDER second paragraph of moves advice for The Hammer.'],
   feature: { name: 'First to the Fight', effect: ['You act first when a fight breaks out, before initiative is otherwise decided.'] },
+  featureMoves: [],
   growth: 'Did you solve a problem with force today?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Hammer.',
@@ -49,6 +50,6 @@ export const hammer: Playbook = {
     '___ is the only one who can talk you down once you’ve decided to hit something.',
     'You hurt ___ once by solving their problem the only way you know how.',
   ],
-  startingTechnique: { name: 'Overwhelming Blow', approach: 'attack', effect: 'Put everything into one strike; a foe marks 2-fatigue and is knocked back.' },
+  startingTechnique: { name: 'Overwhelming Blow', approach: 'attack', details: 'Put everything into one strike; a foe marks 2-fatigue and is knocked back.' },
   momentOfBalance: 'You choose the moment to hold back — or not. Tell the GM how you end a conflict by knowing exactly how much force it needs, and no more.',
 };

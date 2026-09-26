@@ -68,7 +68,7 @@ export default function StepConcept({
                 >
                   <div className="min-w-0">
                     <p className="font-display font-semibold text-sm text-parchment mb-0.5">{bg.name}</p>
-                    <p className="text-[12.5px] leading-relaxed text-[#b9c2bd]">{bg.desc}</p>
+                    <p className="text-[12.5px] leading-relaxed text-[#b9c2bd]">{bg.tagline}</p>
                   </div>
                   <span
                     className="text-muted text-[11px] shrink-0 inline-block transition-transform"
@@ -80,9 +80,9 @@ export default function StepConcept({
               </div>
               {open && (
                 <div className="pt-3.5 pb-4 pr-4 border-t border-white/10" style={{ paddingLeft: 46 }}>
-                  <p className="text-[13px] leading-relaxed text-parchment-dim mb-3">{bg.detail}</p>
-                  <p className="font-display text-[11px] tracking-wide uppercase text-gold mb-1.5">You might know</p>
-                  <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{bg.knows}</p>
+                  {bg.description && <p className="text-[13px] leading-relaxed text-parchment-dim mb-3">{bg.description}</p>}
+                  <p className="font-display text-[11px] tracking-wide uppercase text-gold mb-1.5">Examples</p>
+                  <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{bg.examples.join(', ')}</p>
                 </div>
               )}
             </div>
