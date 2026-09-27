@@ -33,8 +33,9 @@ export const elder: Playbook = {
   ],
   // PLACEHOLDER — guidance on choosing moves for The Elder.
   movesAdvice: ['PLACEHOLDER moves advice for The Elder.', 'PLACEHOLDER second paragraph of moves advice for The Elder.'],
-  feature: { name: 'Mastered Techniques', effect: ['Start with four mastered techniques instead of one, chosen freely from your training.'] },
+  feature: { name: 'Mastered Techniques', effect: [{ text: 'Start with four mastered techniques instead of one, chosen freely from your training.' }] },
   featureMoves: [],
+  featureChoices: [],
   growth: 'Did your age and experience change how you handled something today?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Elder.',

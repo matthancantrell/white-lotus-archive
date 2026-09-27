@@ -17,23 +17,36 @@ export const rogue: Playbook = {
   tagline: 'Answers to no one, trusts no one, and is slowly learning that might have to change.',
   // PLACEHOLDER — a longer passage describing The Rogue, expanding on the tagline.
   description: ['PLACEHOLDER description for The Rogue.', 'PLACEHOLDER second paragraph for The Rogue.'],
-  principles: ['Self-Reliance', 'Trust'],
-  // PLACEHOLDER — flavor text for what it means to live by Self-Reliance vs Trust.
+  // Verified against Demiplane Nexus's Playbooks index (Core Book) — page
+  // itself is gated on this account, so only principles are corrected here.
+  // (The old 'Self-Reliance'/'Trust' pair here was actually The Guardian's —
+  // apparent mixup in the original placeholder data.)
+  principles: ['Friendship', 'Survival'],
+  // PLACEHOLDER — flavor text for what it means to live by Friendship vs Survival.
   principlesDescription: 'PLACEHOLDER principles description for The Rogue.',
   stats: { creativity: 1, focus: 0, harmony: -1, passion: 1 },
   // PLACEHOLDER — suggested demeanors for The Rogue.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
   moves: [
-    { name: 'Solo Job', category: 'Playbook', subcategory: null, rollsWith: 'creativity', details: 'When you handle something alone rather than ask for help, roll with Creativity.' },
-    { name: 'Leap of Trust', category: 'Playbook', subcategory: null, rollsWith: 'harmony', details: 'When you rely on the party instead of going it alone, roll with Harmony.' },
-    { name: 'Slip the Net', category: 'Playbook', subcategory: null, rollsWith: 'creativity', details: 'When you talk or sneak your way out of trouble, roll with Creativity.' },
-    { name: 'No Strings', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Once per session, walk away from an obligation with no mechanical consequence.' },
-    { name: 'Found Family', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Clear a condition the first time you let the party in on something personal.' },
+    { name: 'Casing the Joint', category: 'Playbook', subcategory: 'The Rogue', rollsWith: null, details: 'When you assess a situation, add these questions to the list.' },
+    { name: 'Is That the Best You Got?', category: 'Playbook', subcategory: 'The Rogue', rollsWith: 'passion', details: 'When you goad or provoke an NPC into foolhardy action, say what you want them to do and roll with Passion.' },
+    { name: 'Roguish Charm', category: 'Playbook', subcategory: 'The Rogue', rollsWith: 'creativity', details: 'When you plead with an NPC or guide and comfort someone by flattering them and empathizing with them, mark 1-fatigue to roll with Creativity instead of Harmony.' },
+    { name: 'Slippery Eel-Hound', category: 'Playbook', subcategory: 'The Rogue', rollsWith: null, details: 'When you defend and maneuver and choose to use Seize a Position to escape the scene, foes must mark an additional 2-fatigue to stop you, and you may bring any allies within reach when you retreat.' },
+    { name: 'You’re Not My Master!', category: 'Playbook', subcategory: 'The Rogue', rollsWith: null, details: 'When you resist an NPC shifting your balance, roll +2 instead of +0.' },
   ],
   // PLACEHOLDER — guidance on choosing moves for The Rogue.
   movesAdvice: ['PLACEHOLDER moves advice for The Rogue.', 'PLACEHOLDER second paragraph of moves advice for The Rogue.'],
-  feature: { name: 'Always an Out', effect: ['You always know a way out of the room you’re in, however unlikely.'] },
-  featureMoves: [],
+  // Feature name/moves inferred (not directly page-confirmed — The Rogue's
+  // full page is gated on this account): the two "Playbook Feature" moves
+  // tagged subcategory "Bad Habits" in the Core Book move list roll with
+  // "Survival" and "Friendship" — an exact match to Rogue's real principles
+  // above, strongly indicating this is Rogue's actual feature name.
+  feature: { name: 'Bad Habits', effect: [{ text: 'PLACEHOLDER — full feature description pending direct page access.' }] },
+  featureMoves: [
+    { name: 'Indulge a bad habit on your own', category: 'Playbook Feature', subcategory: 'Bad Habits', rollsWith: 'Survival', details: 'When you indulge a bad habit on your own, shift your balance toward Survival, and roll with Survival.' },
+    { name: 'Indulge a bad habit with a friend', category: 'Playbook Feature', subcategory: 'Bad Habits', rollsWith: 'Friendship', details: 'When you indulge a bad habit with a friend, shift your balance toward Friendship, and roll with Friendship.' },
+  ],
+  featureChoices: [],
   growth: 'Did you choose to rely on someone else today?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Rogue.',

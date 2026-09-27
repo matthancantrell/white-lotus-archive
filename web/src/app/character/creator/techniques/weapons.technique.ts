@@ -1,10 +1,18 @@
 import type { Technique } from '@/types';
 
-// PLACEHOLDER catalog — replace with the Core Book (Appendix A) technique list.
+// Core Book (Appendix A) technique list — verified against Demiplane Nexus
+// with Source filtered to Core Book. No sub-style Forms for Weapons.
 export const weapons: Technique[] = [
-  { name: 'Precise Strike', training: ['Weapons'], approach: 'attack', details: 'Land a hit that finds the gap in a guard; the foe marks 1-fatigue and a condition.' },
-  { name: 'Disarm', training: ['Weapons'], approach: 'attack', details: 'Twist a foe’s weapon from their grip; they are Impaired until they recover it.' },
-  { name: 'Parry and Riposte', training: ['Weapons'], approach: 'defend', details: 'Turn a blocked attack into your own opening; take +1 forward.' },
-  { name: 'Chi Blocking', training: ['Weapons', 'Chi Blocking'], approach: 'attack', details: 'Strike a bender’s pressure points; they cannot bend for the rest of the exchange.' },
-  { name: 'Pincer Movement', training: ['Weapons'], approach: 'defend', details: 'You and an ally flank a foe together; both take +1 forward against them.' },
+  { name: 'Boom!', training: ['Weapons'], approach: 'attack', rare: true, legendary: false, details: 'Throw a small prepared explosive into the midst of your foes.' },
+  { name: 'Chart a Course', training: ['Weapons'], approach: 'evade', rare: true, legendary: false, details: 'Plan a clear and perfect path of action.' },
+  { name: 'Chi-Blocking Jabs', training: ['Weapons'], approach: 'attack', rare: true, legendary: false, details: 'Pinpoint weapon or hand strikes to block a foe’s chi.' },
+  { name: 'Counterstrike', training: ['Weapons'], approach: 'defend', rare: false, legendary: false, details: 'Using impeccable timing, read your foe’s movement and lash out with blinding speed.' },
+  { name: 'Disarm', training: ['Weapons'], approach: 'defend', rare: false, legendary: false, details: 'Target your foe’s ability to fight by breaking, removing, or limiting a particular style.' },
+  { name: 'Feint', training: ['Weapons'], approach: 'evade', rare: false, legendary: false, details: 'Trick your foes into overextending themselves against you.' },
+  { name: 'Parry', training: ['Weapons'], approach: 'defend', rare: false, legendary: false, details: 'Stop a foe’s attack before it connects.' },
+  { name: 'Pin a Fly to a Tree', training: ['Weapons'], approach: 'attack', rare: true, legendary: false, details: 'Fire arrows with perfect accuracy to pin a foe in place.' },
+  { name: 'Pinpoint Thrust', training: ['Weapons'], approach: 'attack', rare: false, legendary: false, details: 'Using a thrusting or stabbing weapon, go straight for the target with precision and accuracy.' },
+  { name: 'Switch It Up', training: ['Weapons'], approach: 'evade', rare: false, legendary: false, details: 'Switch up your style, footwork, weapon, or bearing, causing your foe to second-guess your next move.' },
+  { name: 'Take the High Ground', training: ['Weapons'], approach: 'defend', rare: false, legendary: false, details: 'Move to an advantageous position above your foe.' },
+  { name: 'Turn the Tables', training: ['Weapons'], approach: 'attack', rare: true, legendary: false, details: 'Make careful strikes to undermine your foe’s advantageous position.' },
 ];

@@ -138,6 +138,7 @@ function CharacterCreatorInner() {
                     statBonus: null,
                     balanceShift: 0,
                     selectedMoves: [],
+                    featureChoices: {},
                     history: [],
                     techniqueLevels: newPlaybook ? { [newPlaybook.startingTechnique.name]: 'M' } : {},
                   });
@@ -151,6 +152,20 @@ function CharacterCreatorInner() {
                   if (has) next = next.filter((n) => n !== name);
                   else if (next.length < 2) next = [...next, name];
                   update({ selectedMoves: next });
+                }}
+                featureChoices={draft.featureChoices}
+                onToggleFeatureChoice={(key, value, count) => {
+                  const current = draft.featureChoices[key] ?? [];
+                  const has = current.includes(value);
+                  let next = current;
+                  if (has) next = current.filter((v) => v !== value);
+                  else if (current.length < count) next = [...current, value];
+                  update({ featureChoices: { ...draft.featureChoices, [key]: next } });
+                }}
+                onFeatureFreeformChange={(key, index, value) => {
+                  const next = (draft.featureChoices[key] ?? []).slice();
+                  next[index] = value;
+                  update({ featureChoices: { ...draft.featureChoices, [key]: next } });
                 }}
               />
             )}

@@ -41,6 +41,23 @@ characters.get('/:id', requireAuth, async (c) => {
   return c.json({ ...row, data: JSON.parse(row.data as unknown as string) });
 });
 
+// GET /api/characters/:id/public — read-only fetch for the public character-view
+// page, deliberately unauthenticated (any visitor, or no login at all). No
+// user_id check — visibility is gated purely on the character's own
+// `isPrivate` flag (stored inside `data`, toggled from the sheet itself), so
+// this returns 404 for both a nonexistent id and a private one — the response
+// can't be used to tell those two cases apart from outside.
+characters.get('/:id/public', async (c) => {
+  const id = c.req.param('id');
+  const row = await c.env.DB.prepare('SELECT id, name, playbook_id, era_name, icon_id, data FROM characters WHERE id = ?')
+    .bind(id)
+    .first<Pick<CharacterRecord, 'id' | 'name' | 'playbook_id' | 'era_name' | 'icon_id' | 'data'>>();
+  if (!row) return c.json({ error: 'Character not found' }, 404);
+  const data = JSON.parse(row.data as unknown as string);
+  if (data?.isPrivate) return c.json({ error: 'Character not found' }, 404);
+  return c.json({ ...row, data });
+});
+
 // POST /api/characters — create a new character owned by the caller. The id is
 // always server-assigned (never trust a client-supplied primary key on insert).
 characters.post('/', requireAuth, async (c) => {

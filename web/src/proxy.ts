@@ -2,7 +2,10 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // !!! Protected routes that require authentication !!!
-const PROTECTED_PREFIXES = ['/profile', '/character'];
+// Only the creator (building/editing your own character) and the manager
+// (your own character list + editable sheet) require login — /character/:id
+// is the public, read-only character view and must stay reachable by anyone.
+const PROTECTED_PREFIXES = ['/profile', '/character/creator', '/character/manager'];
 // Auth-only pages — a logged-in user has no reason to see these; send them to
 // their profile instead of letting them re-visit login/signup.
 const AUTH_PREFIXES = ['/login', '/signup'];

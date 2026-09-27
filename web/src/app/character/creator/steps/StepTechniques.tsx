@@ -99,7 +99,7 @@ export default function StepTechniques({
 
   const universalPool: Technique[] = playbook
     ? [
-        { ...playbook.startingTechnique, training: ['Universal'] },
+        { ...playbook.startingTechnique, training: ['Universal'], rare: false, legendary: false },
         ...UNIVERSAL_TECHNIQUES.filter((t) => t.name !== startingName),
       ]
     : UNIVERSAL_TECHNIQUES;

@@ -33,8 +33,9 @@ export const destined: Playbook = {
   ],
   // PLACEHOLDER — guidance on choosing moves for The Destined.
   movesAdvice: ['PLACEHOLDER moves advice for The Destined.', 'PLACEHOLDER second paragraph of moves advice for The Destined.'],
-  feature: { name: 'Destiny Sign', effect: ['Choose one destiny sign at creation; it grants a special ability tied to your fate.'] },
+  feature: { name: 'Destiny Sign', effect: [{ text: 'Choose one destiny sign at creation; it grants a special ability tied to your fate.' }] },
   featureMoves: [],
+  featureChoices: [],
   growth: 'Did your destiny pull you somewhere you didn’t choose to go?',
   // PLACEHOLDER — flavor text explaining what the growth question is getting at.
   growthDescription: 'PLACEHOLDER growth description for The Destined.',

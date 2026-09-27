@@ -119,6 +119,7 @@ export const INITIAL_DRAFT: CharacterDraft = {
   statBonus: null,
   balanceShift: 0,
   selectedMoves: [],
+  featureChoices: {},
   techniqueLevels: {},
   name: '',
   iconId: null,
@@ -134,6 +135,7 @@ export const INITIAL_DRAFT: CharacterDraft = {
   fatigueMarked: 0,
   conditions: [],
   journalEntries: [],
+  isPrivate: false,
 };
 
 export const ERAS: Era[] = [

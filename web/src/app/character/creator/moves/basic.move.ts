@@ -1,17 +1,17 @@
 import type { Move } from '@/types';
 
-// PLACEHOLDER catalog — replace with the Core Book (Appendix A) basic-move
-// list. Written fresh for this project, not copied from any source; a null
-// rollsWith covers moves with no roll at all.
+// Core Book basic-move list — verified against Demiplane Nexus with Source
+// filtered to Core Book. A null rollsWith covers moves with no roll at all.
+// 'Training' is the only Basic move with a non-null subcategory.
 export const basic: Move[] = [
-  { name: 'Assess a Situation', category: 'Basic', subcategory: null, rollsWith: 'creativity', details: 'Size up a scene for hidden angles, dangers, or opportunities.' },
-  { name: 'Guide and Comfort', category: 'Basic', subcategory: null, rollsWith: 'harmony', details: 'Steady someone through fear or grief; they clear a condition or act on your advice.' },
-  { name: 'Intimidate', category: 'Basic', subcategory: null, rollsWith: 'passion', details: 'Press someone with force of will until they back down or give something up.' },
-  { name: 'Plead', category: 'Basic', subcategory: null, rollsWith: 'harmony', details: 'Appeal to someone’s better nature to get help or mercy you haven’t earned yet.' },
-  { name: 'Push Your Luck', category: 'Basic', subcategory: null, rollsWith: 'passion', details: 'Throw yourself at a risky, uncertain action with no clean fallback.' },
-  { name: 'Rely on Your Skills and Training', category: 'Basic', subcategory: null, rollsWith: 'focus', details: 'Use hard-won expertise to accomplish something exacting or technical.' },
-  { name: 'Trick', category: 'Basic', subcategory: null, rollsWith: 'creativity', details: 'Mislead or misdirect someone into a mistake they don’t see coming.' },
-  { name: 'Help', category: 'Basic', subcategory: null, rollsWith: null, details: 'Lend an ally your aid; they take +1 forward, at some cost or risk to you.' },
-  { name: 'Stance Move', category: 'Basic', subcategory: null, rollsWith: null, details: 'Your training’s signature stance — see your Training for its specific effect.' },
-  { name: 'Training', category: 'Basic', subcategory: null, rollsWith: null, details: 'The baseline benefit every character gets from their chosen Training.' },
+  { name: 'Assess a Situation', category: 'Basic', subcategory: null, rollsWith: 'creativity', details: 'Any time you try to gather specific or useful information during a tense moment, you make the assess a situation move.' },
+  { name: 'Guide and Comfort', category: 'Basic', subcategory: null, rollsWith: 'harmony', details: 'Any time you try to comfort, offer guidance, or steer someone’s course of action through wisdom, not persuasion, you’re guiding and comforting someone.' },
+  { name: 'Intimidate', category: 'Basic', subcategory: null, rollsWith: 'passion', details: 'Any time you threaten an NPC into retreat or surrender with words or fists, you are intimidating them.' },
+  { name: 'Plead', category: 'Basic', subcategory: null, rollsWith: 'harmony', details: 'Any time you try to get help or a favor from an NPC, you are pleading with an NPC.' },
+  { name: 'Push Your Luck', category: 'Basic', subcategory: null, rollsWith: 'passion', details: 'Any time you rely on fate and luck to carry you through instead of skills or training, you’re pushing your luck.' },
+  { name: 'Rely on Your Skills and Training', category: 'Basic', subcategory: null, rollsWith: 'focus', details: 'Any time you use your expertise and knowledge to overcome a significant complication or risk, you’re relying on your skills and training.' },
+  { name: 'Trick', category: 'Basic', subcategory: null, rollsWith: 'creativity', details: 'Any time you use your wits and skills to fool, confuse, or deceive NPCs, you’re tricking an NPC.' },
+  { name: 'Help', category: 'Basic', subcategory: null, rollsWith: null, details: 'Any time you step in and assist another PC’s actions, you are helping a companion.' },
+  { name: 'Stance Move', category: 'Basic', subcategory: null, rollsWith: null, details: 'To determine how many techniques a PC combatant can use, they make the stance move when resolving approaches: each player rolls with the appropriate stat, based on the approach they chose.' },
+  { name: 'Training', category: 'Basic', subcategory: 'Advancement', rollsWith: null, details: 'When you spend time with a teacher learning and training in a new technique, roll with modifiers from the following questions.' },
 ];

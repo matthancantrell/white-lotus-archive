@@ -3,6 +3,24 @@ import iconImg from '../../../../assets/playbooks/successor.jpg';
 import backgroundImg from '../../../../assets/playbooks/background/successor.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/successor.jpg';
 
+// Shared between the Domain and Secondary Domain choices below — both draw
+// from this identical 12-option catalog (see featureChoices' excludeChoiceKeys).
+const DOMAINS = [
+  'High society',
+  'Military command',
+  'Arts and entertainment',
+  'Land ownership',
+  'Organized crime',
+  'Spiritual authority',
+  'State politics',
+  'Business and industry',
+  'Elite academics',
+  'Vigilante militias',
+  'Media and news',
+  'Vital supply chains',
+];
+
+// Verified against Demiplane Nexus's full Playbook page (Core Book).
 export const successor: Playbook = {
   id: 'successor',
   iconColor: '#4c7ac9',
@@ -14,42 +32,85 @@ export const successor: Playbook = {
   bannerImageKey: 'successor.jpg',
   secondaryImageKey: 'successor-secondary.jpg',
   name: 'The Successor',
-  tagline: 'Next in line for a role or legacy, and unsure whether they want it.',
-  // PLACEHOLDER — a longer passage describing The Successor, expanding on the tagline.
-  description: ['PLACEHOLDER description for The Successor.', 'PLACEHOLDER second paragraph for The Successor.'],
-  principles: ['Duty', 'Individuality'],
-  // PLACEHOLDER — flavor text for what it means to live by Duty vs Individuality.
-  principlesDescription: 'PLACEHOLDER principles description for The Successor.',
-  stats: { creativity: 0, focus: 1, harmony: 1, passion: -1 },
-  // PLACEHOLDER — suggested demeanors for The Successor.
-  demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],
+  tagline: 'The inheritor of a massively powerful legacy, known all over, with its own dark history.',
+  description: [
+    'The Successor comes from a powerful, tarnished lineage. Play the Successor if you want to struggle against your lineage as it threatens to draw you in.',
+    'Prestigious, redemptive, pigeonholed, rebellious. The Successor comes from a powerful family, group, order, or lineage—they’re the inheritor of real power, in one way or another, and everyone in the group believes the Successor belongs to it. But the lineage of the Successor is mired in corruption, or tragedy, or dark rumors. It’s not an unequivocally noble inheritance; it’s characterized by a tradition of destructive or cruel decisions and practices.',
+    'The Successor is a bit like the Icon; this identity has been foisted upon them. But unlike the Icon, this isn’t some specific, honored role that the Successor faces; it has the weight of an entire legacy with its own enemies, allies, responsibilities, and benefits. Getting out from under that name, its weight, and its borne assumptions is quite the challenge for the Successor.',
+  ],
+  principles: ['Tradition', 'Progress'],
+  principlesDescription: 'The Successor’s split between their desire to uphold the greatness of their lineage and their desire to forge their own path is represented in their two principles. Their Tradition principle represents their commitment to the lineage, both its heritage and its practices and power — a high-Tradition Successor sees the value and power of the lineage and seeks to respect and honor their forebears. Their Progress principle represents their desire to find new ways, different from the ways of their lineage — often wanting to make amends for the worst excesses of their lineage, or simply looking for non-traditional change.',
+  stats: { creativity: 1, focus: 1, harmony: -1, passion: 0 },
+  demeanorOptions: ['Perky', 'Intense', 'By-the-book', 'Casual', 'Arrogant', 'Oblivious'],
   moves: [
-    { name: 'Inherited Skill', category: 'Playbook', subcategory: null, rollsWith: 'focus', details: 'When you draw on training passed down to you, roll with Focus.' },
-    { name: 'My Own Path', category: 'Playbook', subcategory: null, rollsWith: 'creativity', details: 'When you break from tradition to do things your way, roll with Creativity.' },
-    { name: 'Voice of the Legacy', category: 'Playbook', subcategory: null, rollsWith: 'harmony', details: 'When you invoke your predecessor’s name or reputation, roll with Harmony.' },
-    { name: 'Question Everything', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Once per session, gain insight by challenging an assumption everyone else takes for granted.' },
-    { name: 'Steady the Line', category: 'Playbook', subcategory: null, rollsWith: null, details: 'Clear a condition when you honor the legacy in a way that still feels like you.' },
+    { name: 'Way of the Future', category: 'Playbook', subcategory: 'The Successor', rollsWith: null, details: 'Take +1 Creativity (max +3).' },
+    { name: 'Black Koala-Sheep', category: 'Playbook', subcategory: 'The Successor', rollsWith: 'creativity', details: 'When you behave in a way that shocks and unsettles people from one of your backgrounds, roll with Creativity to intimidate them or push your luck.' },
+    { name: 'A Life of Regret', category: 'Playbook', subcategory: 'The Successor', rollsWith: 'focus', details: 'When you guide and comfort an NPC by apologizing and honestly promising to make amends for the harm they have suffered, roll with Focus instead of Harmony. If they choose not to open up to you, you do not take +1 forward against them. If they choose to open up to you, take +1 ongoing to attempts to take action to make amends.' },
+    { name: 'Walk This Way', category: 'Playbook', subcategory: 'The Successor', rollsWith: 'creativity', details: 'When you make over, disguise, and/or coach your friends to fit in with a specific crowd appropriate to one of your backgrounds, roll with Creativity. On a 10+, the performance is flawless; you gain access to wherever you wanted to fit in while attracting little suspicion. On a 7–9, you fool nearly everyone; there’s only a single gatekeeper who asks any questions or stands in your way. On a miss, the only way to get the access you desired is for one of your friends to take on an uncomfortable, dangerous, or attention-grabbing role.' },
+    { name: 'Worldly Knowledge', category: 'Playbook', subcategory: 'The Successor', rollsWith: null, details: 'Your upbringing expanded your horizons, skillsets, and contacts. Choose another training and another background.' },
   ],
-  // PLACEHOLDER — guidance on choosing moves for The Successor.
-  movesAdvice: ['PLACEHOLDER moves advice for The Successor.', 'PLACEHOLDER second paragraph of moves advice for The Successor.'],
-  feature: { name: 'The Weight of What’s Next', effect: ['Once per session, ask the GM what your predecessor would have done in this exact moment.'] },
-  featureMoves: [],
-  growth: 'Did the pull between legacy and your own path come up today?',
-  // PLACEHOLDER — flavor text explaining what the growth question is getting at.
-  growthDescription: 'PLACEHOLDER growth description for The Successor.',
+  movesAdvice: [
+    'For Black Koala-Sheep, the GM is the final arbiter of whether or not you behaved in a way that shocks or unsettles people from one of your backgrounds.',
+    'For A Life of Regret, you can apologize and honestly promise to make amends for harm that you did not personally inflict—especially if that harm was inflicted by your lineage.',
+    'For Walk This Way, the makeover or disguise is only useful to get your friends past suspicion or observation. Make sure you know your destination when you use this move.',
+    'For Worldly Knowledge, you cannot choose a second form of bending, but you can always choose Weapons or Technology, or your first form of bending.',
+  ],
+  feature: {
+    name: 'A Tainted Past',
+    effect: [
+      { text: 'You hail from a powerful, infamous lineage—one with an impressive and terrible reputation. Its reach extends over the whole scope of your story, and everyone in the scope knows of it. Choose one domain that is the source of your lineage’s power (e.g. high society, military command, organized crime, business and industry, spiritual authority), and another into which they’re now beginning to extend their reach.' },
+      { heading: 'Lineage Resources', text: 'You have access to your family’s extensive stores of two resources (e.g. obscure or forbidden knowledge, introductions and connections, servants or muscle, high technology, cold hard cash, spiritual artifacts or tomes). Spend resources during the session to establish a boon your lineage’s unique position and stores could provide: a vehicle, an invitation, a chest of jade coins, etc.' },
+    ],
+  },
+  // Auto-granted by A Tainted Past above — both performed by the Successor,
+  // tied to their lineage's stored resources.
+  featureMoves: [
+    { name: 'Humble Yourself', category: 'Playbook Feature', subcategory: 'A Tainted Past', rollsWith: 'Tradition', details: 'When you politely and obediently humble yourself before a powerful member of your lineage, roll with your Tradition. On a hit, you earn some credit; hold 3-resources. On a 7–9, their resources don’t come without strings; you’ll need to promise to fulfill some other obligation of your lineage, or let them shift your balance. On a miss, they’re dissatisfied with your display; they’re cutting you off until you fulfill some task they set to you.' },
+    { name: 'Raid Your Lineage’s Resources', category: 'Playbook Feature', subcategory: 'A Tainted Past', rollsWith: 'Progress', details: 'When you raid your lineage’s resources without their consent or knowledge, mark a condition and roll with your Progress. On a hit, hold 1-resource. On a 7–9, choose 1. On a 10+, choose 2: you obtain an additional 1-resource; you nab your goodies quietly, your lineage is none the wiser; you steel yourself for what you’re doing, avoid marking a condition. On a miss, you’re caught red-handed by a powerful member of your lineage who saw you coming.' },
+  ],
+  // Verified against Demiplane Nexus's Roll20 character sheet wizard — Domains
+  // and Secondary Domain are both closed catalogs drawing from the identical
+  // 12-option list (the Core Book's own prose only gives 5 "e.g." examples),
+  // so a pick in one excludes it from the other. Lineage Resources is its own
+  // separate 6-option catalog with no overlap.
+  featureChoices: [
+    {
+      kind: 'select',
+      key: 'domain',
+      label: 'Domain',
+      count: 1,
+      options: DOMAINS,
+      excludeChoiceKeys: ['secondaryDomain'],
+    },
+    {
+      kind: 'select',
+      key: 'secondaryDomain',
+      label: 'Secondary Domain',
+      count: 1,
+      options: DOMAINS,
+      excludeChoiceKeys: ['domain'],
+    },
+    {
+      kind: 'select',
+      key: 'resources',
+      label: 'Lineage Resources',
+      count: 2,
+      options: ['Obscure or forbidden knowledge', 'Introductions and connections', 'Servants or muscle', 'High technology', 'Cold hard cash', 'Spiritual artifacts or tomes'],
+    },
+  ],
+  startingTechnique: { name: 'Break', approach: 'evade', details: 'Target a foe’s vulnerable equipment; render it useless or broken—possibly inflicting or overcoming a fictionally appropriate status.' },
+  growth: 'Did you learn something meaningful or important about your lineage, its members, or its effects on the world and others?',
+  growthDescription: 'The Successor’s growth question is all about coming to learn more, discover more, and better understand their own lineage. Because the Successor’s lineage should be well-known throughout the scope of your game, it shouldn’t be hard to find out something about them nearly anywhere the Successor goes.',
   history: [
-    'What legacy are you next in line for, and who held it before you?',
-    'What part of that legacy do you want no part of?',
-    'Who is waiting for you to take your place, and who hopes you never will?',
-    'Which companion knows what you truly want?',
+    'Who is the current head of your lineage? How do you love and frustrate each other?',
+    'What close member of your lineage wants to revolutionize it?',
+    'What do you carry that reminds you of the place most associated with your lineage?',
+    'What part of your lineage’s identity is most important and valuable to you as a person?',
+    'Why are you committed to this group or purpose?',
   ],
-  // PLACEHOLDER — suggested connection prompts for The Successor. A run of 3+
-  // underscores marks a fill-in-the-blank spot (see renderBlanks in
-  // ../PlaybookInfoPanel).
   connectionPrompts: [
-    '___ is the only one who knows what you truly want, apart from the legacy.',
-    'You hope ___ never has to inherit a burden like yours.',
+    '___ has major concerns, fears, or grievances with my lineage—and with me, by proxy.',
+    '___ seems free of their past in a way I wish I could let go of mine; hearing them talk about the future feels amazing!',
   ],
-  startingTechnique: { name: 'Inherited Form', approach: 'defend', details: 'Fall back on drilled technique; you are Prepared and clear 1-fatigue.' },
-  momentOfBalance: 'You honor your legacy in a way that is wholly your own. Tell the GM how you resolve a crisis in a way your predecessor never could have.',
+  momentOfBalance: 'You may never escape the legacy of your family, but balance allows you to learn from them without defining yourself in their image. You call upon a resource of your family to innovate a new solution to an intractable problem, never forgetting who you are in the face of incredible danger. Tell the GM how you knock down obstacles that seem impossible to overcome and save the day.',
 };

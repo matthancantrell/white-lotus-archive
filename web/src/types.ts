@@ -15,10 +15,13 @@ export type Approach = 'attack' | 'defend' | 'evade';
 // — a technique itself has no intrinsic mastery tier.
 export type TechniqueLevel = 'L' | 'M';
 // `training` is an array because some techniques are a sub-style of a broader
-// training (e.g. Bloodbending, Metalbending) and carry both — ['Waterbending',
-// 'Bloodbending'] — so the technique is found under either tag. Ordinary
-// techniques just have their one training.
-export interface Technique { name: string; training: string[]; approach: Approach; details: string; }
+// training (e.g. Blood, Metal — the book's own short "Form" names) and carry
+// both — ['Waterbending', 'Blood'] — so the technique is found under either
+// tag. Ordinary techniques just have their one training.
+// `rare` and `legendary` are independent flags on the technique itself (per
+// the Core Book), not the character's progress toward it — that's
+// TechniqueLevel, tracked separately in CharacterDraft.techniqueLevels.
+export interface Technique { name: string; training: string[]; approach: Approach; rare: boolean; legendary: boolean; details: string; }
 export interface Connection { name: string; note: string; }
 // One shared shape for every kind of move in the game — basic/balance moves
 // everyone gets, a playbook's own selectable moves, moves auto-granted by a
@@ -58,6 +61,10 @@ export interface CharacterDraft {
   statBonus: keyof Stats | null;
   balanceShift: number;
   selectedMoves: string[];
+  // Keyed by FeatureChoice.key (creator/playbooks/playbook.ts) — the values the
+  // player picked for a playbook feature's own choices (e.g. Bold's 4 Drives,
+  // Idealist's 3 Ideals). A key with no entry hasn't been touched at all.
+  featureChoices: Record<string, string[]>;
   // Keyed by technique name; a technique with no entry hasn't been picked at all.
   techniqueLevels: Record<string, TechniqueLevel>;
   name: string;
@@ -81,6 +88,10 @@ export interface CharacterDraft {
   conditions: string[];
   // Free-form session log, newest-first — added to from the sheet's Journal tab.
   journalEntries: JournalEntry[];
+  // Toggled from the character sheet's own privacy switch — whether this
+  // character is visible to others, separate from the account-level privacy
+  // setting on the user's profile (see app/profile/types.ts's is_private).
+  isPrivate: boolean;
   // Set once saved via StepGrowth's "Save character to my archive"; unset means
   // this draft only exists in the current session and hasn't reached the DB yet.
   characterId?: string;

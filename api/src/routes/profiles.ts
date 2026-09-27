@@ -10,10 +10,6 @@ profiles.get('/me', requireAuth, async (c) => {
   const userId = c.get('userId');
   const userToken = c.get('userToken');
 
-  console.log('=== PROFILE DEBUG ===');
-  console.log('userId:', userId);
-  console.log('hasToken:', !!userToken);
-
   const supabase = userClient(c.env, userToken);
 
   const { data, error } = await supabase
@@ -22,18 +18,7 @@ profiles.get('/me', requireAuth, async (c) => {
     .eq('id', userId)
     .single();
 
-  console.log('profile data:', data);
-  console.log('profile error:', error);
-
-  if (error) {
-    return c.json({
-      error: error.message,
-      code: error.code,
-      details: error.details,
-      hint: error.hint,
-      userId,
-    }, 404);
-  }
+  if (error) return c.json({ error: 'Could not load your profile.' }, 404);
 
   return c.json(data as Profile);
 });
@@ -62,7 +47,7 @@ profiles.patch('/me', requireAuth, async (c) => {
     .select()
     .single();
 
-  if (error) return c.json({ error: error.message }, 400);
+  if (error) return c.json({ error: 'Could not update your profile.' }, 400);
   return c.json(data as Profile);
 });
 
@@ -94,6 +79,6 @@ profiles.get('/:id', async (c) => {
 profiles.delete('/me', requireAuth, async (c) => {
   const admin = adminClient(c.env);
   const { error } = await admin.auth.admin.deleteUser(c.get('userId'));
-  if (error) return c.json({ error: error.message }, 400);
+  if (error) return c.json({ error: 'Could not delete your account.' }, 400);
   return c.json({ success: true });
 });

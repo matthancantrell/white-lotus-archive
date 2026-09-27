@@ -2,8 +2,31 @@ import type { StaticImageData } from 'next/image';
 import type { Approach, Move, Stats } from '@/types';
 
 // `effect` is a set of paragraphs, not one block — see the Feature section of
-// PlaybookInfoPanel, which renders each entry as its own <p>.
-export interface Feature { name: string; effect: string[]; }
+// PlaybookInfoPanel, which renders each entry as its own <p>. Some paragraphs
+// are their own named sub-rule within the feature (e.g. The Icon's "Live Up to
+// Your Role" alongside "Break Tradition") and carry a `heading`, rendered as
+// its own sub-header above the paragraph; plain paragraphs just omit it.
+// `list`, when present, renders as its own bulleted list below `text` — for
+// paragraphs whose source material is actually a list of options (e.g. The
+// Bold's Drives), not a run-on sentence of semicolon-joined items.
+export interface FeatureParagraph { heading?: string; text: string; list?: string[]; }
+export interface Feature { name: string; effect: FeatureParagraph[]; }
+
+// A choice the feature itself asks the player to make, surfaced as its own
+// "Feature" tab in StepPlaybook (see CharacterDraft.featureChoices, keyed by
+// `key`). Two kinds, matching how the source material actually presents them:
+// - 'select': an exact, closed catalog to pick `count` from (e.g. The Bold's
+//   20 Drives, pick 4; The Icon's Responsibilities/Prohibitions; The
+//   Successor's Domains/Secondary Domain/Lineage Resources) — rendered as a
+//   checklist. `excludeChoiceKeys`, when present, names sibling choices whose
+//   already-picked values are off-limits here too — The Successor's Domains
+//   and Secondary Domain draw from the identical 12-option list and can't
+//   repeat a pick between them.
+// - 'freeform': a single name with no catalog to choose from (e.g. The
+//   Adamant's Lodestar) — rendered as `count` text field(s).
+export type FeatureChoice =
+  | { kind: 'select'; key: string; label: string; count: number; options: string[]; excludeChoiceKeys?: string[] }
+  | { kind: 'freeform'; key: string; label: string; count: number; prompt: string; examples?: string[] };
 
 // The playbook's full information-panel content, in the same order it's rendered
 // (see PlaybookInfoPanel) — banner/tagline/description/principles/stats/demeanor
@@ -37,6 +60,11 @@ export interface Playbook {
   // The passage shown in Growth's "Moment of Balance" tab once unlocked.
   momentOfBalance: string;
   feature: Feature;
+  // Choices the feature asks the player to make (see FeatureChoice above) —
+  // surfaced as their own "Feature" tab in StepPlaybook. Empty for playbooks
+  // whose feature needs no player input beyond naming a lodestar/ward/adversary
+  // (handled separately, closer to featureMoves than a list-choice).
+  featureChoices: FeatureChoice[];
   // Moves auto-granted by `feature` regardless of the moves picked below —
   // category 'Playbook Feature'. Empty for playbooks whose feature is purely
   // descriptive and grants no move of its own.
