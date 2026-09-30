@@ -127,7 +127,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
             onError={(e) => { e.currentTarget.style.display = 'none'; }}
           />
         </div>
-        <p className="text-[13.5px] leading-relaxed text-[#b9c2bd] max-w-md mx-auto">{playbook.principlesDescription}</p>
+        <div className="max-w-md mx-auto"><Paragraphs items={playbook.principlesDescription} /></div>
       </div>
 
       <Section label="Starting stats" className="mb-5">

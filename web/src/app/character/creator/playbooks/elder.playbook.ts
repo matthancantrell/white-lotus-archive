@@ -20,7 +20,7 @@ export const elder: Playbook = {
   description: ['PLACEHOLDER description for The Elder.', 'PLACEHOLDER second paragraph for The Elder.'],
   principles: ['Determination', 'Patience'],
   // PLACEHOLDER — flavor text for what it means to live by Determination vs Patience.
-  principlesDescription: 'PLACEHOLDER principles description for The Elder.',
+  principlesDescription: ['PLACEHOLDER principles description for The Elder.'],
   stats: { creativity: 0, focus: 1, harmony: 1, passion: -1 },
   // PLACEHOLDER — suggested demeanors for The Elder.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],

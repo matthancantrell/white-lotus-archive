@@ -21,7 +21,7 @@ export const prodigy: Playbook = {
   // itself is gated on this account, so only principles are corrected here.
   principles: ['Excellence', 'Community'],
   // PLACEHOLDER — flavor text for what it means to live by Excellence vs Community.
-  principlesDescription: 'PLACEHOLDER principles description for The Prodigy.',
+  principlesDescription: ['PLACEHOLDER principles description for The Prodigy.'],
   stats: { creativity: 1, focus: 1, harmony: 0, passion: -1 },
   // PLACEHOLDER — suggested demeanors for The Prodigy.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],

@@ -20,7 +20,7 @@ export const destined: Playbook = {
   description: ['PLACEHOLDER description for The Destined.', 'PLACEHOLDER second paragraph for The Destined.'],
   principles: ['Control', 'Connection'],
   // PLACEHOLDER — flavor text for what it means to live by Control vs Connection.
-  principlesDescription: 'PLACEHOLDER principles description for The Destined.',
+  principlesDescription: ['PLACEHOLDER principles description for The Destined.'],
   stats: { creativity: 1, focus: 0, harmony: 0, passion: 0 },
   // PLACEHOLDER — suggested demeanors for The Destined.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],

@@ -22,7 +22,7 @@ export const pillar: Playbook = {
   // itself is gated on this account, so only principles are corrected here.
   principles: ['Support', 'Leadership'],
   // PLACEHOLDER — flavor text for what it means to live by Support vs Leadership.
-  principlesDescription: 'PLACEHOLDER principles description for The Pillar.',
+  principlesDescription: ['PLACEHOLDER principles description for The Pillar.'],
   stats: { creativity: 0, focus: 2, harmony: 0, passion: -1 },
   // PLACEHOLDER — suggested demeanors for The Pillar.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],

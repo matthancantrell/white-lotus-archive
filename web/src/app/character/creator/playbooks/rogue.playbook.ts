@@ -23,7 +23,7 @@ export const rogue: Playbook = {
   // apparent mixup in the original placeholder data.)
   principles: ['Friendship', 'Survival'],
   // PLACEHOLDER — flavor text for what it means to live by Friendship vs Survival.
-  principlesDescription: 'PLACEHOLDER principles description for The Rogue.',
+  principlesDescription: ['PLACEHOLDER principles description for The Rogue.'],
   stats: { creativity: 1, focus: 0, harmony: -1, passion: 1 },
   // PLACEHOLDER — suggested demeanors for The Rogue.
   demeanorOptions: ['PLACEHOLDER demeanor', 'PLACEHOLDER demeanor', 'PLACEHOLDER demeanor'],

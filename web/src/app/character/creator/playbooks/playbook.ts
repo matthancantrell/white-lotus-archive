@@ -44,7 +44,7 @@ export interface Playbook {
   principles: [string, string];
   // Flavor text shown under the Principles emblem, explaining what it means to
   // live by these two principles. Distinct from `description` above.
-  principlesDescription: string;
+  principlesDescription: string[];
   stats: Stats;
   // Suggested demeanors offered as inspiration for the free-text demeanor a player
   // fills in during the Concept step (see CharacterDraft.demeanor).
