@@ -14,7 +14,7 @@ import StepBalance from './steps/StepBalance';
 import StepTechniques from './steps/StepTechniques';
 import StepConnections from './steps/StepConnections';
 import StepGrowth from './steps/StepGrowth';
-import { CharacterDraft, INITIAL_DRAFT, PLAYBOOKS, TOTAL_STEPS, Stats, TechniqueLevel } from './data';
+import { CharacterDraft, INITIAL_DRAFT, PLAYBOOKS, TECHNIQUES, normalizeDraft, TOTAL_STEPS, Stats, TechniqueLevel } from './data';
 
 function CharacterCreatorInner() {
   const router = useRouter();
@@ -37,13 +37,13 @@ function CharacterCreatorInner() {
     getCharacter(editId)
       .then((record) => {
         if (cancelled) return;
-        // Merge under INITIAL_DRAFT rather than trusting the saved shape as-is —
-        // a character saved before a field (hometown, techniqueLevels, ...) existed
-        // would otherwise come back with that field missing instead of its default.
+        // normalizeDraft merges under INITIAL_DRAFT rather than trusting the saved
+        // shape as-is — a character saved before a field (hometown, techniqueLevels,
+        // trainingNames, ...) existed would otherwise come back without it.
         // `step` is always reset to 1 regardless of what was saved — a saved
         // character's `step` is whatever step it happened to be saved from
         // (normally the last one), and editing should always start from the top.
-        setDraft({ ...INITIAL_DRAFT, ...record.data, characterId: record.id, step: 1 });
+        setDraft({ ...normalizeDraft(record.data), characterId: record.id, step: 1 });
       })
       .catch((err) => {
         if (!cancelled) setLoadError(err instanceof Error ? err.message : 'Could not load that character.');
@@ -140,6 +140,7 @@ function CharacterCreatorInner() {
                     selectedMoves: [],
                     featureChoices: {},
                     history: [],
+                    trainingNames: draft.trainingNames.slice(0, newPlaybook?.startingTrainingCount ?? 1),
                     techniqueLevels: newPlaybook ? { [newPlaybook.startingTechnique.name]: 'M' } : {},
                   });
                 }}
@@ -198,16 +199,26 @@ function CharacterCreatorInner() {
             {draft.step === 4 && (
               <StepTraining
                 playbookName={playbook ? playbook.name : 'No playbook yet'}
-                trainingName={draft.trainingName}
+                trainingNames={draft.trainingNames}
+                trainingCount={playbook?.startingTrainingCount ?? 1}
                 fightingStyle={draft.fightingStyle}
-                onSelectTraining={(trainingName) => {
-                  // Switching (or clearing) training drops any training-specific technique
-                  // choices, but keeps the playbook's own granted technique if it had a level set.
-                  const startName = playbook?.startingTechnique.name;
-                  const keep: Record<string, TechniqueLevel> = startName && draft.techniqueLevels[startName]
-                    ? { [startName]: draft.techniqueLevels[startName] }
-                    : {};
-                  update({ trainingName, techniqueLevels: keep });
+                onToggleTraining={(name) => {
+                  const has = draft.trainingNames.includes(name);
+                  const limit = playbook?.startingTrainingCount ?? 1;
+                  let next = draft.trainingNames;
+                  if (has) next = next.filter((n) => n !== name);
+                  else if (next.length < limit) next = [...next, name];
+                  // Dropping a training drops only the techniques no remaining training
+                  // covers — universal techniques (and the playbook's own) aren't in
+                  // TECHNIQUES, so they're always kept, as is anything already leveled
+                  // under a training that's still selected.
+                  const trainingOnly = new Set(TECHNIQUES.map((t) => t.name));
+                  const levels: Record<string, TechniqueLevel> = {};
+                  for (const [tName, lvl] of Object.entries(draft.techniqueLevels)) {
+                    const t = TECHNIQUES.find((x) => x.name === tName);
+                    if (!trainingOnly.has(tName) || (t && t.training.some((tr) => next.includes(tr)))) levels[tName] = lvl;
+                  }
+                  update({ trainingNames: next, techniqueLevels: levels });
                 }}
                 onFightingStyleChange={(fightingStyle) => update({ fightingStyle })}
               />
@@ -222,7 +233,8 @@ function CharacterCreatorInner() {
             {draft.step === 6 && (
               <StepTechniques
                 playbook={playbook}
-                trainingName={draft.trainingName}
+                trainingNames={draft.trainingNames}
+                masteredCount={playbook?.startingMasteredCount ?? 1}
                 techniqueLevels={draft.techniqueLevels}
                 onSetLevel={(name, level) => {
                   const next = { ...draft.techniqueLevels };

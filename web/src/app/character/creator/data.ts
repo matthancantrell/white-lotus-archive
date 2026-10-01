@@ -114,7 +114,7 @@ export const INITIAL_DRAFT: CharacterDraft = {
   step: 1,
   eraName: null,
   playbookId: null,
-  trainingName: null,
+  trainingNames: [],
   fightingStyle: '',
   statBonus: null,
   balanceShift: 0,
@@ -137,6 +137,19 @@ export const INITIAL_DRAFT: CharacterDraft = {
   journalEntries: [],
   isPrivate: false,
 };
+
+// Single entry point for turning a saved character's stored JSON into a draft —
+// merges under INITIAL_DRAFT (a field added after the character was saved comes
+// back with its default instead of missing) and upgrades legacy shapes. Both
+// load paths (the creator and the sheet's server page) go through this.
+export function normalizeDraft(raw: Partial<CharacterDraft> & { trainingName?: string | null }): CharacterDraft {
+  const { trainingName, ...rest } = raw;
+  return {
+    ...INITIAL_DRAFT,
+    ...rest,
+    trainingNames: rest.trainingNames ?? (trainingName ? [trainingName] : []),
+  };
+}
 
 export const ERAS: Era[] = [
   { name: 'Avatar Roku', tag: 'Fire Nation dawn', accent: 'text-[#e8927a]',

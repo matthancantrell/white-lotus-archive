@@ -59,6 +59,12 @@ export interface Playbook {
   connectionPrompts: string[];
   // The passage shown in Growth's "Moment of Balance" tab once unlocked.
   momentOfBalance: string;
+  // How many trainings / Mastered techniques this playbook starts with at
+  // character creation (default 1 each — see The Foundling's Double Heritage).
+  // Starting allotments only: the creator's counters show them, but nothing caps
+  // techniqueLevels, so a character can learn and master more as they advance.
+  startingTrainingCount?: number;
+  startingMasteredCount?: number;
   feature: Feature;
   // Choices the feature asks the player to make (see FeatureChoice above) —
   // surfaced as their own "Feature" tab in StepPlaybook. Empty for playbooks

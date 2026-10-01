@@ -82,12 +82,14 @@ function TechniqueCard({
 
 export default function StepTechniques({
   playbook,
-  trainingName,
+  trainingNames,
+  masteredCount: masteredAllotment,
   techniqueLevels,
   onSetLevel,
 }: {
   playbook: Playbook | null;
-  trainingName: string | null;
+  trainingNames: string[];
+  masteredCount: number;
   techniqueLevels: Record<string, TechniqueLevel>;
   onSetLevel: (name: string, level: TechniqueLevel | null) => void;
 }) {
@@ -103,9 +105,10 @@ export default function StepTechniques({
         ...UNIVERSAL_TECHNIQUES.filter((t) => t.name !== startingName),
       ]
     : UNIVERSAL_TECHNIQUES;
-  const trainingPool: Technique[] = trainingName ? TECHNIQUES.filter((t) => browseAll || t.training.includes(trainingName)) : [];
+  const trainingPool: Technique[] = trainingNames.length ? TECHNIQUES.filter((t) => browseAll || t.training.some((tr) => trainingNames.includes(tr))) : [];
+  const trainingLabel = trainingNames.join(' / ');
 
-  const masteredCount = Object.values(techniqueLevels).filter((v) => v === 'M').length;
+  const masteredLevelCount = Object.values(techniqueLevels).filter((v) => v === 'M').length;
   const learnedCount = Object.values(techniqueLevels).filter((v) => v === 'L').length;
 
   function renderCard(t: Technique) {
@@ -137,13 +140,13 @@ export default function StepTechniques({
 
   const trainingTab = (
     <>
-      <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">{trainingName || 'Training'} techniques</p>
+      <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">{trainingLabel || 'Training'} techniques</p>
       <p className="text-[12.5px] leading-relaxed text-muted mb-2.5">
-        Techniques unique to your training{browseAll ? ' and every other training (ask your GM to convert one)' : ''}.
+        Techniques unique to your {trainingNames.length > 1 ? 'trainings' : 'training'}{browseAll ? ' and every other training (ask your GM to convert one)' : ''}.
       </p>
-      {!trainingName && <p className="text-[13.5px] text-muted mb-3">Choose a training first to see its techniques.</p>}
+      {!trainingNames.length && <p className="text-[13.5px] text-muted mb-3">Choose a training first to see its techniques.</p>}
       <button onClick={() => setBrowseAll((v) => !v)} className="block w-fit whitespace-nowrap text-gold text-xs font-semibold mb-3.5">
-        {browseAll ? 'Show only my training' : 'Browse other trainings'}
+        {browseAll ? `Show only my ${trainingNames.length > 1 ? 'trainings' : 'training'}` : 'Browse other trainings'}
       </button>
       <div className="flex flex-col gap-2.5">{trainingPool.map(renderCard)}</div>
     </>
@@ -153,7 +156,7 @@ export default function StepTechniques({
     <section>
       <StepHeader
         title="Techniques"
-        subtitle="Special combat abilities rated Learned or Mastered. Your playbook grants one mastered technique (pre-selected); most campaigns add one learned technique. Pick from the universal list or your training."
+        subtitle={`Special combat abilities rated Learned or Mastered. Your playbook grants a mastered technique (pre-selected)${masteredAllotment > 1 ? `, and you start with ${masteredAllotment} mastered in all` : ''}; most campaigns add one learned technique. Pick from the universal list or your training.`}
       />
 
       <div className="flex items-center justify-between gap-3 flex-wrap mb-6 px-4.5 py-3.5 rounded-xl bg-panel border border-gold/20">
@@ -162,7 +165,7 @@ export default function StepTechniques({
         </p>
         <div className="flex gap-2 shrink-0 flex-nowrap">
           <span className="px-4 py-2 rounded-full text-[12.5px] font-bold whitespace-nowrap inline-block bg-white/6 text-gold border border-gold/50">
-            Mastered ({masteredCount}/1)
+            Mastered ({masteredLevelCount}/{masteredAllotment})
           </span>
           <span className="px-4 py-2 rounded-full text-[12.5px] font-bold whitespace-nowrap inline-block bg-white/6 text-gold border border-gold/50">
             Learned ({learnedCount}/1)
@@ -171,11 +174,11 @@ export default function StepTechniques({
       </div>
 
       <TabbedStepPanel
-        headerTitle={trainingName || 'No training yet'}
+        headerTitle={trainingLabel || 'No training yet'}
         headerLabel="Techniques"
         tabs={[
           { id: 'universal', label: 'Universal Techniques', content: universalTab },
-          { id: 'training', label: `${trainingName || 'Training'} Techniques`, content: trainingTab },
+          { id: 'training', label: `${trainingLabel || 'Training'} Techniques`, content: trainingTab },
         ]}
       />
     </section>

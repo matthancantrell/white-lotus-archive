@@ -183,7 +183,7 @@ export default function CharacterSheet({
           <div>
             <h1 className="font-display font-semibold text-[28px] text-parchment">{draft.name || 'Unnamed character'}</h1>
             <p className="text-[13.5px] text-muted">
-              {era ? ERA_HEADER_LABEL[era.name] || era.name : 'No era yet'} &middot; {playbook ? playbook.name : 'No playbook yet'} &middot; {draft.trainingName || 'No training yet'}
+              {era ? ERA_HEADER_LABEL[era.name] || era.name : 'No era yet'} &middot; {playbook ? playbook.name : 'No playbook yet'} &middot; {draft.trainingNames.length ? draft.trainingNames.join(' / ') : 'No training yet'}
             </p>
           </div>
         </div>

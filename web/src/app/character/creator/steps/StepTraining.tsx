@@ -4,34 +4,45 @@ import TabbedStepPanel from '../TabbedStepPanel';
 import ChoiceCard from '../ChoiceCard';
 import { TextArea } from '../TextField';
 
+// Bending arts are limited to one per character; Weapons and Technology can
+// stand alongside one (or each other) for playbooks that start with more than
+// one training.
+const BENDING_ARTS = ['Waterbending', 'Earthbending', 'Firebending', 'Airbending'];
+
 export default function StepTraining({
   playbookName,
-  trainingName,
+  trainingNames,
+  trainingCount,
   fightingStyle,
-  onSelectTraining,
+  onToggleTraining,
   onFightingStyleChange,
 }: {
   playbookName: string;
-  trainingName: string | null;
+  trainingNames: string[];
+  trainingCount: number;
   fightingStyle: string;
-  onSelectTraining: (name: string | null) => void;
+  onToggleTraining: (name: string) => void;
   onFightingStyleChange: (v: string) => void;
 }) {
   const pickTab = (
     <>
-      <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Training &middot; choose 1</p>
+      <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Training &middot; choose {trainingCount}</p>
       <p className="text-[12.5px] leading-relaxed text-muted mb-3.5">
         Bending arts are limited to one per character. Weapons covers any martial discipline — blades, staves, chi-blocking, or bare hands. Technology is gadgets and machines.
       </p>
       <div className="flex flex-col gap-2.5">
         {TRAININGS.map((t) => {
-          const selected = trainingName === t.name;
+          const selected = trainingNames.includes(t.name);
+          const blocked =
+            !selected &&
+            (trainingNames.length >= trainingCount ||
+              (BENDING_ARTS.includes(t.name) && trainingNames.some((n) => BENDING_ARTS.includes(n))));
           return (
             <ChoiceCard
               key={t.name}
               selected={selected}
-              onClick={() => onSelectTraining(selected ? null : t.name)}
-              className="flex items-center gap-3.5 text-left px-4 py-3.5"
+              onClick={() => { if (!blocked) onToggleTraining(t.name); }}
+              className={`flex items-center gap-3.5 text-left px-4 py-3.5${blocked ? ' opacity-40 cursor-not-allowed' : ''}`}
             >
               <div
                 className="w-5 h-5 rounded-full border-[1.5px] border-gold shrink-0 flex items-center justify-center"
@@ -76,7 +87,7 @@ export default function StepTraining({
         headerTitle={playbookName}
         headerLabel="Training"
         tabs={[
-          { id: 'pick', label: `Training (${trainingName ? 1 : 0}/1)`, content: pickTab },
+          { id: 'pick', label: `Training (${trainingNames.length}/${trainingCount})`, content: pickTab },
           { id: 'style', label: fightingStyle.trim() ? 'Fighting Style ✓' : 'Fighting Style', content: styleTab },
         ]}
       />

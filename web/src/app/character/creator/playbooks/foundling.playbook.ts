@@ -36,6 +36,9 @@ export const foundling: Playbook = {
     'For No Time for Feelings, there are two discrete effects to this move that both point to how you try to resist your feelings, even when others push you on them. Whenever you resist an NPC shifting your balance, you can mark a condition to roll with conditions instead of rolling without any bonus — but you can’t roll higher than a +4, and if you choose to do this, you can’t choose to clear a condition by immediately acting to prove them wrong. You can still mark growth by immediately acting to prove them wrong. For the other part of the move, you can only internalize your conditions and ignore their penalties when you have conditions marked up to your highest principle.',
     'For Takes One to Know One, make sure you actually needle your target, saying things that pick at them and mess with them! Be aware that doing so can reveal something of your own character at the same time, as on a 7–9 they get to ask you a question as well. The other party doesn’t have to answer the question, even out of character — they can instead mark 2-fatigue to stonewall and try to hide the answer. On a miss, however, you don’t get the option of stonewalling, and must answer honestly.',
   ],
+  // Double Heritage: two trainings and two Mastered techniques at creation.
+  startingTrainingCount: 2,
+  startingMasteredCount: 2,
   feature: {
     name: 'Double Heritage',
     effect: [

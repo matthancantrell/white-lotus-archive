@@ -1,7 +1,7 @@
 import { redirect, notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { apiFetch } from '@/lib/api';
-import { CharacterDraft, INITIAL_DRAFT } from '../../creator/data';
+import { CharacterDraft, normalizeDraft } from '../../creator/data';
 import CharacterSheet from './CharacterSheet';
 
 export default async function CharacterSheetPage({ params }: { params: Promise<{ id: string }> }) {
@@ -24,10 +24,10 @@ export default async function CharacterSheetPage({ params }: { params: Promise<{
     throw new Error('Could not load this character.');
   }
   const record: { data: CharacterDraft; icon_id: string | null } = await res.json();
-  // Merge under INITIAL_DRAFT rather than trusting the saved shape as-is — same
-  // reasoning as the creator's load path: characters saved before a field
-  // existed (e.g. conditions, fatigueMarked) won't have it in their stored JSON.
-  const draft: CharacterDraft = { ...INITIAL_DRAFT, ...record.data };
+  // Normalize rather than trusting the saved shape as-is — same reasoning as the
+  // creator's load path: characters saved before a field existed (e.g.
+  // conditions, trainingNames) won't have it in their stored JSON.
+  const draft: CharacterDraft = normalizeDraft(record.data);
 
   return <CharacterSheet characterId={id} initialDraft={draft} iconId={record.icon_id} />;
 }

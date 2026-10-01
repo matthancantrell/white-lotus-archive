@@ -56,7 +56,10 @@ export interface CharacterDraft {
   step: number;
   eraName: string | null;
   playbookId: string | null;
-  trainingName: string | null;
+  // Up to Playbook.startingTrainingCount names from TRAININGS (1 for most playbooks).
+  // Characters saved before this was an array have `trainingName` instead — see
+  // normalizeDraft (creator/data.ts).
+  trainingNames: string[];
   fightingStyle: string;
   statBonus: keyof Stats | null;
   balanceShift: number;
