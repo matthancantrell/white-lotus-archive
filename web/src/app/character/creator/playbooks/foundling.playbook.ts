@@ -1,7 +1,21 @@
 import type { Playbook } from './playbook';
 import iconImg from './../../../../assets/playbooks/foundling.jpg';
-import backgroundImg from '../../../../assets/playbooks/background/foundling.jpg';
+import backgroundImg from '../../../../assets/playbooks/background/avatarlegends-bg.jpg';
 import bannerImg from '../../../../assets/playbooks/banner/foundling.jpg';
+
+const WISDOMQUESTIONS = [
+  "Is your Unity greater than zero?",
+  "Have you studied this technique before?",
+  "Has someone used this technique against you in real battle?"
+];
+
+const BONDS = [
+  "They accept you and cease hostility / antagonism.",
+  "They grow to like you (if they already accept you). They agree to help you with a problem.",
+  "They reveal their background. You learn their principle.",
+  "They offer solace. You clear a condition.",
+  "They reveal a vulnerability. You become Prepared to deal with them."
+];
 
 export const foundling: Playbook = {
   id: 'foundling',
@@ -19,22 +33,22 @@ export const foundling: Playbook = {
   ],
   principles: ['Unity', 'Heritage'],
   principlesDescription: [
-    "The Foundling’s two principles reflect their self-awareness and their attempt to manage their best and worst impulses. Their Unity principle is all about their drive to bring different cultures and traditions together, creating a harmonious blend that honors both heritages. Their Heritage principle is all about their desire to preserve and respect the traditions and practices of their background, ensuring that they remain connected to their roots while also embracing the diversity of their environment.",
+    "The Foundling's two principles, Unity and Heritage, reflect their struggle to define themselves while finding a place to belong.",
+    "The Foundling's Unity principle represents their desire to combine their heritages, to find the connections and similarities that bring their two home cultures into one identity. Leaning toward this principle means the Foundling is coming to see themselves as something new, a truly innovative combination of two ways of being.",
+    "The Foundling's Heritage principle represents the Foundling's interest in and devotion to their heritage. Commitment to either background is represented by Heritage — the principle represents how the Foundling is embracing the unique and specific aspects of one of their cultures, no matter which culture they embrace. But identifying with either heritage too strongly tends to preclude identifying easily with the other — raising Heritage usually means picking one of the two identities to focus on. Finding a way to mesh two disparate identities together is much more about Unity, while being interested in and proud of either tradition individually is about Heritage.",
+    "The Foundling's Moment of Balance allows them to embrace each of their identities in full, uniting them without diminishing either. In that moment, the Foundling sees how all things connect, and their two aspects can retain their own special identities but act in perfect concert with the other. The Foundling sees that the divisions are false — everything is connected, and they can be proud of all their facets. And with that new understanding, they combine their trainings from both heritages to perform astonishing feats."
   ],
   stats: { creativity: 1, focus: -1, harmony: 1, passion: 1 },
   demeanorOptions: ['Caring', 'Dedicated', 'Friendly', 'Modest', 'Respectful', 'Shy'],
   moves: [
-    { name: 'Empty Your Mind', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'passion', details: '' },
-    { name: 'Building Bridges', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'focus', details: 'rks 2-fatigue. On a miss, your attack leaves you exposed; they may ask you any one question from the list, and you must answer honestly.' },
-    { name: 'Martial Sensitive', category: 'Playbook', subcategory: 'The Foundling', rollsWith: null, details: '' },
-    { name: 'Trusty Talisman', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'passion', details: '' },
-    { name: 'Things in Common', category: 'Playbook', subcategory: 'The Foundling', rollsWith: null, details: '' },
+    { name: 'Empty Your Mind', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'null', details: 'You flow and adapt, formless and shapeless. During an exhange, after you roll the stance move, you can mark 1-fatigue to select a basic technique from a different approach than the one youu chose. (You must still pay all other costs of that technique.)' },
+    { name: 'Building Bridges', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'harmony', details: "When you try to calm an immediate conflict between 2 NPCs, remind them what they have in common and roll with Harmony. On hit, they come to terms for now. They won't pursue their conflict until an outside influence reignites it or at least a day passes. On a 10+you have an opportunity for them to put aside their conflict for good. The GM will tell you what you must do. On a miss, you inadvertently highlight their differences and fan the conflict. You cannot use this move on them again." },
+    { name: 'Martial Sensitive', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'harmony', details: "You are good at reading people's intentions and gestures in the heat of battle. When you 'defend and manuever' against a foe whose principle you know, mark fatigue to roll with Harmony instead of Focus." },
+    { name: 'Trusty Talisman', category: 'Playbook', subcategory: 'The Foundling', rollsWith: 'harmony', details: "You have a specific item which you believe is crucial to your training and abilities. You can roll with Harmony instead of Focus when you use the item to 'rely on your skills and training'. If you miss, the item is damaged and needs repairs. If the item is damaged again before repaired, it is destroyed. You are impaired without it until someone helps you overcome the loss. Choose a new move to replace this one when you finally move on." },
+    { name: 'Things in Common', category: 'Playbook', subcategory: 'The Foundling', rollsWith: null, details: "When you 'guide and comfort' someone who shares a training or a background with you by talking about what you have in common, on a hit, you become Inspired. If they embrace your guidance and comfort, they become Inspired as well." },
   ],
   movesAdvice: [
-    'For I Don’t Hate You, you must have Insecure marked to represent how awkwardly you act. If you don’t have it marked, you can choose to mark it.',
-    'For This Was a Victory, you reveal your sabotage after you could have performed it. You mark fatigue not at the moment you engaged in sabotage, but at the moment it actually matters and comes into play, like revealing that you weakened a bridge just as the soldiers chasing you start to cross it. On a 7–9, your sabotage only creates a quick opportunity. On a miss, your sabotage now causes different, worse, or more expansive problems than you anticipated.',
-    'For No Time for Feelings, there are two discrete effects to this move that both point to how you try to resist your feelings, even when others push you on them. Whenever you resist an NPC shifting your balance, you can mark a condition to roll with conditions instead of rolling without any bonus — but you can’t roll higher than a +4, and if you choose to do this, you can’t choose to clear a condition by immediately acting to prove them wrong. You can still mark growth by immediately acting to prove them wrong. For the other part of the move, you can only internalize your conditions and ignore their penalties when you have conditions marked up to your highest principle.',
-    'For Takes One to Know One, make sure you actually needle your target, saying things that pick at them and mess with them! Be aware that doing so can reveal something of your own character at the same time, as on a 7–9 they get to ask you a question as well. The other party doesn’t have to answer the question, even out of character — they can instead mark 2-fatigue to stonewall and try to hide the answer. On a miss, however, you don’t get the option of stonewalling, and must answer honestly.',
+    "No advice just yet! Check back later!"
   ],
   // Double Heritage: two trainings and two Mastered techniques at creation.
   startingTrainingCount: 2,
@@ -43,34 +57,17 @@ export const foundling: Playbook = {
     name: 'Double Heritage',
     effect: [
       { text: "You are a child of two cultures. At character creation, choose two trainings and two backgrounds that represent your two heritages. You also start play with two mastered techniques instead of just one." },
-      { text: 'You can shift your lodestar to someone new when they guide and comfort you and you open up to them, or when you guide and comfort them and they open up to you. If you do choose to shift your lodestar, clear a condition.' },
-      { text: 'When your lodestar shifts your balance or calls you out, you cannot resist it. Treat an NPC lodestar calling you out as if you rolled a 10+, and a PC lodestar calling you out as if they rolled a 10+.' },
+      { heading: "Wisdom From Many Places", text: "You can study with a master to learn techniques from any training and adapt them to your own. When you start learning a technique from a training you don't have with a willing teacher, roll. Take +1 for each time you answer yes to the questions below. On a hit, you learn the technique and shift your balance towards Unity. On a 7-9, learning was trying. Mark a condition and write its name by the technique. You cannot use the technique if you have that condition marked. When this technique is mastered, erase the condition's name. On a miss, you struggle to incorporate the lesson and must find a new master.", list: WISDOMQUESTIONS },
+      { heading: "Cultural Bonds", text: "When you try to connect to an NPC with a shared culture, roll with Heritage. On hit, they see you. Shift your balance towards Heritage. On a 7-9, choose one from below. On 10+, choose two. On miss, you mix up your heritages in a terrible way, making the NPC mock you or get offended. Mark a condition and shift your balance away from Heritage.", list: BONDS }
     ],
   },
-  // Auto-granted by The Lodestar feature above — both performed BY the Adamant,
-  // triggered by their relationship with their designated lodestar (a second,
-  // named PC or NPC), not moves the lodestar character themselves takes.
-  featureMoves: [
-    { name: 'Shut Down Someone Vulnerable', category: 'Playbook Feature', subcategory: 'The Lodestar', rollsWith: 'Results', details: 'When you shut down someone vulnerable to harsh words or icy silence, shift your balance toward Results and roll with Results. On a hit, they mark a condition and you may clear the same condition. On a 10+, they also cannot shift your balance or call you out for the rest of the scene. On a miss, they have exactly the right retort; mark a condition and they shift your balance. You cannot use this on your lodestar.' },
-    { name: 'Consult Your Lodestar for Advice', category: 'Playbook Feature', subcategory: 'The Lodestar', rollsWith: 'Restraint', details: 'When you consult your lodestar for advice on a problem (or permission to use your preferred solution), roll with Restraint. On a 10+ take all three; on a 7–9 they choose two: you see the wisdom of their advice and they shift your balance twice if you follow it; the conversation bolsters you, clear a condition or 2-fatigue; they feel at ease offering their opinion, they clear a condition or 2-fatigue. On a miss, something about their advice infuriates you — mark a condition or have the GM shift your balance twice.' },
-  ],
-  // Verified against Demiplane Nexus's Roll20 character sheet wizard — a
-  // single freeform name, no catalog to choose from.
-  featureChoices: [
-      { 
-        kind: 'freeform', 
-        key: 'lodestar', label: 'Lodestar', 
-        count: 1, 
-        prompt: 'Name your lodestar (choose a PC to start).' 
-      },
-      {
-        kind: 'freeform', 
-        key: 'lodestarShift', label: 'Lodestar Shift', 
-        count: 1, 
-        prompt: 'Name the person who has become your new lodestar.' 
-      }
-  ],
-  startingTechnique: { name: 'Feel The Flow', approach: 'evade', details: "You take pause to feel the flow of battle and study the way your opposition fights. You become 'Favored'. If they share a training with you, learn their principle. If you know their principle, clear 1-fatigue (even if they do not share the same training)." },
+  featureMoves: [],
+  featureChoices: [],
+  startingTechnique: { 
+    name: 'Feel The Flow', 
+    approach: 'evade', 
+    details: "You take pause to feel the flow of battle and study the way your opposition fights. You become 'Favored'. If they share a training with you, learn their principle. If you know their principle, clear 1-fatigue (even if they do not share the same training)." 
+  },
   growth: 'Did you resolve an issue or conflict relying on something other than your trainings?',
   growthDescription: "The Foundling's growth question is all about exploring more of the world beyond the two trainings that divide them. The Foundling may be deeply defined by those trainings, but that means they need to round themselves out as a full person by learning other ways of solving problems or dealing with the world.",
   history: [

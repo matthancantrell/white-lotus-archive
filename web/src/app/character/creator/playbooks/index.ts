@@ -6,6 +6,7 @@ import { hammer } from './hammer.playbook';
 import { icon } from './icon.playbook';
 import { idealist } from './idealist.playbook';
 import { successor } from './successor.playbook';
+import { foundling } from './foundling.playbook';
 // Destined and Elder aren't Core Book playbooks (confirmed against the real
 // book's playbook list — Core Book only has the 10 below). Commented out,
 // not deleted, until we know what they should actually be sourced from.
@@ -30,6 +31,7 @@ export const PLAYBOOKS: Playbook[] = [
   icon,
   idealist,
   successor,
+  foundling,
   // destined,
   // elder,
   // pillar,
