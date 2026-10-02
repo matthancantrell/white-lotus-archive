@@ -1,7 +1,9 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { ERAS, PORTRAITS } from './data';
+import { ERAS, ICONS } from './data';
+import StepHeader from './StepHeader';
+import { TextField, TextArea } from './TextField';
 import rokuEraImg from '../../../assets/eras/roku.jpg';
 import aangEraImg from '../../../assets/eras/aang.jpg';
 import kyoshiEraImg from '../../../assets/eras/kyoshi.jpg';
@@ -27,26 +29,29 @@ const ERA_ACCENT_HEX: Record<string, string> = {
   'Your own era': '#e8c874',
 };
 
-const inputCls =
-  'w-full box-border bg-white/6 border border-white/18 rounded-[10px] px-3.5 py-3 text-parchment text-[14.5px] placeholder:text-[#6f827d] focus:outline-none focus:border-gold font-body';
-
 export default function Step1Setup({
-  eraName, name, portraitId, scopeText, groupFocusesText,
-  onSelectEra, onName, onPortrait, onScope, onGroupFocuses,
+  eraName, name, iconId, scopeText, groupFocusesText,
+  onSelectEra, onName, onIcon, onScope, onGroupFocuses,
 }: {
   eraName: string | null;
   name: string;
-  portraitId: string | null;
+  iconId: string | null;
   scopeText: string;
   groupFocusesText: string;
   onSelectEra: (name: string | null) => void;
   onName: (v: string) => void;
-  onPortrait: (id: string) => void;
+  onIcon: (id: string) => void;
   onScope: (v: string) => void;
   onGroupFocuses: (v: string) => void;
 }) {
   const [campaignOpen, setCampaignOpen] = useState(false);
-  const [portraitsExpanded, setPortraitsExpanded] = useState(false);
+  const [iconsExpanded, setIconsExpanded] = useState(false);
+  // Icons are fetched from R2 through the API — a slow network or a
+  // misconfigured/unreachable API must never block finishing this step, so a
+  // broken image just falls back to a plain placeholder instead of a broken
+  // <img> icon, and picking one is optional either way (nothing below gates
+  // moving on).
+  const [brokenIconIds, setBrokenIconIds] = useState<Set<string>>(new Set());
   const [detailAtBottom, setDetailAtBottom] = useState(true);
   const detailRef = useRef<HTMLDivElement>(null);
   const activeEra = eraName ? ERAS.find((e) => e.name === eraName) ?? null : null;
@@ -65,8 +70,10 @@ export default function Step1Setup({
 
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Start your character</h1>
-      <p className="text-parchment-dim text-[15px] mb-7">Set the scene before you dive into playbooks and stats &mdash; talk to your GM if you&rsquo;re joining an existing campaign.</p>
+      <StepHeader
+        title="Start your character"
+        subtitle={<>Set the scene before you dive into playbooks and stats &mdash; talk to your GM if you&rsquo;re joining an existing campaign.</>}
+      />
 
       <h2 className="font-display font-semibold text-lg mb-1.5 text-parchment">Choose your era</h2>
       <p className="text-parchment-dim text-[14.5px] mb-4.5">This sets the backdrop for your story.</p>
@@ -151,58 +158,68 @@ export default function Step1Setup({
             <p className="text-[13px] leading-relaxed text-muted mb-2.5">
               How far this story reaches &mdash; a personal drama between a few people, the fate of one community, or something that shakes the wider world. Talk it through with your GM and write down what you land on.
             </p>
-            <textarea
+            <TextArea
               value={scopeText}
               onChange={(e) => onScope(e.target.value)}
               placeholder="e.g. This saga follows the fall and rebuilding of a single Earth Kingdom village."
               rows={2}
-              className={`${inputCls} resize-y mb-5.5`}
+              className="resize-y mb-5.5"
             />
 
             <p className="font-display font-semibold text-sm text-parchment mb-1">Group focuses</p>
             <p className="text-[13px] leading-relaxed text-muted mb-2.5">
               What the table wants this saga to actually be about &mdash; the themes and kinds of stories everyone&rsquo;s excited to tell, like found family, coming of age, or war and survival. Agree on a few as a group before you start.
             </p>
-            <textarea
+            <TextArea
               value={groupFocusesText}
               onChange={(e) => onGroupFocuses(e.target.value)}
               placeholder="e.g. Found family, coming of age, and the cost of war."
               rows={2}
-              className={`${inputCls} resize-y`}
+              className="resize-y"
             />
           </div>
         )}
       </div>
 
-      <h2 className="font-display font-semibold text-lg mb-3.5 text-parchment">Name &amp; portrait</h2>
+      <h2 className="font-display font-semibold text-lg mb-3.5 text-parchment">Name &amp; icon</h2>
       <label className="block text-[13px] text-muted mb-2">Character name</label>
-      <input type="text" value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Teo of the Northern Air Temple" className={`${inputCls} mb-5`} />
+      <TextField type="text" value={name} onChange={(e) => onName(e.target.value)} placeholder="e.g. Teo of the Northern Air Temple" className="mb-5" />
 
-      <label className="block text-[13px] text-muted mb-2.5">Choose a portrait</label>
+      <label className="block text-[13px] text-muted mb-2.5">Choose an icon (optional)</label>
       <div className="relative">
-        <div className="pr-1 mb-2.5" style={{ maxHeight: portraitsExpanded ? 340 : 176, overflowY: portraitsExpanded ? 'auto' : 'hidden' }}>
+        <div className="pr-1 mb-2.5" style={{ maxHeight: iconsExpanded ? 340 : 176, overflowY: iconsExpanded ? 'auto' : 'hidden' }}>
           <div className="flex flex-wrap justify-center gap-3">
-            {PORTRAITS.map((p) => {
-              const selected = portraitId === p.id;
+            {ICONS.map((icon) => {
+              const selected = iconId === icon.id;
               return (
                 <button
-                  key={p.id}
-                  onClick={() => onPortrait(p.id)}
-                  className="rounded-full flex items-center justify-center shrink-0"
-                  style={{ width: 76, height: 76, background: p.bg, border: `3px solid ${selected ? '#e8c874' : 'transparent'}` }}
+                  key={icon.id}
+                  onClick={() => onIcon(icon.id)}
+                  className="relative rounded-full flex items-center justify-center shrink-0 overflow-hidden bg-white/6"
+                  style={{ width: 76, height: 76, border: `3px solid ${selected ? '#e8c874' : 'transparent'}` }}
                 >
-                  {selected && <span className="text-gold-ink text-lg font-bold">&#10003;</span>}
+                  {brokenIconIds.has(icon.id) ? (
+                    <div className="w-full h-full" />
+                  ) : (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={icon.url}
+                      alt=""
+                      className="w-full h-full object-cover"
+                      onError={() => setBrokenIconIds((prev) => new Set(prev).add(icon.id))}
+                    />
+                  )}
                 </button>
               );
             })}
           </div>
         </div>
-        {!portraitsExpanded && (
+        {!iconsExpanded && (
           <div className="absolute left-0 right-1 bottom-2.5 h-11 pointer-events-none" style={{ background: 'linear-gradient(rgba(13,27,30,0), #0d1b1e)' }} />
         )}
       </div>
-      <button onClick={() => setPortraitsExpanded((v) => !v)} className="text-gold text-[13.5px] font-semibold">
-        {portraitsExpanded ? 'Show fewer' : `Show all ${PORTRAITS.length} portraits`}
+      <button onClick={() => setIconsExpanded((v) => !v)} className="text-gold text-[13.5px] font-semibold">
+        {iconsExpanded ? 'Show fewer' : `Show all ${ICONS.length} icons`}
       </button>
     </section>
   );

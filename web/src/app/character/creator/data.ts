@@ -1,58 +1,28 @@
-import type { StaticImageData } from 'next/image';
+// Catalog data for the character creator/sheet — one flat file for the catalogs
+// that don't warrant their own per-item directory (see TRAININGS, TECHNIQUES,
+// CONDITIONS, ERAS, ICONS below). Playbook and Background each get one file per
+// item instead (see ./playbooks/*.playbook.ts and ./backgrounds/*.background.ts)
+// with their own type colocated alongside; everything else shared across the
+// creator lives in @/types.
+export type {
+  Approach,
+  CharacterDraft,
+  ConditionDef,
+  Connection,
+  Era,
+  IconOption,
+  JournalEntry,
+  Move,
+  MoveCategory,
+  Stats,
+  Technique,
+  TechniqueLevel,
+  Training,
+} from '@/types';
 
-export interface Move { name: string; effect: string; }
-export interface Feature { name: string; effect: string; }
-export interface Stats { creativity: number; focus: number; harmony: number; passion: number; }
+import type { Approach, CharacterDraft, ConditionDef, Era, IconOption, Stats, Training } from '@/types';
 
-export interface Playbook {
-  id: string;
-  name: string;
-  tagline: string;
-  principles: [string, string];
-  stats: Stats;
-  moves: Move[];
-  feature: Feature;
-  growth: string;
-  // Icon/background/banner art (plus an icon accent color), imported and
-  // owned directly by each playbook's own file (see ./playbooks/*.playbook.ts)
-  // — so adding, removing, or reordering entries in PLAYBOOKS can't shift
-  // anyone else's visuals, and each playbook's own file is the one place to
-  // look to change its art. The three image fields are deliberately
-  // independent — a playbook's card icon, its card background, and its
-  // detail-panel banner (StepPlaybook) aren't meant to be the same picture.
-  iconColor: string;
-  iconImage: StaticImageData;
-  backgroundImage: StaticImageData;
-  bannerFile: StaticImageData;
-}
-
-export interface Era { name: string; tag: string; accent: string; overview: string; avatarStatus: string; events: string; tone: string; tension: string; }
-export interface Technique { name: string; effect: string; }
-export interface Connection { name: string; note: string; }
-
-export interface CharacterDraft {
-  step: number;
-  eraName: string | null;
-  playbookId: string | null;
-  trainingName: string | null;
-  fightingStyle: string;
-  statBonus: keyof Stats | null;
-  balanceShift: number;
-  selectedMoves: string[];
-  selectedTechnique: string | null;
-  name: string;
-  portraitId: string | null;
-  scopeText: string;
-  groupFocusesText: string;
-  look: string;
-  background: string | null;
-  demeanor: string | null;
-  connections: Connection[];
-  characterId?: string;
-  status?: 'draft' | 'complete';
-}
-
-export const STEP_LABELS = ['Setup', 'Playbook', 'Training', 'Stats', 'Balance', 'Moves', 'Techniques', 'Identity', 'Connections', 'Growth'];
+export const STEP_LABELS = ['Setup', 'Playbook', 'Concept', 'Training', 'Balance', 'Techniques', 'Connections', 'Growth'];
 
 export const ERA_HEADER_LABEL: Record<string, string> = {
   'Avatar Roku': 'Roku Era',
@@ -63,8 +33,80 @@ export const ERA_HEADER_LABEL: Record<string, string> = {
   'Your own era': 'Custom Era',
 };
 
-export const PORTRAIT_COLORS = ['#3a6ea5', '#4a7c3a', '#b3492e', '#d9c98a', '#8a5ca8', '#5c8a8a', '#c98a4c', '#6f8a5c', '#a54e6e', '#4c7ac9', '#8a7c3a', '#3a9e8f', '#9e5c3a', '#5c6f9e', '#7c9e3a', '#9e3a6f', '#4c9e6f', '#9e6f4c', '#6f4c9e', '#3a5c9e', '#9e3a3a', '#3a9e3a', '#9e9e3a'];
-export const PORTRAITS = PORTRAIT_COLORS.map((c, i) => ({ id: `p${i + 1}`, bg: `linear-gradient(155deg,${c},#1a3238)` }));
+// `id` doubles as the R2 object key under `icons/`, extension included (e.g.
+// "aang-1.png") — served only through api/src/routes/media.ts, never a raw
+// bucket URL. See api/schema/0001_characters.sql for why characters store
+// this id rather than a URL.
+// Some of these ("the-<playbook>-1.jpg") are also meant to become that
+// playbook's card icon (Playbook.iconImage in ./playbooks/*.playbook.ts) —
+// not wired up yet, deliberately held off for now.
+const ICON_IDS: string[] = [
+  'pro-bender-1.jpg',
+  'pro-bender-2.jpg',
+  'the-adamant-1.jpg',
+  'the-adamant-2.jpg',
+  'the-bold-1.jpg',
+  'the-bold-2.jpg',
+  'the-destined-1.jpg',
+  'the-destined-2.jpg',
+  'the-elder-1.jpg',
+  'the-elder-2.jpg',
+  'the-foundling-1.jpg',
+  'the-foundling-2.jpg',
+  'the-guardian-1.jpg',
+  'the-guardian-2.jpg',
+  'the-hammer-1.jpg',
+  'the-hammer-2.jpg',
+  'the-icon-1.jpg',
+  'the-icon-2.jpg',
+  'the-idealist-1.jpg',
+  'the-idealist-2.jpg',
+  'the-pillar-1.jpg',
+  'the-pillar-2.jpg',
+  'the-prodigy-1.jpg',
+  'the-prodigy-2.jpg',
+  'the-razor-1.jpg',
+  'the-razor-2.jpg',
+  'the-rogue-1.jpg',
+  'the-rogue-2.jpg',
+  'the-successor-1.jpg',
+  'the-successor-2.jpg',
+  'cabbage-man.jpg',
+];
+export const ICONS: IconOption[] = ICON_IDS.map((id) => ({
+  id,
+  url: `${process.env.NEXT_PUBLIC_API_URL}/media/icons/${id}`,
+}));
+export function resolveIcon(id: string | null): IconOption | null {
+  return id ? ICONS.find((i) => i.id === id) ?? null : null;
+}
+
+// Resolves a playbook-art R2 object key (see Playbook.bannerImageKey and
+// .secondaryImageKey, plus PRINCIPLES_EMBLEM_URL below) to a fetchable URL,
+// same pattern as the icons served through /media/icons/:key above.
+export function resolvePlaybookMedia(key: string): string {
+  return `${process.env.NEXT_PUBLIC_API_URL}/media/playbooks/${key}`;
+}
+
+// The yin-yang "fish" emblem behind every playbook's Principles section (see
+// PlaybookInfoPanel) — one shared asset, not per-playbook, since every playbook
+// uses the same art with different words laid over it.
+export const PRINCIPLES_EMBLEM_URL = resolvePlaybookMedia('principles-emblem.png');
+
+// Resolves a one-off content-art R2 object key (under `content/`, e.g. the
+// Balance-track koi images below) to a fetchable URL — same
+// serve-through-a-Worker pattern as resolvePlaybookMedia, just a different
+// bucket prefix for art that isn't playbook- or icon-specific.
+export function resolveContentMedia(key: string): string {
+  return `${process.env.NEXT_PUBLIC_API_URL}/media/content/${key}`;
+}
+
+// The Balance dial is two mirrored pip rows (+3..-3 on top, -3..+3 on the
+// bottom) with one koi fish arcing behind each — the black koi over the top
+// row, the white koi under the bottom row, together forming the yin-yang
+// shape. The sheet hides either slot independently on a 404.
+export const BALANCE_TRACK_DARK_FISH_URL = resolveContentMedia('black-koi.png');
+export const BALANCE_TRACK_LIGHT_FISH_URL = resolveContentMedia('white-koi.png');
 
 export const TOTAL_STEPS = STEP_LABELS.length;
 
@@ -72,21 +114,42 @@ export const INITIAL_DRAFT: CharacterDraft = {
   step: 1,
   eraName: null,
   playbookId: null,
-  trainingName: null,
+  trainingNames: [],
   fightingStyle: '',
   statBonus: null,
   balanceShift: 0,
   selectedMoves: [],
-  selectedTechnique: null,
+  featureChoices: {},
+  techniqueLevels: {},
   name: '',
-  portraitId: null,
+  iconId: null,
   scopeText: '',
   groupFocusesText: '',
+  hometown: '',
   look: '',
-  background: null,
-  demeanor: null,
+  backgrounds: [],
+  demeanor: '',
+  history: [],
   connections: [{ name: '', note: '' }],
+  location: '',
+  fatigueMarked: 0,
+  conditions: [],
+  journalEntries: [],
+  isPrivate: false,
 };
+
+// Single entry point for turning a saved character's stored JSON into a draft —
+// merges under INITIAL_DRAFT (a field added after the character was saved comes
+// back with its default instead of missing) and upgrades legacy shapes. Both
+// load paths (the creator and the sheet's server page) go through this.
+export function normalizeDraft(raw: Partial<CharacterDraft> & { trainingName?: string | null }): CharacterDraft {
+  const { trainingName, ...rest } = raw;
+  return {
+    ...INITIAL_DRAFT,
+    ...rest,
+    trainingNames: rest.trainingNames ?? (trainingName ? [trainingName] : []),
+  };
+}
 
 export const ERAS: Era[] = [
   { name: 'Avatar Roku', tag: 'Fire Nation dawn', accent: 'text-[#e8927a]',
@@ -127,62 +190,67 @@ export const ERAS: Era[] = [
     tension: 'Decide with your GM what technology level, state of bending, and central conflicts will define your saga.' },
 ];
 
-export const TRAININGS = ['Airbending', 'Waterbending', 'Earthbending', 'Firebending', 'Weapons', 'Technology', 'Hand-to-Hand'];
+export const TRAININGS: Training[] = [
+  { name: 'Waterbending', desc: 'Flowing, adaptive, and defensive \u2014 redirecting force, healing, and ice.' },
+  { name: 'Earthbending', desc: 'Grounded and patient, waiting for the moment to strike with overwhelming weight.' },
+  { name: 'Firebending', desc: 'Aggressive and direct, fueled by breath and drive; reach and raw power.' },
+  { name: 'Airbending', desc: 'Evasive and free, turning aside attacks and controlling space without harm.' },
+  { name: 'Weapons', desc: 'Any martial discipline \u2014 blades, staves, thrown weapons, chi-blocking, bare hands.' },
+  { name: 'Technology', desc: 'Gadgets, machines, and clever engineering standing in for bending.' },
+];
 
-export const TECHNIQUES: Record<string, Technique[]> = {
-  Airbending: [
-    { name: 'Evasive Current', effect: 'Slip past an incoming attack by riding a cushion of air.' },
-    { name: 'Updraft', effect: 'Launch yourself or an ally upward out of danger.' },
-    { name: 'Air Shield', effect: 'Spin a defensive barrier of air around yourself.' },
-    { name: 'Gale Push', effect: 'Knock an opponent back with a burst of wind.' },
-  ],
-  Waterbending: [
-    { name: 'Wave Crash', effect: 'Pull water into a wave that sweeps opponents off their feet.' },
-    { name: 'Healing Flow', effect: 'Use bent water to soothe fatigue or a minor injury.' },
-    { name: 'Ice Lock', effect: 'Freeze water around a target\u2019s limbs to immobilize them.' },
-    { name: 'Redirect', effect: 'Catch and redirect an incoming attack using water\u2019s flow.' },
-  ],
-  Earthbending: [
-    { name: 'Stone Wall', effect: 'Raise a wall of earth for cover in an instant.' },
-    { name: 'Seismic Sense', effect: 'Read the ground to sense movement and hidden threats.' },
-    { name: 'Rock Slide', effect: 'Send a wave of rubble at your opponents.' },
-    { name: 'Pillar Launch', effect: 'Propel yourself upward on a column of stone.' },
-  ],
-  Firebending: [
-    { name: 'Flame Whip', effect: 'Lash out with a controlled arc of fire at range.' },
-    { name: 'Breath of Fire', effect: 'Exhale a burst of flame to clear space around you.' },
-    { name: 'Redirect the Spark', effect: 'Absorb and reroute an incoming bolt of lightning or fire.' },
-    { name: 'Smoke Screen', effect: 'Cloud the area to cover an escape or approach.' },
-  ],
-  Weapons: [
-    { name: 'Precise Strike', effect: 'Land a controlled hit that finds the gap in a guard.' },
-    { name: 'Disarm', effect: 'Twist an opponent\u2019s weapon from their grip.' },
-    { name: 'Parry and Riposte', effect: 'Turn a blocked attack into your own opening.' },
-    { name: 'Thrown Weapon', effect: 'Hit a distant target with a thrown blade or projectile.' },
-  ],
-  Technology: [
-    { name: 'Field Rig', effect: 'Jury-rig a device on the spot from whatever\u2019s on hand.' },
-    { name: 'Overcharge', effect: 'Push a mechanism past its limits for one big effect.' },
-    { name: 'Remote Trigger', effect: 'Set up a device to activate later, from a distance.' },
-    { name: 'Quick Repair', effect: 'Patch damaged gear well enough to keep going.' },
-  ],
-  'Hand-to-Hand': [
-    { name: 'Pressure Point', effect: 'Strike a nerve cluster to numb a limb or block a bender\u2019s chi.' },
-    { name: 'Throw', effect: 'Use an opponent\u2019s own momentum to put them on the ground.' },
-    { name: 'Iron Guard', effect: 'Hold a defensive stance that\u2019s nearly impossible to break.' },
-    { name: 'Counter Grab', effect: 'Turn a grapple attempt back on your attacker.' },
-  ],
-};
+export const APPROACH_LABEL: Record<Approach, string> = { defend: 'Defend & Maneuver', attack: 'Advance & Attack', evade: 'Evade & Observe' };
 
-export const BACKGROUNDS = ['Military', 'Outlaw', 'Monastic', 'Privileged', 'Urban', 'Wilderness'];
-export const DEMEANORS = ['Eager', 'Uncertain', 'Solemn', 'Jocular', 'Haunted', 'Watchful'];
+// Broken out into one file per training \u2014 see ./techniques/*.technique.ts \u2014
+// plus a standalone universal list, same reasoning as PLAYBOOKS/BACKGROUNDS:
+// easy to read and edit on its own instead of scrolling one giant array. A
+// playbook's own starting technique (see each playbook's `startingTechnique`)
+// is shown alongside UNIVERSAL_TECHNIQUES, not listed here, so it isn't
+// duplicated for playbooks that happen to share a name.
+export { UNIVERSAL_TECHNIQUES, TECHNIQUES } from './techniques';
+
+export const ADVANCEMENTS = [
+  'Take a new move from your playbook',
+  'Take a new move from another playbook',
+  'Raise a stat by +1 (maximum of +2 in any given stat)',
+  'Shift your center one step',
+  'Unlock your Moment of Balance',
+];
+
+// Broken out into one file per background — see ./backgrounds/*.background.ts
+// — same reasoning as PLAYBOOKS below: easy to read and edit on its own
+// instead of scrolling one giant array.
+export { BACKGROUNDS } from './backgrounds';
+export type { Background } from './backgrounds/background';
 
 export const STANDARD_GROWTH = [
-  'Did you learn something new about the world, a person, or yourself today?',
-  'Did you fail to live up to your own standards, and did you notice?',
-  'Did you help someone else grow, even in a small way?',
+  'Did you learn something challenging, exciting, or complicated about the world?',
+  'Did you stop a dangerous threat or solve a community problem?',
+  'Did you guide a companion towards balance or end the session at your center?',
 ];
+
+export const MAX_FATIGUE = 5;
+
+// Names match the Core Book's five Conditions; effects are placeholder text
+// (written fresh for this project, not copied from any source) pending the
+// real per-move penalties from the book.
+export const CONDITIONS: ConditionDef[] = [
+  { name: 'Afraid', effect: 'Take -2 to moves that roll with Focus.' },
+  { name: 'Angry', effect: 'Take -2 to moves that roll with Passion.' },
+  { name: 'Guilty', effect: 'Take -2 to moves that roll with Harmony.' },
+  { name: 'Insecure', effect: 'Take -2 to moves that roll with Creativity.' },
+  { name: 'Troubled', effect: 'Take -2 to Balance moves.' },
+];
+
+// Broken out into one file per category — see ./moves/*.move.ts — same
+// reasoning as PLAYBOOKS/BACKGROUNDS/TECHNIQUES: easy to read and edit on its
+// own instead of scrolling one giant array.
+export { UNIVERSAL_MOVES } from './moves';
 
 // Broken out into one file per playbook \u2014 see ./playbooks/*.playbook.ts \u2014 so
 // each is easy to read and edit on its own instead of scrolling one giant array.
+// Playbook (plus Move/Feature, which only ever appear as its fields) is defined
+// in ./playbooks/playbook.ts, not here, so a playbook file never needs to reach
+// into data.ts for its own type.
 export { PLAYBOOKS } from './playbooks';
+export type { Playbook, Feature } from './playbooks/playbook';

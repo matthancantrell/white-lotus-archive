@@ -5,9 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
 import LotusMark from '@/components/LotusMark';
-
-const inputCls =
-  'text-[15px] px-3.5 py-3 rounded-[10px] border border-white/[0.18] bg-ink/60 text-parchment w-full box-border placeholder:text-[#6f847f] focus:outline-none focus:border-gold focus:ring-[3px] focus:ring-gold/20';
+import { AuthTextField } from '@/components/AuthTextField';
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -85,7 +83,7 @@ export default function SignUpPage() {
 
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="username" className="text-[13px] font-semibold text-parchment-dim">Username</label>
-                <input
+                <AuthTextField
                   id="username"
                   type="text"
                   autoComplete="username"
@@ -94,14 +92,13 @@ export default function SignUpPage() {
                   aria-invalid={!!error}
                   minLength={3}
                   required
-                  className={inputCls}
                 />
                 <span className="text-xs text-faint">This is how others will see you.</span>
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="email" className="text-[13px] font-semibold text-parchment-dim">Email</label>
-                <input
+                <AuthTextField
                   id="email"
                   type="email"
                   autoComplete="email"
@@ -109,14 +106,13 @@ export default function SignUpPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   aria-invalid={!!error}
                   required
-                  className={inputCls}
                 />
               </div>
 
               <div className="flex flex-col gap-1.5">
                 <label htmlFor="password" className="text-[13px] font-semibold text-parchment-dim">Password</label>
                 <div className="relative">
-                  <input
+                  <AuthTextField
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     autoComplete="new-password"
@@ -125,7 +121,7 @@ export default function SignUpPage() {
                     aria-invalid={!!error}
                     minLength={8}
                     required
-                    className={`${inputCls} pr-[68px]`}
+                    className="pr-[68px]"
                   />
                   <button
                     type="button"

@@ -1,4 +1,5 @@
 import { Playbook } from '../data';
+import StepHeader from '../StepHeader';
 
 export default function StepBalance({
   playbook,
@@ -16,10 +17,7 @@ export default function StepBalance({
 
   return (
     <section>
-      <h1 className="font-display font-semibold text-[30px] mb-2">Balance</h1>
-      <p className="text-parchment-dim text-[15px] mb-7 max-w-xl">
-        Your balance is the tug-of-war between your two principles. It starts centered; you may shift it once now.
-      </p>
+      <StepHeader title="Balance" subtitle="Your balance is the tug-of-war between your two principles. It starts centered; you may shift it once now." />
       <div className="bg-ink-soft border border-gold/18 rounded-2xl p-7">
         <div className="flex justify-between mb-4.5">
           <span className="font-display text-[14.5px] text-[#9ec4e8]">{principleLeft}</span>

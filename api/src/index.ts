@@ -2,6 +2,8 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import type { Env, Variables } from './types';
 import { profiles } from './routes/profiles';
+import { characters } from './routes/characters';
+import { media } from './routes/media';
 
 const app = new Hono<{ Bindings: Env; Variables: Variables }>();
 
@@ -16,5 +18,7 @@ app.use('*', async (c, next) => {
 
 app.get('/', (c) => c.json({ ok: true, service: 'avatar-legends-api' }));
 app.route('/api/profiles', profiles);
+app.route('/api/characters', characters);
+app.route('/media', media);
 
 export default app;

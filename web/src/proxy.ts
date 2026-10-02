@@ -2,9 +2,15 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 // !!! Protected routes that require authentication !!!
-const PROTECTED_PREFIXES = ['/profile'];
+// Only the creator (building/editing your own character) and the manager
+// (your own character list + editable sheet) require login — /character/:id
+// is the public, read-only character view and must stay reachable by anyone.
+const PROTECTED_PREFIXES = ['/profile', '/character/creator', '/character/manager'];
+// Auth-only pages — a logged-in user has no reason to see these; send them to
+// their profile instead of letting them re-visit login/signup.
+const AUTH_PREFIXES = ['/login', '/signup'];
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(
@@ -35,6 +41,11 @@ export async function middleware(request: NextRequest) {
     const redirectUrl = new URL('/login', request.url);
     redirectUrl.searchParams.set('next', request.nextUrl.pathname);
     return NextResponse.redirect(redirectUrl);
+  }
+
+  const isAuthPage = AUTH_PREFIXES.some((p) => request.nextUrl.pathname.startsWith(p));
+  if (isAuthPage && user) {
+    return NextResponse.redirect(new URL('/profile', request.url));
   }
 
   return response;
