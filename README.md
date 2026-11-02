@@ -10,19 +10,19 @@ Below is a development roadmap for creating and hosting the application so that 
 
 ### Goals
 
-- [ ] Create repository
-- [ ] Create Next.js application
-- [ ] Configure Tailwind
-- [ ] Create Supabase Project (Databse and authorization)
-- [ ] Configure Prisma (Object relationship between database and application)
-- [ ] Configure Cloudflare Pages deployment
-- [ ] Configure environment variables (local and hosted)
-- [ ] Setup automatic deployments
+- [x] Create repository
+- [x] Create Next.js application
+- [x] Configure Tailwind
+- [x] Create Supabase Project (Database and authorization) (`Update`: We also use Cloudflare D1)
+- [ ] ~~Configure Prisma (Object relationship between database and application)~~ (`Update`: Prisma is no longer considered / needed.)
+- [x] Configure Cloudflare Pages deployment
+- [x] Configure environment variables (local and hosted)
+- [ ] ~~Setup automatic deployments~~ (`Update`: This is not yet in place, but is a goal for moving forward)
 
 **Phase 1 Deliverable(s):**
 
-- [ ] Hosted GitHub repository to remotely store codebase
-- [ ] Deployed application connected to Supabase
+- [x] Hosted GitHub repository to remotely store codebase
+- [x] Deployed application connected to Supabase
 
 ---
 
@@ -30,17 +30,17 @@ Below is a development roadmap for creating and hosting the application so that 
 
 ### Goals
 
-- [ ] User registration
-- [ ] Login + Logout
+- [x] User registration
+- [x] Login + Logout
 - [ ] Password Reset
-- [ ] Email verification
-- [ ] Protected Routing
-- [ ] User Profile Page
+- [x] Email verification
+- [x] Protected Routing
+- [x] User Profile Page
 
 **Phase 2 Deliverable(s):**
 
-- [ ] Login + Signup Pages
-- [ ] Users should be able to create & authenticate accounts
+- [x] Login + Signup Pages
+- [x] Users should be able to create & authenticate accounts
 
 ---
 
@@ -48,7 +48,7 @@ Below is a development roadmap for creating and hosting the application so that 
 
 ### Goals
 
-- [ ] Implement Avatar Legends character sheets
+- [x] Implement Avatar Legends character sheets
 
 Potential Sections:
 
@@ -69,16 +69,16 @@ Potential Sections:
 
 App Features:
 
-- [ ] Create character
-- [ ] Edit character
-- [ ] Delete character
-- [ ] Autosave changes
-- [ ] Character dashboard (See and manage characters)
+- [x] Create character
+- [x] Edit character
+- [x] Delete character
+- [x] Autosave changes
+- [x] Character dashboard (See and manage characters)
 
 **Phase 3 Deliverable(s):**
 
-- [ ] Create and view or export digital character sheet
-- [ ] Users can access their own character dashboard
+- [x] Create and view or export digital character sheet (`Update`: Export is not yet implemented.)
+- [x] Users can access their own character dashboard
 
 ---
 
