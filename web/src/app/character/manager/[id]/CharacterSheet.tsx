@@ -155,6 +155,10 @@ export default function CharacterSheet({
     update({ journalEntries: [entry, ...draft.journalEntries] });
   }
 
+  function editJournalEntry(id: string, title: string, body: string) {
+    update({ journalEntries: draft.journalEntries.map((e) => (e.id === id ? { ...e, title, body } : e)) });
+  }
+
   const balancePos = Math.max(-3, Math.min(3, draft.balanceShift));
 
   return (
@@ -341,7 +345,7 @@ export default function CharacterSheet({
         {tab === 'concept' && <ConceptDetailsTab draft={draft} playbook={playbook} onUpdate={update} readOnly={readOnly} />}
         {tab === 'growth' && <GrowthTab playbook={playbook} />}
         {tab === 'extras' && <ExtrasTab />}
-        {tab === 'journal' && <JournalTab entries={draft.journalEntries} onAdd={addJournalEntry} readOnly={readOnly} />}
+        {tab === 'journal' && <JournalTab entries={draft.journalEntries} onAdd={addJournalEntry} onEdit={editJournalEntry} readOnly={readOnly} />}
       </main>
     </div>
   );
@@ -795,12 +799,28 @@ function ExtrasTab() {
   );
 }
 
-function JournalTab({ entries, onAdd, readOnly }: { entries: JournalEntry[]; onAdd: (title: string, body: string) => void; readOnly: boolean }) {
+function JournalTab({ entries, onAdd, onEdit, readOnly }: { entries: JournalEntry[]; onAdd: (title: string, body: string) => void; onEdit: (id: string, title: string, body: string) => void; readOnly: boolean }) {
   const [query, setQuery] = useState('');
   const [composing, setComposing] = useState(false);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
+  function startEdit(e: JournalEntry) {
+    setEditingId(e.id);
+    setEditTitle(e.title);
+    setEditBody(e.body);
+  }
+  function cancelEdit() {
+    setEditingId(null);
+  }
+  function saveEdit() {
+    if (!editingId || !editBody.trim()) return;
+    onEdit(editingId, editTitle.trim() || 'Untitled entry', editBody.trim());
+    setEditingId(null);
+  }
   function toggleExpanded(id: string) {
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -886,7 +906,44 @@ function JournalTab({ entries, onAdd, readOnly }: { entries: JournalEntry[]; onA
               </button>
               {isOpen && (
                 <div className="px-3.5 pb-3.5 border-t border-white/10">
-                  <p className="text-[13px] leading-relaxed text-[#b9c2bd] whitespace-pre-wrap pt-3">{e.body}</p>
+                  {editingId === e.id ? (
+                    <div className="flex flex-col gap-2.5 pt-3">
+                      <input
+                        value={editTitle}
+                        onChange={(ev) => setEditTitle(ev.target.value)}
+                        placeholder="Title"
+                        aria-label="Entry title"
+                        className="px-3 py-2 rounded-lg bg-panel border border-gold/20 text-[13px] text-parchment placeholder:text-faint focus:outline-none focus:border-gold/50"
+                      />
+                      <textarea
+                        value={editBody}
+                        onChange={(ev) => setEditBody(ev.target.value)}
+                        placeholder="What happened?"
+                        aria-label="Entry body"
+                        rows={4}
+                        className="px-3 py-2 rounded-lg bg-panel border border-gold/20 text-[13px] text-parchment placeholder:text-faint focus:outline-none focus:border-gold/50 resize-none"
+                      />
+                      <div className="flex justify-end gap-2">
+                        <button type="button" onClick={cancelEdit} className="px-3.5 py-1.5 rounded-full text-[12.5px] text-parchment-dim hover:text-parchment">Cancel</button>
+                        <button type="button" onClick={saveEdit} disabled={!editBody.trim()} className="px-3.5 py-1.5 rounded-full bg-gold text-gold-ink text-[12.5px] font-semibold disabled:opacity-50">Save</button>
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="text-[13px] leading-relaxed text-[#b9c2bd] whitespace-pre-wrap pt-3">{e.body}</p>
+                      {!readOnly && (
+                        <div className="flex justify-end pt-3">
+                          <button
+                            type="button"
+                            onClick={() => startEdit(e)}
+                            className="px-3.5 py-1.5 rounded-full bg-white/8 border border-white/20 text-parchment text-[12.5px] font-semibold hover:bg-white/12"
+                          >
+                            Edit
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
                 </div>
               )}
             </div>
