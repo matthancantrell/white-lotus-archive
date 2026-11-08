@@ -5,7 +5,8 @@ import { APPROACH_LABEL, BALANCE_TRACK_DARK_FISH_URL, BALANCE_TRACK_LIGHT_FISH_U
 import PlaybookBanner from './PlaybookBanner';
 import ChoiceCard from './ChoiceCard';
 import FeatureEffect from './FeatureEffect';
-import { highlightStats, highlightTerms } from './highlightStats';
+import { highlightTerms } from './highlightStats';
+import MarkdownText from './MarkdownText';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 const BULLET_DOT = <div className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style={{ background: 'rgba(232,200,116,0.6)' }} />;
@@ -174,7 +175,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
               {/* selected is always false here — this is the preview, not the
                   actual move picker (see StepPlaybook's Select Moves tab). */}
               <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
-              <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{highlightStats(mv.details)}</p>
+              <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.details}</MarkdownText>
             </ChoiceCard>
           ))}
         </div>
@@ -205,7 +206,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
           <p className="font-display font-bold text-base text-gold mb-1">{playbook.startingTechnique.name}</p>
           <p className="text-[11px] text-muted uppercase tracking-wide">{APPROACH_LABEL[playbook.startingTechnique.approach]}</p>
         </ChoiceCard>
-        <p className="text-[13.5px] leading-relaxed text-[#b9c2bd] mb-3">{playbook.startingTechnique.details}</p>
+        <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd] mb-3">{playbook.startingTechnique.details}</MarkdownText>
         <OrnamentDivider />
       </Section>
 

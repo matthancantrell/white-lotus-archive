@@ -10,7 +10,8 @@ import StepHeader from '../StepHeader';
 import ChoiceCard from '../ChoiceCard';
 import CheckboxSquare from '../CheckboxSquare';
 import { TextArea } from '../TextField';
-import { highlightStats, rollsWithLabel } from '../highlightStats';
+import { rollsWithLabel } from '../highlightStats';
+import MarkdownText from '../MarkdownText';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 const TABS = ['about', 'stats', 'moves', 'feature'] as const;
@@ -310,7 +311,7 @@ export default function StepPlaybook({
                           </div>
                           {expanded && (
                             <div className="px-4 pb-3.5 border-t border-white/10">
-                              <p className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{highlightStats(mv.details)}</p>
+                              <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{mv.details}</MarkdownText>
                             </div>
                           )}
                         </ChoiceCard>

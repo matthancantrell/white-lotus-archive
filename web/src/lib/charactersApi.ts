@@ -59,9 +59,11 @@ export async function createCharacter(draft: CharacterDraft): Promise<CharacterR
   return parseOrThrow(res, 'Could not save your character.');
 }
 
-export async function updateCharacter(id: string, draft: CharacterDraft): Promise<CharacterRecord> {
+// keepalive lets the request outlive the page — used when flushing a pending
+// edit during a refresh/tab close (the browser cancels ordinary fetches then).
+export async function updateCharacter(id: string, draft: CharacterDraft, opts?: { keepalive?: boolean }): Promise<CharacterRecord> {
   const headers = await authHeaders();
-  const res = await fetch(`${API_URL}/api/characters/${id}`, { method: 'PATCH', headers, body: JSON.stringify(draft) });
+  const res = await fetch(`${API_URL}/api/characters/${id}`, { method: 'PATCH', headers, body: JSON.stringify(draft), keepalive: opts?.keepalive });
   return parseOrThrow(res, 'Could not save your character.');
 }
 

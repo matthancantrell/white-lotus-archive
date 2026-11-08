@@ -5,6 +5,7 @@ import { APPROACH_LABEL, Playbook, Technique, TechniqueLevel, TECHNIQUES, UNIVER
 import StepHeader from '../StepHeader';
 import TabbedStepPanel from '../TabbedStepPanel';
 import CheckboxSquare from '../CheckboxSquare';
+import MarkdownText from '../MarkdownText';
 
 const LEVEL_ON = { background: '#e8c874', color: '#1a1108' };
 const LEVEL_OFF = { background: 'transparent', color: '#7f948f' };
@@ -73,7 +74,7 @@ function TechniqueCard({
       </div>
       {open && (
         <div className="pt-3.5 pb-4 pr-4 border-t border-white/10" style={{ paddingLeft: 48 }}>
-          <p className="text-[13px] leading-relaxed text-parchment-dim">{t.details}</p>
+          <MarkdownText className="text-[13px] leading-relaxed text-parchment-dim">{t.details}</MarkdownText>
         </div>
       )}
     </div>

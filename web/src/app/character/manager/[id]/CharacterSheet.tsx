@@ -5,7 +5,7 @@ import Link from 'next/link';
 import LotusMark from '@/components/LotusMark';
 import { updateCharacter } from '@/lib/charactersApi';
 import FeatureEffect from '../../creator/FeatureEffect';
-import { highlightStats, rollsWithLabel } from '../../creator/highlightStats';
+import { rollsWithLabel } from '../../creator/highlightStats';
 import CheckboxSquare from '../../creator/CheckboxSquare';
 import { TextArea, TextField } from '../../creator/TextField';
 import {
@@ -32,6 +32,7 @@ import {
   UNIVERSAL_MOVES,
   UNIVERSAL_TECHNIQUES,
 } from '../../creator/data';
+import MarkdownText from '../../creator/MarkdownText';
 
 const LEVEL_LABEL: Record<TechniqueLevel, string> = { L: 'Learned', M: 'Mastered' };
 const STAT_ROWS: [keyof Stats, string][] = [
@@ -119,18 +120,28 @@ export default function CharacterSheet({
   }, [draft]);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  function flushSave() {
+  function flushSave(keepalive = false) {
     if (!saveTimer.current) return;
     clearTimeout(saveTimer.current);
     saveTimer.current = null;
-    updateCharacter(characterId, draftRef.current).catch((err) => {
+    updateCharacter(characterId, draftRef.current, { keepalive }).catch((err) => {
       setSaveError(err instanceof Error ? err.message : 'Could not save that change.');
     });
   }
 
   // Send the last pending edit even if the player navigates away before the
   // debounce would otherwise have fired.
-  useEffect(() => flushSave, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => flushSave(), []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // A browser refresh or tab close doesn't run React's unmount cleanup, so an
+  // edit made inside the 800ms debounce window would be lost. Flush it on
+  // pagehide (with keepalive so the request survives the page going away).
+  useEffect(() => {
+    if (readOnly) return;
+    const onPageHide = () => flushSave(true);
+    window.addEventListener('pagehide', onPageHide);
+    return () => window.removeEventListener('pagehide', onPageHide);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   function update(patch: Partial<CharacterDraft>) {
     setDraft((prev) => ({ ...prev, ...patch }));
@@ -419,7 +430,7 @@ function MovesFeaturesTab({ draft, playbook }: { draft: CharacterDraft; playbook
                 </button>
                 {expanded && (
                   <div className="px-4 pb-3.5 border-t border-white/10">
-                    <p className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{highlightStats(mv.details)}</p>
+                    <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{mv.details}</MarkdownText>
                   </div>
                 )}
               </div>
@@ -530,7 +541,7 @@ function TechniqueCard({
       </button>
       {expanded && (
         <div className="px-3 pb-3 border-t border-white/10">
-          <p className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{highlightStats(details)}</p>
+          <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{details}</MarkdownText>
         </div>
       )}
     </div>
