@@ -306,7 +306,7 @@ export default function CharacterSheet({
                         <span className={`text-[12.5px] font-display font-semibold uppercase tracking-wide ${marked ? 'text-gold' : 'text-parchment'}`}>
                           {cond.name}
                         </span>
-                        <span className="block text-[11px] text-muted leading-snug">{cond.effect}</span>
+                        <MarkdownText className="text-[11px] text-muted leading-snug">{cond.effect}</MarkdownText>
                       </span>
                     </label>
                   );
@@ -373,9 +373,12 @@ function MovesFeaturesTab({ draft, playbook }: { draft: CharacterDraft; playbook
     });
   }
 
-  // Universal moves plus whichever playbook moves were actually selected —
-  // one flat list, not split by where the move came from.
-  const playbookMoves = playbook ? playbook.moves.filter((mv) => draft.selectedMoves.includes(mv.name)) : [];
+  // Universal moves, the playbook's auto-granted feature moves, and whichever
+  // playbook moves were actually selected — one flat list, not split by where
+  // the move came from (the Category badge says).
+  const playbookMoves = playbook
+    ? [...playbook.featureMoves, ...playbook.moves.filter((mv) => draft.selectedMoves.includes(mv.name))]
+    : [];
   const allMoves = [...UNIVERSAL_MOVES, ...playbookMoves];
 
   return (
@@ -446,7 +449,7 @@ function MovesFeaturesTab({ draft, playbook }: { draft: CharacterDraft; playbook
         {playbook && (
           <Section title="Moment of Balance" centerTitle>
             <div className="p-4.5 rounded-xl bg-gold/6 border border-gold/30">
-              <p className="text-[13.5px] leading-relaxed text-parchment-dim">{playbook.momentOfBalance}</p>
+              <MarkdownText className="text-[13.5px] leading-relaxed text-parchment-dim">{playbook.momentOfBalance}</MarkdownText>
             </div>
           </Section>
         )}
@@ -468,7 +471,10 @@ function MovesFeaturesTab({ draft, playbook }: { draft: CharacterDraft; playbook
                       {picked.length > 0 ? (
                         <div className="flex flex-col gap-1">
                           {picked.map((v, i) => (
-                            <p key={i} className="text-[13px] text-[#b9c2bd]">&bull; {v}</p>
+                            <div key={i} className="flex items-start gap-2">
+                              <span className="text-[13px] text-[#b9c2bd]">&bull;</span>
+                              <MarkdownText className="text-[13px] text-[#b9c2bd]">{v}</MarkdownText>
+                            </div>
                           ))}
                         </div>
                       ) : (
@@ -665,7 +671,7 @@ function ConceptDetailsTab({
                 />
                 <div>
                   <p className={`font-display font-semibold text-sm mb-0.5 ${picked ? 'text-gold' : 'text-parchment'}`}>{b.name}</p>
-                  <p className="text-[13px] leading-relaxed text-[#b9c2bd]">{b.tagline}</p>
+                  <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd]">{b.tagline}</MarkdownText>
                 </div>
               </div>
             );
@@ -743,7 +749,7 @@ function ConceptDetailsTab({
           <div className="flex flex-col gap-3">
             {playbook.history.map((q, i) => (
               <div key={i}>
-                <p className="text-[13px] text-[#e8ddc4] mb-1">{q}</p>
+                <MarkdownText className="text-[13px] text-[#e8ddc4] mb-1">{q}</MarkdownText>
                 <TextArea value={draft.history[i] || ''} onChange={(e) => updateHistory(i, e.target.value)} readOnly={readOnly} rows={2} placeholder="Your answer..." className="resize-y" />
               </div>
             ))}
@@ -777,7 +783,7 @@ function GrowthTab({ playbook }: { playbook: Playbook | null }) {
       <Section title="Growth Questions">
         <div className="flex flex-col gap-2">
           {STANDARD_GROWTH.map((q) => (
-            <div key={q} className="px-4 py-3 rounded-xl bg-panel border border-gold/14 text-[13px] text-[#e8ddc4]">{q}</div>
+            <MarkdownText key={q} className="px-4 py-3 rounded-xl bg-panel border border-gold/14 text-[13px] text-[#e8ddc4]">{q}</MarkdownText>
           ))}
         </div>
       </Section>
@@ -785,16 +791,16 @@ function GrowthTab({ playbook }: { playbook: Playbook | null }) {
       {playbook && (
         <Section title="Unique Playbook Question">
           <div className="px-4 py-3 rounded-xl bg-gold/8 border border-gold/30 mb-2">
-            <p className="font-display font-semibold text-[13.5px] leading-relaxed text-parchment">{playbook.growth}</p>
+            <MarkdownText className="font-display font-semibold text-[13.5px] leading-relaxed text-parchment">{playbook.growth}</MarkdownText>
           </div>
-          <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{playbook.growthDescription}</p>
+          <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{playbook.growthDescription}</MarkdownText>
         </Section>
       )}
 
       <Section title="Growth Advancements">
         <div className="flex flex-col gap-2">
           {ADVANCEMENTS.map((a) => (
-            <div key={a} className="px-4 py-3 rounded-xl bg-ink-soft border border-gold/15 text-[13px] text-[#b9c2bd]">{a}</div>
+            <MarkdownText key={a} className="px-4 py-3 rounded-xl bg-ink-soft border border-gold/15 text-[13px] text-[#b9c2bd]">{a}</MarkdownText>
           ))}
         </div>
       </Section>
@@ -941,7 +947,7 @@ function JournalTab({ entries, onAdd, onEdit, readOnly }: { entries: JournalEntr
                     </div>
                   ) : (
                     <>
-                      <p className="text-[13px] leading-relaxed text-[#b9c2bd] whitespace-pre-wrap pt-3">{e.body}</p>
+                      <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd] pt-3">{e.body}</MarkdownText>
                       {!readOnly && (
                         <div className="flex justify-end pt-3">
                           <button

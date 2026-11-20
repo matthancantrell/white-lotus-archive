@@ -320,7 +320,21 @@ export default function StepPlaybook({
                   </div>
                 </>
               )}
-              {tab === 'feature' && !featureChoiceTab && <FeatureEffect effect={confirmed.feature.effect} />}
+              {tab === 'feature' && !featureChoiceTab && (
+                <>
+                  <FeatureEffect effect={confirmed.feature.effect} />
+                  {confirmed.featureMoves.length > 0 && (
+                    <div className="flex flex-col gap-2.5 mt-4">
+                      {confirmed.featureMoves.map((mv) => (
+                        <ChoiceCard key={mv.name} as="div" selected={false} className="p-3.5">
+                          <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
+                          <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.details}</MarkdownText>
+                        </ChoiceCard>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
 
               {tab === 'feature' && featureChoiceTab && confirmed.featureChoices.map((choice) => {
                 if (choice.key !== featureChoiceTab) return null;
@@ -358,7 +372,7 @@ export default function StepPlaybook({
                                 onClick={() => { if (!disabled) onToggleFeatureChoice(choice.key, opt, choice.count); }}
                                 ariaLabel={`Select ${opt}`}
                               />
-                              <p className="text-[13px] leading-relaxed text-[#b9c2bd] flex-1">{opt}</p>
+                              <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd] flex-1">{opt}</MarkdownText>
                               {claimed && <p className="text-[11px] text-faint whitespace-nowrap">Already chosen</p>}
                             </div>
                           );
@@ -370,9 +384,9 @@ export default function StepPlaybook({
                 return (
                   <div key={choice.key}>
                     <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">{choice.label}</p>
-                    <p className="text-[12.5px] text-muted mb-2">{choice.prompt}</p>
+                    <MarkdownText className="text-[12.5px] text-muted mb-2">{choice.prompt}</MarkdownText>
                     {choice.examples && (
-                      <p className="text-[12px] text-faint mb-3.5">e.g. {choice.examples.join(', ')}</p>
+                      <MarkdownText className="text-[12px] text-faint mb-3.5">{`e.g. ${choice.examples.join(', ')}`}</MarkdownText>
                     )}
                     <div className="flex flex-col gap-2.5">
                       {Array.from({ length: choice.count }).map((_, i) => (

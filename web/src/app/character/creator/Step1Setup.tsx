@@ -10,6 +10,7 @@ import kyoshiEraImg from '../../../assets/eras/kyoshi.jpg';
 import hywEraImg from '../../../assets/eras/hundred-year-war.jpg';
 import korraEraImg from '../../../assets/eras/korra.jpg';
 import customEraImg from '../../../assets/eras/custom.jpg';
+import MarkdownText from './MarkdownText';
 
 const ERA_IMAGES: Record<string, typeof rokuEraImg> = {
   'Avatar Roku': rokuEraImg,
@@ -129,15 +130,15 @@ export default function Step1Setup({
               <p className={`mb-1.5 text-[11px] tracking-[0.18em] uppercase ${activeEra.accent}`}>{activeEra.tag}</p>
               <h3 className="font-display font-semibold text-[22px] text-parchment mb-4">{activeEra.name}</h3>
               <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Overview</p>
-              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.overview}</p>
+              <MarkdownText className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.overview}</MarkdownText>
               <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">The Avatar</p>
-              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.avatarStatus}</p>
+              <MarkdownText className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.avatarStatus}</MarkdownText>
               <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Key events &amp; consequences</p>
-              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.events}</p>
+              <MarkdownText className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.events}</MarkdownText>
               <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Tone</p>
-              <p className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.tone}</p>
+              <MarkdownText className="text-sm leading-relaxed text-parchment-dim mb-4">{activeEra.tone}</MarkdownText>
               <p className="font-display text-xs tracking-wide uppercase text-gold mb-1">Key tension</p>
-              <p className="text-sm leading-relaxed text-parchment-dim">{activeEra.tension}</p>
+              <MarkdownText className="text-sm leading-relaxed text-parchment-dim">{activeEra.tension}</MarkdownText>
             </div>
             {!detailAtBottom && (
               <div className="absolute left-0 right-0 bottom-0 h-14 pointer-events-none" style={{ background: 'linear-gradient(rgba(20,42,46,0), #142a2e)' }} />

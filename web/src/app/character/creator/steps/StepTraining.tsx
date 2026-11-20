@@ -3,6 +3,7 @@ import StepHeader from '../StepHeader';
 import TabbedStepPanel from '../TabbedStepPanel';
 import ChoiceCard from '../ChoiceCard';
 import { TextArea } from '../TextField';
+import MarkdownText from '../MarkdownText';
 
 // Bending arts are limited to one per character; Weapons and Technology can
 // stand alongside one (or each other) for playbooks that start with more than
@@ -52,7 +53,7 @@ export default function StepTraining({
               </div>
               <div className="min-w-0">
                 <p className="font-display font-semibold text-sm text-parchment mb-0.5">{t.name}</p>
-                <p className="text-[12.5px] leading-relaxed text-[#b9c2bd]">{t.desc}</p>
+                <MarkdownText className="text-[12.5px] leading-relaxed text-[#b9c2bd]">{t.desc}</MarkdownText>
               </div>
             </ChoiceCard>
           );

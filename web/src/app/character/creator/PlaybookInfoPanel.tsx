@@ -5,23 +5,14 @@ import { APPROACH_LABEL, BALANCE_TRACK_DARK_FISH_URL, BALANCE_TRACK_LIGHT_FISH_U
 import PlaybookBanner from './PlaybookBanner';
 import ChoiceCard from './ChoiceCard';
 import FeatureEffect from './FeatureEffect';
-import { highlightTerms } from './highlightStats';
 import MarkdownText from './MarkdownText';
 
 const STAT_ROWS: [keyof Stats, string][] = [['creativity', 'Creativity'], ['focus', 'Focus'], ['harmony', 'Harmony'], ['passion', 'Passion']];
 const BULLET_DOT = <div className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style={{ background: 'rgba(232,200,116,0.6)' }} />;
 
-// A run of 3+ underscores in a connection prompt (e.g. "___ is your lodestar...")
-// marks a fill-in-the-blank spot — swapped for a visual blank line instead of
-// showing the literal underscores, so it reads as "write a name here" rather
-// than typo'd punctuation.
-function renderBlanks(text: string): ReactNode {
-  return text.split(/(_{3,})/g).map((part, i) =>
-    /^_{3,}$/.test(part)
-      ? <span key={i} className="inline-block align-baseline" style={{ width: '5.5em', borderBottom: '1.5px solid rgba(232,200,116,0.55)', margin: '0 2px' }} />
-      : part
-  );
-}
+// All playbook text is authored as markdown (see MarkdownText) — including
+// "___" fill-in-the-blank spots in connection prompts, which MarkdownText
+// renders as a blank line.
 
 // A section label + body, styled the same way everywhere it's used below — the one
 // place to change if the "uppercase gold label" treatment ever needs to change.
@@ -46,10 +37,10 @@ function OrnamentDivider() {
 
 // One paragraph per array entry — used for Description, Feature, and Moves Advice,
 // all of which are authored as a set of paragraphs rather than one text blob.
-function Paragraphs({ items }: { items: ReactNode[] }) {
+function Paragraphs({ items, terms }: { items: string[]; terms?: string[] }) {
   return (
     <div className="flex flex-col gap-3">
-      {items.map((p, i) => <p key={i} className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{p}</p>)}
+      {items.map((p, i) => <MarkdownText key={i} terms={terms} className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{p}</MarkdownText>)}
     </div>
   );
 }
@@ -63,7 +54,7 @@ function TwoColumnList({ items }: { items: string[] }) {
       {items.map((item, i) => (
         <div key={i} className="flex items-start gap-2.5 mb-2.5" style={{ breakInside: 'avoid' }}>
           {BULLET_DOT}
-          <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{item}</p>
+          <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{item}</MarkdownText>
         </div>
       ))}
     </div>
@@ -73,13 +64,14 @@ function TwoColumnList({ items }: { items: string[] }) {
 // A left-aligned bulleted list — used for History and Connections. `children`
 // may contain the rendered blanks from renderBlanks, so items are ReactNode,
 // not just strings.
-function LeftAlignedList({ items }: { items: ReactNode[] }) {
+function LeftAlignedList({ items }: { items: string[] }) {
   return (
     <div className="flex flex-col items-start gap-3">
       {items.map((item, i) => (
-        <p key={i} className="text-[13.5px] leading-relaxed text-[#b9c2bd] max-w-md">
-          <span className="text-gold mr-2">&bull;</span>{item}
-        </p>
+        <div key={i} className="flex items-start gap-2 max-w-md">
+          <span className="text-gold text-[13.5px] leading-relaxed">&bull;</span>
+          <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{item}</MarkdownText>
+        </div>
       ))}
     </div>
   );
@@ -96,7 +88,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
     <>
       <PlaybookBanner playbook={playbook} />
 
-      <p className="italic text-[14.5px] leading-relaxed mb-5 text-gold">{playbook.tagline}</p>
+      <MarkdownText className="italic text-[14.5px] leading-relaxed mb-5 text-gold">{playbook.tagline}</MarkdownText>
 
       <Section label="Description" className="mb-5">
         <Paragraphs items={playbook.description} />
@@ -153,12 +145,12 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
       </Section>
 
       <Section label="Connections" className="mb-5">
-        <LeftAlignedList items={playbook.connectionPrompts.map((p, i) => <span key={i}>{renderBlanks(p)}</span>)} />
+        <LeftAlignedList items={playbook.connectionPrompts} />
       </Section>
 
       <Section label="Moment of balance" className="mb-5">
         <div className="p-4.5 rounded-xl bg-gold/6 border border-gold/30">
-          <p className="text-[13.5px] leading-relaxed text-parchment-dim">{playbook.momentOfBalance}</p>
+          <MarkdownText className="text-[13.5px] leading-relaxed text-parchment-dim">{playbook.momentOfBalance}</MarkdownText>
         </div>
       </Section>
 
@@ -166,6 +158,16 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
         <div className="rounded-xl border border-gold/15 bg-panel p-5">
           <FeatureEffect effect={playbook.feature.effect} />
         </div>
+        {playbook.featureMoves.length > 0 && (
+          <div className="flex flex-col gap-2.5 mt-3">
+            {playbook.featureMoves.map((mv) => (
+              <ChoiceCard key={mv.name} as="div" selected={false} className="p-3.5">
+                <p className="font-display font-semibold text-sm text-gold mb-1">{mv.name}</p>
+                <MarkdownText className="text-[13px] leading-relaxed text-[#b9c2bd]">{mv.details}</MarkdownText>
+              </ChoiceCard>
+            ))}
+          </div>
+        )}
       </Section>
 
       <Section label="Moves" className="mb-5">
@@ -182,11 +184,7 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
       </Section>
 
       <Section label="Moves advice" className="mb-5">
-        <Paragraphs
-          items={playbook.movesAdvice.map((p, i) => (
-            <span key={i}>{highlightTerms(p, playbook.moves.map((mv) => mv.name))}</span>
-          ))}
-        />
+        <Paragraphs items={playbook.movesAdvice} terms={playbook.moves.map((mv) => mv.name)} />
       </Section>
 
       {/* No local fallback for this one — the art doesn't exist yet, so the slot
@@ -211,8 +209,8 @@ export default function PlaybookInfoPanel({ playbook }: { playbook: Playbook }) 
       </Section>
 
       <Section label="Growth question">
-        <p className="font-display font-semibold text-[13.5px] leading-relaxed text-parchment mb-2">{playbook.growth}</p>
-        <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{playbook.growthDescription}</p>
+        <MarkdownText className="font-display font-semibold text-[13.5px] leading-relaxed text-parchment mb-2">{playbook.growth}</MarkdownText>
+        <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{playbook.growthDescription}</MarkdownText>
       </Section>
     </>
   );

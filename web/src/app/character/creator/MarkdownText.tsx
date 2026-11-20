@@ -1,7 +1,7 @@
 import { Children, isValidElement, type ReactNode } from 'react';
 import ReactMarkdown, { type Components } from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { highlightStats } from './highlightStats';
+import { highlightStats, highlightTerms } from './highlightStats';
 
 // Renders a move/technique `details` string as markdown (paragraphs, **bold**,
 // *italics*, lists, > quotes, tables, `code`, ---) so card text can be
@@ -12,16 +12,34 @@ import { highlightStats } from './highlightStats';
 // `className` sets the base text size/color/leading (same classes the old <p>
 // carried); everything inside inherits it.
 
-function withStats(children: ReactNode): ReactNode {
-  return Children.map(children, (child) =>
-    typeof child === 'string' ? highlightStats(child) : isValidElement(child) ? child : child
+// A run of 3+ underscores marks a fill-in-the-blank spot (connection prompts) —
+// swapped for a visual blank line instead of literal underscores.
+function renderBlanks(text: string): ReactNode {
+  return text.split(/(_{3,})/g).map((part, i) =>
+    /^_{3,}$/.test(part)
+      ? <span key={i} className="inline-block align-baseline" style={{ width: '5.5em', borderBottom: '1.5px solid rgba(232,200,116,0.55)', margin: '0 2px' }} />
+      : part
   );
 }
 
-const components: Components = {
-  p: ({ children }) => <p className="mb-2 last:mb-0">{withStats(children)}</p>,
-  li: ({ children }) => <li>{withStats(children)}</li>,
-  td: ({ children }) => <td className="border border-white/15 px-2 py-1 align-top">{withStats(children)}</td>,
+// Stat highlighting is skipped when `terms` are given (move-advice text names
+// moves, not stats).
+function decorate(text: string, terms: string[]): ReactNode {
+  return Children.map(renderBlanks(text), (part) =>
+    typeof part !== 'string' ? part : terms.length ? highlightTerms(part, terms) : highlightStats(part)
+  );
+}
+
+function withStats(children: ReactNode, terms: string[]): ReactNode {
+  return Children.map(children, (child) =>
+    typeof child === 'string' ? decorate(child, terms) : isValidElement(child) ? child : child
+  );
+}
+
+const buildComponents = (terms: string[]): Components => ({
+  p: ({ children }) => <p className="mb-2 last:mb-0">{withStats(children, terms)}</p>,
+  li: ({ children }) => <li>{withStats(children, terms)}</li>,
+  td: ({ children }) => <td className="border border-white/15 px-2 py-1 align-top">{withStats(children, terms)}</td>,
   th: ({ children }) => <th className="border border-white/15 px-2 py-1 text-left text-gold font-semibold">{children}</th>,
   table: ({ children }) => (
     <div className="overflow-x-auto mb-2 last:mb-0">
@@ -44,12 +62,13 @@ const components: Components = {
   a: ({ children, href }) => (
     <a href={href} target="_blank" rel="noreferrer" className="text-gold underline">{children}</a>
   ),
-};
+});
 
-export default function MarkdownText({ children, className = '' }: { children: string; className?: string }) {
+// `terms`: names (e.g. a playbook's move names) to bold wherever they appear.
+export default function MarkdownText({ children, className = '', terms = [] }: { children: string; className?: string; terms?: string[] }) {
   return (
     <div className={className}>
-      <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
+      <ReactMarkdown remarkPlugins={[remarkGfm]} components={buildComponents(terms)}>
         {children}
       </ReactMarkdown>
     </div>

@@ -1,4 +1,5 @@
 import type { FeatureParagraph } from './playbooks/playbook';
+import MarkdownText from './MarkdownText';
 
 const BULLET_DOT = <div className="w-1.5 h-1.5 rounded-full shrink-0 mt-1.5" style={{ background: 'rgba(232,200,116,0.6)' }} />;
 
@@ -10,14 +11,14 @@ export default function FeatureEffect({ effect }: { effect: FeatureParagraph[] }
     <div className="flex flex-col gap-4">
       {effect.map((p, i) => (
         <div key={i}>
-          {p.heading && <p className="font-display font-semibold text-sm text-parchment mb-1.5">{p.heading}</p>}
-          {p.text && <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{p.text}</p>}
+          {p.heading && <MarkdownText className="font-display font-semibold text-sm text-parchment mb-1.5">{p.heading}</MarkdownText>}
+          {p.text && <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{p.text}</MarkdownText>}
           {p.list && (
             <div className="sm:columns-2 gap-x-7 mt-2.5">
               {p.list.map((item, j) => (
                 <div key={j} className="flex items-start gap-2.5 mb-2" style={{ breakInside: 'avoid' }}>
                   {BULLET_DOT}
-                  <p className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{item}</p>
+                  <MarkdownText className="text-[13.5px] leading-relaxed text-[#b9c2bd]">{item}</MarkdownText>
                 </div>
               ))}
             </div>

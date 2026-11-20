@@ -1,6 +1,7 @@
 import { ADVANCEMENTS, Playbook, STANDARD_GROWTH } from '../data';
 import StepHeader from '../StepHeader';
 import TabbedStepPanel from '../TabbedStepPanel';
+import MarkdownText from '../MarkdownText';
 
 export default function StepGrowth({
   playbook,
@@ -17,7 +18,7 @@ export default function StepGrowth({
       <p className="text-[12.5px] leading-relaxed text-muted mb-3.5">Answered by every player at the end of each session. Each yes marks one growth box.</p>
       <div className="flex flex-col gap-2.5 mb-4.5">
         {STANDARD_GROWTH.map((q) => (
-          <div key={q} className="px-4 py-3.5 rounded-xl bg-panel border border-gold/14 text-[13.5px] leading-relaxed text-[#e8ddc4]">{q}</div>
+          <MarkdownText key={q} className="px-4 py-3.5 rounded-xl bg-panel border border-gold/14 text-[13.5px] leading-relaxed text-[#e8ddc4]">{q}</MarkdownText>
         ))}
         <div className="px-4 py-3.5 rounded-xl bg-gold/8 border border-gold/30 text-[13.5px] leading-relaxed text-parchment">
           <span className="text-gold font-semibold">{playbookName}: </span>
@@ -40,7 +41,7 @@ export default function StepGrowth({
       <div className="flex flex-col gap-2.5">
         {ADVANCEMENTS.map((a) => (
           <div key={a} className="flex items-center justify-between gap-3.5 px-4 py-3.5 rounded-xl bg-panel border border-gold/14">
-            <p className="text-[13.5px] leading-relaxed text-[#e8ddc4] flex-1 min-w-0">{a}</p>
+            <MarkdownText className="text-[13.5px] leading-relaxed text-[#e8ddc4] flex-1 min-w-0">{a}</MarkdownText>
             <div className="flex gap-1.5 shrink-0">
               <div className="w-5 h-5 rounded-[5px] border-[1.5px] border-gold/50" />
               <div className="w-5 h-5 rounded-[5px] border-[1.5px] border-gold/50" />
@@ -61,7 +62,7 @@ export default function StepGrowth({
       {playbook && (
         <div className="p-4.5 rounded-xl bg-gold/6 border border-gold/30">
           <p className="font-display font-semibold text-sm text-gold mb-2">{playbook.name}</p>
-          <p className="text-[13.5px] leading-relaxed text-parchment-dim">{playbook.momentOfBalance}</p>
+          <MarkdownText className="text-[13.5px] leading-relaxed text-parchment-dim">{playbook.momentOfBalance}</MarkdownText>
         </div>
       )}
     </>
